@@ -9,6 +9,12 @@
 
 #include <alliedcam.h>
 
+#define MS_TO_US(ms) ((ms) * 1000)                    // ms to us
+#define US_TO_SECS(us) ((us) / 1000000.0)             // us to ms
+#define CYCLE_TIME MS_TO_US(100)                      // 100 ms
+#define NUM_CYCLES 100                                // 100 cycles
+#define TOTAL_SECS US_TO_SECS(CYCLE_TIME *NUM_CYCLES) // 10 s
+
 static inline void timespec_diff(struct timespec *start, struct timespec *end, struct timespec *diff)
 {
     assert(start);
@@ -70,6 +76,32 @@ static void Callback(const AlliedCameraHandle_t handle, const VmbHandle_t stream
     return;
 }
 
+static void ReadAndPrintTemperatures(const AlliedCameraHandle_t handle, const char **srcs, VmbUint32_t count)
+{
+    VmbError_t err;
+    double temp;
+    VmbUint32_t i;
+    printf("Temperatures: ");
+    for (i = 0; i < count; i++)
+    {
+        err = allied_set_temperature_src(handle, srcs[i]);
+        if (err != VmbErrorSuccess)
+        {
+            printf("Failed to select \"%s\" [%s]\t", srcs[i], allied_strerr(err));
+            continue;
+        }
+        err = allied_get_temperature(handle, &temp);
+        if (err != VmbErrorSuccess)
+        {
+            printf("Failed to read \"%s\" [%s]\t", srcs[i], allied_strerr(err));
+            continue;
+        }
+        printf("%.2lf C [%s]\t", temp, srcs[i]);
+    }
+    fflush(stdout);
+    printf("\r");
+}
+
 int main()
 {
     VmbCameraInfo_t *cameras;
@@ -122,6 +154,21 @@ int main()
         printf("Opened: %s\n", camera_id);
     }
     free((void *)camera_id);
+
+    err = allied_get_temperature_src_list(handle, &fmt, &avail, &count);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error getting temperature source list: %d\n", err);
+        goto cleanup;
+    }
+    else
+    {
+        printf("Available temperature sources:\n");
+        for (i = 0; i < count; i++)
+        {
+            printf("%s: %s\n", fmt[i], avail[i] ? "available" : "not available");
+        }
+    }
 
     err = allied_get_sensor_size(handle, &swidth, &sheight);
     if (err != VmbErrorSuccess)
@@ -206,7 +253,18 @@ int main()
         goto cleanup;
     }
 
-    sleep(2);
+    printf("Capturing for %.2lf s\n", TOTAL_SECS);
+
+    for (int i = NUM_CYCLES; i > 0; i--)
+    {
+        ReadAndPrintTemperatures(handle, (const char **)fmt, count);
+        usleep(CYCLE_TIME);
+    }
+
+    printf("\n");
+
+    free(fmt);
+    free(avail);
 
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)

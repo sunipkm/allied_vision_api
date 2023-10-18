@@ -141,6 +141,17 @@ VmbError_t allied_set_temperature_src(AlliedCameraHandle_t handle, const char *s
 VmbError_t allied_get_temperature_src(AlliedCameraHandle_t handle, const char **_Nonnull src);
 
 /**
+ * @brief Get the list of available temperature sources. User has to free the memory allocated for the lists.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param srcs Pointer to store the list of temperature source strings.
+ * @param available Pointer to store the list of booleans indicating whether the temperature source is available.
+ * @param count Pointer to store the number of temperature sources.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+
+/**
  * @brief Get the camera temperature.
  *
  * @param handle Handle to Allied Vision camera.

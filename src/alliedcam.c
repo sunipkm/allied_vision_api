@@ -903,6 +903,19 @@ VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char **
     return allied_get_enum_list(handle, "SensorBitDepth", depths, available, count);
 }
 
+VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***srcs, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(srcs);
+    assert(available);
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "DeviceTemperatureSelector", srcs, available, count);
+}
+
 VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *depth)
 {
     assert(handle);
