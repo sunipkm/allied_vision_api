@@ -227,7 +227,7 @@ VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *_No
 VmbError_t allied_get_sensor_bit_depth(AlliedCameraHandle_t handle, const char **_Nonnull depth);
 
 /**
- * @brief Set the sensor bit depth.
+ * @brief Set the sensor bit depth. The camera must not be capturing when this function is called.
  *
  * @param handle Handle to Allied Vision camera.
  * @param depth Bit depth string.
@@ -256,7 +256,7 @@ VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, const c
 VmbError_t allied_get_image_format(AlliedCameraHandle_t handle, const char **_Nonnull format);
 
 /**
- * @brief Set the camera pixel format.
+ * @brief Set the camera pixel format. The camera must not be capturing when this function is called.
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pixel format string.
@@ -296,7 +296,7 @@ VmbError_t allied_set_image_flip(AlliedCameraHandle_t handle, VmbBool_t flipx, V
 VmbError_t allied_get_image_flip(AlliedCameraHandle_t handle, VmbBool_t *_Nonnull flipx, VmbBool_t *_Nonnull flipy);
 
 /**
- * @brief Set the binning factor.
+ * @brief Set the binning factor. The camera must not be capturing when this function is called.
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Binning factor.

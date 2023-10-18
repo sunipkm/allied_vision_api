@@ -703,12 +703,21 @@ VmbError_t allied_set_binning_factor(AlliedCameraHandle_t handle, VmbUint32_t fa
     }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    if (ihandle->streaming || ihandle->acquiring)
+    {
+        return VmbErrorBusy;
+    }
     err = VmbFeatureIntSet(ihandle->handle, "BinningHorizontal", factor);
     if (err != VmbErrorSuccess)
     {
         return err;
     }
     err = VmbFeatureIntSet(ihandle->handle, "BinningVertical", factor);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    err = allied_alloc_framebuffer(handle, ihandle->num_frames);
     return err;
 }
 
@@ -795,6 +804,11 @@ VmbError_t allied_set_image_format(AlliedCameraHandle_t handle, const char *form
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
 
     err = VmbFeatureEnumSet(ihandle->handle, "PixelFormat", format);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    err = allied_alloc_framebuffer(handle, ihandle->num_frames);
     return err;
 }
 
@@ -894,7 +908,10 @@ VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
     }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-
+    if (ihandle->streaming || ihandle->acquiring)
+    {
+        return VmbErrorBusy;
+    }
     err = VmbFeatureEnumSet(ihandle->handle, "SensorBitDepth", depth);
     return err;
 }
