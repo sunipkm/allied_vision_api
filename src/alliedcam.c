@@ -350,10 +350,17 @@ err_alloc:
 
 static void FrameCaptureCallback(const VmbHandle_t handle, const VmbHandle_t stream, VmbFrame_t *frame)
 {
+    // extract user data
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)frame->context[CONTEXT_IDX_HANDLE];
     void *user_data = frame->context[CONTEXT_DATA_HANDLE];
     AlliedCaptureCallback callback_handle = frame->context[CONTEXT_CB_HANDLE];
+    // execute the user callback
     (*callback_handle)(ihandle, stream, frame, user_data);
+    // make sure user can not mistakenly destroy the callback mechanism
+    frame->context[CONTEXT_IDX_HANDLE] = ihandle;
+    frame->context[CONTEXT_DATA_HANDLE] = user_data;
+    frame->context[CONTEXT_CB_HANDLE] = callback_handle;
+    // requeue the frame
     VmbCaptureFrameQueue(handle, frame, &FrameCaptureCallback);
 }
 

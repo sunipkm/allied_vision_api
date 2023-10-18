@@ -47,7 +47,7 @@ typedef void *AlliedCameraHandle_t;
 /**
  * @brief Callback function for camera image capture events.
  *
- * @details This function is called when an image is captured by the camera. The user must copy the image data from the frame buffer to a separate buffer if the image data is to be used after the callback returns.
+ * @details This function is called when an image is captured by the camera. The user must copy the image data from the frame buffer to a separate buffer if the image data is to be used after the callback returns. DO NOT modify the frame->context pointers as they are used internally by the library.
  *
  * @param handle Handle to the camera.
  * @param stream Handle to capture stream.
