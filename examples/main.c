@@ -272,12 +272,6 @@ int main()
     free(fmt);
     free(avail);
 
-    err = allied_set_indicator_luma(handle, 10);
-    if (err != VmbErrorSuccess)
-    {
-        fprintf(stderr, "Error setting indicator luma: %d\n", err);
-    }
-
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)
     {
@@ -288,6 +282,12 @@ int main()
     printf("Captured %d frames\n", stat.n);
     printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
     printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
+
+    err = allied_set_indicator_luma(handle, 10);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error setting indicator luma: %d\n", err);
+    }
 
     err = allied_get_image_format_list(handle, &fmt, &avail, &count);
     if (err != VmbErrorSuccess)
@@ -307,12 +307,12 @@ int main()
     free(avail);
 cleanup:
 
-    err = allied_close_camera(handle);
+    err = allied_close_camera(&handle);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error closing camera: %d\n", err);
         return EXIT_FAILURE;
     }
-
+    printf("Closed camera: %p\n", handle);
     return EXIT_SUCCESS;
 }

@@ -474,7 +474,7 @@ static VmbError_t allied_free_framebuf(VmbFrame_t **framebuf, VmbUint32_t num_fr
     return VmbErrorSuccess;
 }
 
-VmbError_t allied_close_camera(AlliedCameraHandle_t handle)
+VmbError_t allied_close_camera(AlliedCameraHandle_t *handle)
 {
     assert(handle);
     if (!is_init)
@@ -482,8 +482,8 @@ VmbError_t allied_close_camera(AlliedCameraHandle_t handle)
         return VmbErrorNotInitialized;
     }
     VmbError_t err;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    err = allied_stop_capture(handle);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)(* handle);
+    err = allied_stop_capture(*handle);
     if (err != VmbErrorSuccess)
     {
         return err;
@@ -499,6 +499,7 @@ VmbError_t allied_close_camera(AlliedCameraHandle_t handle)
         return err;
     }
     free(ihandle);
+    *handle = NULL;
     return VmbErrorSuccess;
 }
 

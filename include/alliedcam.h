@@ -97,7 +97,7 @@ static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handl
 VmbError_t allied_alloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
 
 /**
- * @brief Start image acquisition.
+ * @brief Start image acquisition. {@link allied_alloc_framebuffer} must be called with non-zero number of frames before calling this function.
  *
  * @param handle Handle to Allied Vision camera.
  * @param callback A callback function to be called when an image is captured.
@@ -115,12 +115,13 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
 VmbError_t allied_stop_capture(AlliedCameraHandle_t handle);
 
 /**
- * @brief
+ * @brief Close the camera and free all associated memory allocations.
+ * Reuse of the camera handle without calling {@link allied_open_camera} again will cause your program to crash.
  *
- * @param handle
+ * @param handle Pointer to the camera handle.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_close_camera(AlliedCameraHandle_t handle);
+VmbError_t allied_close_camera(AlliedCameraHandle_t *handle);
 
 /**
  * @brief Select the camera temperature source, measured using {@link allied_get_temperature}.
