@@ -83,7 +83,7 @@ int main()
     double exposure;
     double framerate;
     double fps_min, fps_max, fps_step;
-    VmbInt64_t width, height;
+    VmbInt64_t width, height, swidth, sheight;
     char *camera_id;
 
     err = allied_list_cameras(&cameras, &count);
@@ -121,6 +121,17 @@ int main()
     }
     free((void *)camera_id);
 
+    err = allied_get_sensor_size(handle, &swidth, &sheight);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error getting sensor size: %d\n", err);
+        goto cleanup;
+    }
+    else
+    {
+        printf("Sensor size: %lld x %lld\n", swidth, sheight);
+    }
+
     err = allied_alloc_framebuffer(handle, 2);
     if (err != VmbErrorSuccess)
     {
@@ -128,7 +139,7 @@ int main()
         goto cleanup;
     }
 
-    err = allied_set_image_size(handle, 256, 256);
+    err = allied_set_image_size(handle, 512, 256);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error setting image size: %d\n", err);

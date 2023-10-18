@@ -45,6 +45,12 @@ static void shutdown_atexit()
     }
 }
 
+static VmbError_t vmb_adjust_pkt_sz(const char *id);
+static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t * alignment);
+static VmbError_t allied_free_framebuf(VmbFrame_t **framebuf, VmbUint32_t num_frames);
+
+
+#define ALLIED_DEBUG
 #ifdef ALLIED_DEBUG
 #define eprintlf(fmt, ...)                                                                     \
     {                                                                                          \
@@ -234,7 +240,7 @@ cleanup:
     return err;
 }
 
-static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t *_Nonnull alignment)
+static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t * alignment)
 {
     assert(alignment);
     VmbError_t err;
@@ -265,6 +271,10 @@ VmbError_t allied_alloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num
     {
         return VmbErrorNotInitialized;
     }
+    if (num_frames == 0)
+    {
+        return VmbErrorBadParameter;
+    }
     eprintlf("Allocating %d frames: Handle %p", num_frames, handle);
     eprintlf("Camera handle: %p", ((_AlliedCameraHandle_t *)handle)->handle);
     VmbError_t err;
@@ -280,6 +290,20 @@ VmbError_t allied_alloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num
     if (err != VmbErrorSuccess)
     {
         return err;
+    }
+    eprintlf("Payload size: %u", payloadSize);
+    if (ihandle->framebuf != NULL) // previously allocated frame buffer
+    {
+        err = allied_stop_capture(handle);
+        if (err != VmbErrorSuccess)
+        {
+            return err;
+        }
+        err = allied_free_framebuf(&(ihandle->framebuf), ihandle->num_frames);
+        if (err != VmbErrorSuccess)
+        {
+            return err;
+        }
     }
     VmbFrame_t *iframebuf = (VmbFrame_t *)malloc(num_frames * sizeof(VmbFrame_t));
     if (iframebuf == NULL)
@@ -573,12 +597,25 @@ VmbError_t allied_set_image_size(AlliedCameraHandle_t handle, VmbUint32_t width,
     }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    if (width == 0 || height == 0)
+    {
+        return VmbErrorBadParameter;
+    }
+    if (ihandle->acquiring || ihandle->streaming)
+    {
+        return VmbErrorBusy;
+    }
     err = VmbFeatureIntSet(ihandle->handle, "Width", width);
     if (err != VmbErrorSuccess)
     {
         return err;
     }
     err = VmbFeatureIntSet(ihandle->handle, "Height", height);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    err = allied_alloc_framebuffer(handle, ihandle->num_frames);
     return err;
 }
 
@@ -1056,6 +1093,20 @@ VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **id)
     }
     *id = strdup(info.cameraIdString);
     return VmbErrorSuccess;
+}
+
+bool allied_camera_streaming(AlliedCameraHandle_t handle)
+{
+    assert(handle);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    return ihandle->streaming;
+}
+
+bool allied_camera_acquiring(AlliedCameraHandle_t handle)
+{
+    assert(handle);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    return ihandle->acquiring;
 }
 
 const char *allied_strerr(VmbError_t status)

@@ -35,6 +35,7 @@
 #define _Nullable
 #endif
 
+#include <stdbool.h>
 #include <VmbC/VmbC.h>
 
 /**
@@ -351,7 +352,7 @@ VmbError_t allied_set_image_ofst(AlliedCameraHandle_t handle, VmbUint32_t x, Vmb
 VmbError_t allied_get_image_ofst(AlliedCameraHandle_t handle, VmbInt64_t  * _Nonnull x, VmbInt64_t  * _Nonnull y);
 
 /**
- * @brief Set the image size. The image size is applicable after binning.
+ * @brief Set the image size. The image size is applicable after binning. The image size must be smaller than the sensor size. The camera must not be capturing when this function is called.
  * 
  * @param handle Handle to Allied Vision camera.
  * @param width Image width.
@@ -407,6 +408,24 @@ VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double * 
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
 VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char ** _Nonnull id);
+
+/**
+ * @brief Check if the camera is currently streaming.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @return true 
+ * @return false 
+ */
+bool allied_camera_streaming(AlliedCameraHandle_t handle);
+
+/**
+ * @brief Check if the camera is currently acquiring images.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @return true 
+ * @return false 
+ */
+bool allied_camera_acquiring(AlliedCameraHandle_t handle);
 
 /**
  * @brief Get the message string corresponding to a {@link VmbError_t} status code.
