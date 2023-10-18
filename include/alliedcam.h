@@ -400,6 +400,15 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
 VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double * _Nonnull minval, double * _Nonnull maxval, double * _Nonnull step);
 
 /**
+ * @brief Get the camera ID string.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param id Pointer to store the camera ID string. The memory is allocated by the function and must be freed by the caller.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char ** _Nonnull id);
+
+/**
  * @brief Get the message string corresponding to a {@link VmbError_t} status code.
  * 
  * @param status Status code.

@@ -84,6 +84,7 @@ int main()
     double framerate;
     double fps_min, fps_max, fps_step;
     VmbInt64_t width, height;
+    char *camera_id;
 
     err = allied_list_cameras(&cameras, &count);
     if (err != VmbErrorSuccess)
@@ -95,7 +96,7 @@ int main()
     printf("Found %d cameras\n", count);
     for (i = 0; i < count; i++)
     {
-        printf("Camera %d: %s\n", i, cameras[i].cameraIdString);
+        printf("Available camera %d: %s\n", i, cameras[i].cameraIdString);
     }
 
     free(cameras);
@@ -106,6 +107,19 @@ int main()
         fprintf(stderr, "Error opening camera: %d\n", err);
         return EXIT_FAILURE;
     }
+    
+    err = allied_get_camera_id(handle, &camera_id);
+    
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error getting camera ID: %d\n", err);
+        goto cleanup;
+    }
+    else
+    {
+        printf("Opened: %s\n", camera_id);
+    }
+    free((void *)camera_id);
 
     err = allied_alloc_framebuffer(handle, 2);
     if (err != VmbErrorSuccess)

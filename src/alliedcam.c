@@ -1038,6 +1038,26 @@ VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *m
     return err;
 }
 
+VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **id)
+{
+    assert(handle);
+    assert(id);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbCameraInfo_t info;
+    err = VmbCameraInfoQueryByHandle(ihandle->handle, &info, sizeof(info));
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    *id = strdup(info.cameraIdString);
+    return VmbErrorSuccess;
+}
+
 const char *allied_strerr(VmbError_t status)
 {
 
