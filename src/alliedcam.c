@@ -346,6 +346,7 @@ err_alloc:
             free(iframebuf[i].buffer);
         }
     }
+    free(iframebuf);
     return VmbErrorResources;
 }
 

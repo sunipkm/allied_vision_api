@@ -107,9 +107,9 @@ int main()
         fprintf(stderr, "Error opening camera: %d\n", err);
         return EXIT_FAILURE;
     }
-    
+
     err = allied_get_camera_id(handle, &camera_id);
-    
+
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error getting camera ID: %d\n", err);
