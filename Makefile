@@ -1,17 +1,30 @@
-CC=gcc
+EDCFLAGS:= -O2 -std=gnu11 -I include/ -Wall $(CFLAGS)
+EDLDFLAGS:= -L lib/ -lpthread -lm -lVmbC $(LDFLAGS)
 
-EDCFLAGS=-Wall -O2 -I include/ $(CFLAGS)
-EDLDFLAGS= -Llib/ -lm -lpthread -lVmbC $(LDFLAGS)
+CSRCS := $(wildcard src/*.c)
+COBJS := $(patsubst %.c,%.o,$(CSRCS))
+CDEPS := $(patsubst %.c,%.d,$(CSRCS))
+LIBTARGET := liballiedcam.a
 
-SRC = examples/main.c src/alliedcam.c
+all: $(LIBTARGET) test
 
-all: run alliedcam
+$(LIBTARGET): $(COBJS)
+	ar -crs $(LIBTARGET) $(COBJS)
 
-run: alliedcam
-	LD_LIBRARY_PATH=lib/:$(LD_LIBRARY_PATH) ./alliedcam.out
+test: $(LIBTARGET)
+	$(CC) $(EDCFLAGS) examples/main.c $(LIBTARGET) -o alliedcam.out $(EDLDFLAGS)
 
-alliedcam: $(SRC)
-	$(CC) $(EDCFLAGS) $(SRC) -o alliedcam.out $(EDLDFLAGS)
+-include $(CDEPS)
+
+%.o: %.c Makefile
+	$(CC) $(EDCFLAGS) -MMD -MP -o $@ -c $<
+
+.PHONY: clean
 
 clean:
-	rm -f alliedcam.out
+	rm -vf $(COBJS)
+	rm -vf *.out
+
+spotless: clean
+	rm -vf $(CDEPS)
+	rm -vf $(LIBTARGET)
