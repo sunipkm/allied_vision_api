@@ -244,7 +244,7 @@ VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
  * @param count Pointer to store the number of bit depths.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, const char **_Nonnull depths, const VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***_Nonnull depths, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera pixel format.
@@ -273,7 +273,7 @@ VmbError_t allied_set_image_format(AlliedCameraHandle_t handle, const char *_Non
  * @param count Pointer to store the number of pixel formats.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, const char **formats, const VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***_Nonnull formats, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Flip the image on the camera.

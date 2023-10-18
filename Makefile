@@ -13,6 +13,7 @@ $(LIBTARGET): $(COBJS)
 
 test: $(LIBTARGET)
 	$(CC) $(EDCFLAGS) examples/main.c $(LIBTARGET) -o alliedcam.out $(EDLDFLAGS)
+	LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(PWD)/lib ./alliedcam.out
 
 -include $(CDEPS)
 

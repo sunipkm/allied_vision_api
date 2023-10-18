@@ -49,8 +49,6 @@ static VmbError_t vmb_adjust_pkt_sz(const char *id);
 static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t * alignment);
 static VmbError_t allied_free_framebuf(VmbFrame_t **framebuf, VmbUint32_t num_frames);
 
-
-#define ALLIED_DEBUG
 #ifdef ALLIED_DEBUG
 #define eprintlf(fmt, ...)                                                                     \
     {                                                                                          \
@@ -827,7 +825,7 @@ VmbError_t allied_get_image_format(AlliedCameraHandle_t handle, const char **for
     return err;
 }
 
-VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, const char **formats, const VmbBool_t **available, VmbUint32_t *count)
+VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, char ***formats, VmbBool_t **available, VmbUint32_t *count)
 {
     VmbError_t err;
     VmbUint32_t list_len = 0;
@@ -837,26 +835,26 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
     if (err == VmbErrorSuccess && list_len > 0)
     {
         // 1. Allocate space
-        char *_formats = (char *)malloc(list_len * sizeof(char *));
+        char **_formats = (char **)malloc(list_len * sizeof(char **));
         if (_formats == NULL)
         {
             return VmbErrorResources;
         }
-        VmbBool_t *_available = (VmbBool_t *)malloc(list_len * sizeof(VmbBool_t *));
+        VmbBool_t *_available = (VmbBool_t *)malloc(list_len * sizeof(VmbBool_t));
         if (_available == NULL)
         {
             free(_formats);
             return VmbErrorResources;
         }
-        memset(_available, 0, list_len * sizeof(VmbBool_t *));
-        memset(_formats, 0, list_len * sizeof(char *));
+        memset(_available, 0, list_len * sizeof(VmbBool_t));
+        memset(_formats, 0, list_len * sizeof(char **));
         // 2. Get the features
-        err = VmbFeatureEnumRangeQuery(moduleHandle, name, (const char **)&_formats, list_len, NULL);
+        err = VmbFeatureEnumRangeQuery(moduleHandle, name, (const char **)_formats, list_len, NULL);
         if (err == VmbErrorSuccess && formats != NULL)
         {
             for (int i = 0; i < list_len; i++)
             {
-                err = VmbFeatureEnumIsAvailable(moduleHandle, name, formats[i], &(_available[i]));
+                err = VmbFeatureEnumIsAvailable(moduleHandle, name, _formats[i], &(_available[i]));
             }
         }
         else
@@ -872,7 +870,7 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
     return VmbErrorSuccess;
 }
 
-VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, const char **formats, const VmbBool_t **available, VmbUint32_t *count)
+VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***formats, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
     assert(formats);
@@ -885,7 +883,7 @@ VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, const char 
     return allied_get_enum_list(handle, "PixelFormat", formats, available, count);
 }
 
-VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, const char **depths, const VmbBool_t **available, VmbUint32_t *count)
+VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***depths, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
     assert(depths);

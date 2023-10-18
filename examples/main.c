@@ -85,6 +85,8 @@ int main()
     double fps_min, fps_max, fps_step;
     VmbInt64_t width, height, swidth, sheight;
     char *camera_id;
+    char **fmt;
+    VmbBool_t *avail;
 
     err = allied_list_cameras(&cameras, &count);
     if (err != VmbErrorSuccess)
@@ -217,6 +219,22 @@ int main()
     printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
     printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
 
+    err = allied_get_image_format_list(handle, &fmt, &avail, &count);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error getting image format list: %d\n", err);
+        goto cleanup;
+    }
+    else
+    {
+        printf("Available image formats:\n");
+        for (i = 0; i < count; i++)
+        {
+            printf("%s: %s\n", fmt[i], avail[i] ? "available" : "not available");
+        }
+    }
+    free(fmt);
+    free(avail);
 cleanup:
 
     err = allied_close_camera(handle);
