@@ -161,7 +161,7 @@ int main()
         printf("Exposure: %lf us\n", exposure);
     }
 
-    err = allied_set_exposure_us(handle, 10000);
+    err = allied_set_exposure_us(handle, 100);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error setting exposure: %d\n", err);
@@ -189,7 +189,7 @@ int main()
     }
 
     printf("Captured %d frames\n", stat.n);
-    printf("Average frame time: %lf us\n", stat.avg * 1e6);
+    printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
     printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
 
 cleanup:
