@@ -47,7 +47,7 @@ typedef void *AlliedCameraHandle_t;
 /**
  * @brief Callback function for camera image capture events.
  *
- * @details This function is called when an image is captured by the camera. The user must copy the image data from the frame buffer to a separate buffer if the image data is to be used after the callback returns. DO NOT modify the frame->context pointers as they are used internally by the library.
+ * @details This function is called when an image is captured by the camera. The user must copy the image data from the frame buffer to a separate buffer if the image data is to be used after the callback returns. DO NOT modify the `frame->context` pointers as they are used internally by the library.
  *
  * @param handle Handle to the camera.
  * @param stream Handle to capture stream.
@@ -104,7 +104,7 @@ VmbError_t allied_alloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num
  * @param user_data Pointer to custom user data to be passed to the callback.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback callback, void *user_data);
+VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback _Nonnull callback, void *user_data);
 
 /**
  * @brief Stop image acquisition.

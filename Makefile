@@ -29,3 +29,7 @@ clean:
 spotless: clean
 	rm -vf $(CDEPS)
 	rm -vf $(LIBTARGET)
+	rm -rf doc
+
+doc:
+	doxygen .doxyconfig

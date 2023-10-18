@@ -367,6 +367,7 @@ static void FrameCaptureCallback(const VmbHandle_t handle, const VmbHandle_t str
 VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback callback, void *user_data)
 {
     assert(handle);
+    assert(callback);
     if (!is_init)
     {
         return VmbErrorNotInitialized;

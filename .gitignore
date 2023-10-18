@@ -4,4 +4,5 @@
 **/*.ini
 **/*.d
 **/*.o
+**/doc
 liballiedcam.a
