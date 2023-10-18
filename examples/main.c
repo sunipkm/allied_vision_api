@@ -114,7 +114,7 @@ int main()
         goto cleanup;
     }
 
-    err = allied_set_image_size(handle, 64, 64);
+    err = allied_set_image_size(handle, 256, 256);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error setting image size: %d\n", err);
