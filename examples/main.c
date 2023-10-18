@@ -246,6 +246,12 @@ int main()
         printf("Exposure set to %lf us\n", exposure);
     }
 
+    err = allied_set_indicator_luma(handle, 0);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error setting indicator luma: %d\n", err);
+    }
+
     err = allied_start_capture(handle, &Callback, (void *)&stat);
     if (err != VmbErrorSuccess)
     {
@@ -265,6 +271,12 @@ int main()
 
     free(fmt);
     free(avail);
+
+    err = allied_set_indicator_luma(handle, 10);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error setting indicator luma: %d\n", err);
+    }
 
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)

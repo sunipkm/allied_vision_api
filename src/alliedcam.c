@@ -916,6 +916,103 @@ VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***
     return allied_get_enum_list(handle, "DeviceTemperatureSelector", srcs, available, count);
 }
 
+VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(modes);
+    assert(available);
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "DeviceIndicatorMode", modes, available, count);
+}
+
+VmbError_t allied_get_indicator_mode(AlliedCameraHandle_t handle, const char **mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureEnumGet(ihandle->handle, "DeviceIndicatorMode", mode);
+
+    return err;
+}
+
+VmbError_t allied_set_indicator_mode(AlliedCameraHandle_t handle, const char *mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+
+    err = VmbFeatureEnumSet(ihandle->handle, "DeviceIndicatorMode", mode);
+    return err;
+}
+
+VmbError_t allied_get_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t *luma)
+{
+    assert(handle);
+    assert(luma);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+
+    err = VmbFeatureIntGet(ihandle->handle, "DeviceIndicatorLuminance", luma);
+    return err;
+}
+
+VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t luma)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+
+    err = VmbFeatureIntSet(ihandle->handle, "DeviceIndicatorLuminance", luma);
+    return err;
+}
+
+VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *minval, VmbInt64_t *maxval, VmbInt64_t *step)
+{
+    assert(handle);
+    assert(minval);
+    assert(maxval);
+    assert(step);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    *minval = 0;
+    *maxval = 0;
+    *step = 0;
+
+    err = VmbFeatureIntRangeQuery(ihandle->handle, "DeviceIndicatorLuminance", minval, maxval);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    err = VmbFeatureIntIncrementQuery(ihandle->handle, "DeviceIndicatorLuminance", step);
+    return err;
+}
+
 VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *depth)
 {
     assert(handle);

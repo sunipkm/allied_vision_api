@@ -412,6 +412,64 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
 VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
 /**
+ * @brief Get the camera indicator LED mode.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param mode Pointer to store indicator mode string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_indicator_mode(AlliedCameraHandle_t handle, const char **_Nonnull mode);
+
+/**
+ * @brief Set the camera indicator LED mode.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param mode Indicator mode string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_indicator_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
+
+/**
+ * @brief Get the list of available indicator modes. User has to free the memory allocated for the lists.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param modes Pointer to store the list of indicator mode strings.
+ * @param available Pointer to store the list of booleans indicating whether the indicator mode is available.
+ * @param count Pointer to store the number of indicator modes.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the camera indicator LED brightness.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param luma Pointer to store the indicator brightness.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull luma);
+
+/**
+ * @brief Set the camera indicator LED brightness.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param luma Indicator brightness.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t luma);
+
+/**
+ * @brief Get the camera indicator LED brightness range.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param minval Pointer to store the minimum indicator brightness.
+ * @param maxval Pointer to store the maximum indicator brightness.
+ * @param step Pointer to store the indicator brightness step size.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nonnull step);
+
+/**
  * @brief Get the camera ID string.
  *
  * @param handle Handle to Allied Vision camera.
