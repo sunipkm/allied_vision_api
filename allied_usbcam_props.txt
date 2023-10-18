@@ -1,0 +1,1880 @@
+
+///////////////////////////////////////
+/// Vmb API List Features Example   ///
+///////////////////////////////////////
+
+Vmb Version Major: 1 Minor: 0 Patch: 2
+
+
+Printing remote device features of the camera at index 0
+
+Camera id    : DEV_1AB22C03971D
+Camera name  : Allied Vision 1800 U-291m
+Model name   : 1800 U-291m
+Serial string: 051JX
+
+/// Feature Name: DeviceScanType
+/// Display Name: Device Scan Type
+/// Tooltip: Scan type of the sensor of the device.
+/// Description: Scan type of the sensor of the device.
+/// SNFC Namespace: Standard
+/// Value: [enum] Areascan
+/// Possible values (1):
+///	Areascan		[0x00000000]:  (Y)
+
+
+/// Feature Name: DeviceVendorName
+/// Display Name: Device Vendor Name
+/// Tooltip: Name of the manufacturer of the device.
+/// Description: Name of the manufacturer of the device.
+/// SNFC Namespace: Standard
+/// Value: [string] Allied Vision
+
+/// Feature Name: DeviceModelName
+/// Display Name: Device Model Name
+/// Tooltip: Model of the device.
+/// Description: Model of the device.
+/// SNFC Namespace: Standard
+/// Value: [string] 1800 U-291m
+
+/// Feature Name: DeviceFamilyName
+/// Display Name: Device Family Name
+/// Tooltip: Identifier of the product family of the device.
+/// Description: Identifier of the product family of the device.
+/// SNFC Namespace: Standard
+/// Value: [string] ALVIUM
+
+/// Feature Name: DeviceManufacturerInfo
+/// Display Name: Device Manufacturer Info
+/// Tooltip: Manufacturer information about the device.
+/// Description: Manufacturer information about the device.
+/// SNFC Namespace: Standard
+/// Value: [string] 0-FF-0-461865-0-0
+
+/// Feature Name: DeviceVersion
+/// Display Name: Device Version
+/// Tooltip: Version of the device.
+/// Description: Version of the device.
+/// SNFC Namespace: Standard
+/// Value: [string] 17222
+
+/// Feature Name: DeviceFirmwareVersion
+/// Display Name: Device Firmware Version
+/// Tooltip: Version of the firmware in the device.
+/// Description: Version of the firmware in the device.
+/// SNFC Namespace: Standard
+/// Value: [string] 12.0.00611A22
+
+/// Feature Name: DeviceFirmwareVersionSelector
+/// Display Name: Device Firmware Version Selector
+/// Tooltip: Selects the DeviceFirmwareVersion to read.
+/// Description: Selects the DeviceFirmwareVersion to read.
+/// SNFC Namespace: Custom
+/// Value: [enum] Current
+/// Possible values (2):
+///	Current		[0x00000000]:  (Y)
+///	Programmed		[0x00000001]:  (Y)
+
+
+/// Feature Name: DeviceFirmwareID
+/// Display Name: Device Firmware ID
+/// Tooltip: Device firmware ID.
+/// Description: Device firmware ID.
+/// SNFC Namespace: Custom
+/// Value: [string] 44-0030102C
+
+/// Feature Name: DeviceFirmwareIDSelector
+/// Display Name: Device Firmware ID Selector
+/// Tooltip: Selects the DeviceFirmwareID to read.
+/// Description: Selects the DeviceFirmwareID to read.
+/// SNFC Namespace: Custom
+/// Value: [enum] Current
+/// Possible values (2):
+///	Current		[0x00000000]:  (Y)
+///	Supported		[0x00000001]:  (Y)
+
+
+/// Feature Name: DeviceSerialNumber
+/// Display Name: Device Serial Number
+/// Tooltip: Device`s serial number.
+/// Description: Device`s serial number. This string is a unique identifier of the device.
+/// SNFC Namespace: Standard
+/// Value: [string] 051JX
+
+/// Feature Name: DeviceUserID
+/// Display Name: Device User ID
+/// Tooltip: User-programmable device identifier.
+/// Description: User-programmable device identifier.
+/// SNFC Namespace: Standard
+/// Value: [string] 
+
+/// Feature Name: DeviceSFNCVersionMajor
+/// Display Name: Device SFNC Version Major
+/// Tooltip: Major version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// Description: Major version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// SNFC Namespace: Standard
+/// Value: [int] 2 (-9223372036854775808, 9223372036854775807, 1)
+
+/// Feature Name: DeviceSFNCVersionMinor
+/// Display Name: Device SFNC Version Minor
+/// Tooltip: Minor version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// Description: Minor version of the Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// SNFC Namespace: Standard
+/// Value: [int] 7 (-9223372036854775808, 9223372036854775807, 1)
+
+/// Feature Name: DeviceSFNCVersionSubMinor
+/// Display Name: Device SFNC Version Sub Minor
+/// Tooltip: Sub minor version of Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// Description: Sub minor version of Standard Features Naming Convention that was used to create the device`s GenICam XML.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (-9223372036854775808, 9223372036854775807, 1)
+
+/// Feature Name: DeviceGenCPVersionMajor
+/// Display Name: Device Gen CP Version Major
+/// Tooltip: Major version of the GenCP protocol supported by the device.
+/// Description: Major version of the GenCP protocol supported by the device.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (1, 1, 1)
+
+/// Feature Name: DeviceGenCPVersionMinor
+/// Display Name: Device Gen CP Version Minor
+/// Tooltip: Minor version of the GenCP protocol supported by the device.
+/// Description: Minor version of the GenCP protocol supported by the device.
+/// SNFC Namespace: Standard
+/// Value: [int] 3 (3, 3, 1)
+
+/// Feature Name: DeviceLinkThroughputLimitMode
+/// Display Name: Device Link Throughput Limit Mode
+/// Tooltip: Controls if the DeviceLinkThroughputLimit is active.
+/// Description: Controls if the DeviceLinkThroughputLimit is active. When disabled, lower level TL specific features are expected to control the throughput. When enabled, DeviceLinkThroughputLimit controls the overall throughput.
+/// SNFC Namespace: Standard
+/// Value: [enum] On
+/// Possible values (2):
+///	On		[0x00000001]:  (Y)
+///	Off		[0x00000000]:  (Y)
+
+
+/// Feature Name: DeviceLinkThroughputLimit
+/// Display Name: Device Link Throughput Limit
+/// Tooltip: Limits the maximum bandwidth of the data that will be streamed out by the device on the selected Link.
+/// Description: Limits the maximum bandwidth of the data that will be streamed out by the device on the selected Link. If necessary, delays will be uniformly inserted between transport layer packets in order to control the peak bandwidth.
+/// SNFC Namespace: Standard
+/// Value: [int] 200000000 (6000000, 450000000, 1)
+
+/// Feature Name: DeviceReset
+/// Display Name: Device Reset
+/// Tooltip: Resets the device to its power up state.
+/// Description: Resets the device to its power up state. After reset, the device must be rediscovered.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: DeviceLinkSpeed
+/// Display Name: Device Link Speed
+/// Tooltip: Indicates the speed of transmission negotiated on the specified Link.
+/// Description: Indicates the speed of transmission negotiated and represents the total speed of all the connections of the specified Link.
+/// SNFC Namespace: Standard
+/// Value: [int] 450000000 (0, 9223372036854775807, 1)
+
+/// Feature Name: DeviceIndicatorMode
+/// Display Name: Device Indicator Mode
+/// Tooltip: Controls the behavior of the indicators (such as LEDs) showing the status of the Device.
+/// Description: Controls the behavior of the indicators (such as LEDs) showing the status of the Device.
+/// SNFC Namespace: Standard
+/// Value: [enum] Active
+/// Possible values (3):
+///	Inactive		[0x00000000]:  (Y)
+///	Active		[0x00000001]:  (Y)
+///	ErrorStatus		[0x00000002]:  (Y)
+
+
+/// Feature Name: DeviceIndicatorLuminance
+/// Display Name: Device Indicator Luminance
+/// Tooltip: Controls the luminance of the indicators (such as LEDs) showing the status of the Device.
+/// Description: Controls the luminance of the indicators (such as LEDs) showing the status of the Device.
+/// SNFC Namespace: Custom
+/// Value: [int] 10 (0, 10, 1)
+
+/// Feature Name: DeviceTemperatureSelector
+/// Display Name: Device Temperature Selector
+/// Tooltip: Selects the location within the device, where the temperature will be measured.
+/// Description: Selects the location within the device, where the temperature will be measured.
+/// SNFC Namespace: Standard
+/// Value: [enum] Mainboard
+/// Possible values (2):
+///	Sensor		[0x00000000]:  (Y)
+///	Mainboard		[0x00000001]:  (Y)
+
+
+/// Feature Name: DeviceTemperature
+/// Display Name: Device Temperature
+/// Tooltip: Device temperature in degrees Celsius (C).
+/// Description: Device temperature in degrees Celsius (C). It is measured at the location selected by DeviceTemperatureSelector.
+/// SNFC Namespace: Standard
+/// Value: [float] 66.200000 (-179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368.000000, 179769313486231570814527423731704356798070567525844996598917476803157260780028538760589558632766878171540458953514382464234321326889464182768467546703537516986049910576551282076245490090389328944075868508455133942304583236903222948165808559332123348274797826204144723168738177180919299881250404026184124858368.000000, 0.000000 [False])
+
+/// Feature Name: DeviceLinkCommandTimeout
+/// Display Name: Device Link Command Timeout
+/// Tooltip: Indicates the command timeout of the specified Link.
+/// Description: Indicates the command timeout of the specified Link. This corresponds to the maximum response time of the device for a command sent on that link.
+/// SNFC Namespace: Standard
+/// Value: [float] 100000.000000 (-340282346638528859811704183484516925440.000000, 340282346638528859811704183484516925440.000000, 0.000000 [False])
+
+/// Feature Name: DeviceTLVersionMajor
+/// Display Name: Device Transport Layer Version Major
+/// Tooltip: Major version of the Transport Layer of the device.
+/// Description: Major version of the Transport Layer of the device.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (0, 4294967295, 1)
+
+/// Feature Name: DeviceTLVersionMinor
+/// Display Name: Device Transport Layer Version Minor
+/// Tooltip: Minor version of the Transport Layer of the device.
+/// Description: Minor version of the Transport Layer of the device.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (0, 4294967295, 1)
+
+/// Feature Name: TimestampLatch
+/// Display Name: Timestamp Latch
+/// Tooltip: Latches the current timestamp counter into TimestampLatchValue.
+/// Description: Latches the current timestamp counter into TimestampLatchValue.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: TimestampReset
+/// Display Name: Timestamp Reset
+/// Tooltip: Resets the current value of the device timestamp counter.
+/// Description: Resets the current value of the device timestamp counter.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: TimestampLatchValue
+/// Display Name: Timestamp Latch Value
+/// Tooltip: Returns the latched value of the timestamp counter.
+/// Description: Returns the latched value of the timestamp counter.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 9223372036854775807, 1)
+
+/// Feature Name: DevicePowerSavingMode
+/// Display Name: Device Power Saving Mode
+/// Tooltip: Selects between various power saving modes.
+/// Description: Selects between various power saving modes.
+            To apply the selected power saving mode, the device needs to receive a DevicePowerSave command or
+            a respective backend command from the Host.
+/// SNFC Namespace: Custom
+/// Value: [enum] Disabled
+/// Possible values (2):
+///	Disabled		[0x00000000]:  (Y)
+///	SuspendMode		[0x00000002]:  (Y)
+
+
+/// Feature Name: SensorWidth
+/// Display Name: Sensor Width
+/// Tooltip: Effective width of the sensor in pixels.
+/// Description: Effective width of the sensor in pixels.
+/// SNFC Namespace: Standard
+/// Value: [int] 1944 (1944, 1944, 1)
+
+/// Feature Name: SensorHeight
+/// Display Name: Sensor Height
+/// Tooltip: Effective height of the sensor in pixels.
+/// Description: Effective height of the sensor in pixels.
+/// SNFC Namespace: Standard
+/// Value: [int] 1472 (1472, 1472, 1)
+
+/// Feature Name: SensorShutterMode
+/// Display Name: Shutter Mode
+/// Tooltip: Selects the sensor shutter mode
+/// Description: Selects the sensor shutter mode. Available for CMOS sensors supporting either global shutter, rolling shutter or global reset shutter mode.
+/// SNFC Namespace: Standard
+/// Value: [enum] GlobalShutter
+/// Possible values (1):
+///	GlobalShutter		[0x00000000]:  (Y)
+
+
+/// Feature Name: WidthMax
+/// Display Name: Width Max
+/// Tooltip: Maximum width of the image (in pixels).
+/// Description: Maximum width of the image (in pixels). The dimension is calculated after horizontal binning, decimation or any other function changing the horizontal dimension of the image.
+/// SNFC Namespace: Standard
+/// Value: [int] 1944 (8, 1944, 1)
+
+/// Feature Name: HeightMax
+/// Display Name: Height Max
+/// Tooltip: Maximum height of the image (in pixels).
+/// Description: Maximum height of the image (in pixels). This dimension is calculated after vertical binning, decimation or any other function changing the vertical dimension of the image
+/// SNFC Namespace: Standard
+/// Value: [int] 1472 (8, 1472, 1)
+
+/// Feature Name: Width
+/// Display Name: Width
+/// Tooltip: Width of the image provided by the device (in pixels).
+/// Description: Width of the image provided by the device (in pixels).
+/// SNFC Namespace: Standard
+/// Value: [int] 1944 (8, 1944, 8)
+
+/// Feature Name: Height
+/// Display Name: Height
+/// Tooltip: Height of the image provided by the device (in pixels).
+/// Description: Height of the image provided by the device (in pixels).
+/// SNFC Namespace: Standard
+/// Value: [int] 1472 (8, 1472, 2)
+
+/// Feature Name: OffsetX
+/// Display Name: Offset X
+/// Tooltip: Horizontal offset from the origin to the region of interest (in pixels).
+/// Description: Horizontal offset from the origin to the region of interest (in pixels).
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 0, 8)
+
+/// Feature Name: OffsetY
+/// Display Name: Offset Y
+/// Tooltip: Vertical offset from the origin to the region of interest (in pixels).
+/// Description: Vertical offset from the origin to the region of interest (in pixels).
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 0, 8)
+
+/// Feature Name: BinningSelector
+/// Display Name: Binning Selector
+/// Tooltip: Selects which binning engine is controlled by the BinningHorizontal and BinningVertical features.
+/// Description: Selects which binning engine is controlled by the BinningHorizontal and BinningVertical features.
+/// SNFC Namespace: Standard
+/// Value: [enum] Digital
+/// Possible values (1):
+///	Digital		[0x00000000]:  (Y)
+
+
+/// Feature Name: BinningHorizontalMode
+/// Display Name: Binning Horizontal Mode
+/// Tooltip: Sets the mode to use to combine horizontal photo-sensitive cells together when BinningHorizontal is used.
+/// Description: Sets the mode to use to combine horizontal photo-sensitive cells together when BinningHorizontal is used.
+/// SNFC Namespace: Standard
+/// Value: [enum] Sum
+/// Possible values (2):
+///	Sum		[0x00000000]:  (Y)
+///	Average		[0x00000001]:  (Y)
+
+
+/// Feature Name: BinningHorizontal
+/// Display Name: Binning Horizontal
+/// Tooltip: Number of horizontal photo-sensitive cells to combine together.
+/// Description: Number of horizontal photo-sensitive cells to combine together. This reduces the horizontal resolution (width) of the image.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (1, 8, 1)
+
+/// Feature Name: BinningVerticalMode
+/// Display Name: Binning Vertical Mode
+/// Tooltip: Sets the mode used to combine horizontal photo-sensitive cells together when BinningVertical is used.
+/// Description: Sets the mode used to combine horizontal photo-sensitive cells together when BinningVertical is used.
+/// SNFC Namespace: Standard
+/// Value: [enum] Sum
+/// Possible values (2):
+///	Sum		[0x00000000]:  (Y)
+///	Average		[0x00000001]:  (Y)
+
+
+/// Feature Name: BinningVertical
+/// Display Name: Binning Vertical
+/// Tooltip: Number of vertical photo-sensitive cells to combine together.
+/// Description: Number of vertical photo-sensitive cells to combine together. This reduces the vertical resolution (height) of the image.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (1, 8, 1)
+
+/// Feature Name: ReverseX
+/// Display Name: Reverse X
+/// Tooltip: Flip horizontally the image sent by the device.
+/// Description: Flip horizontally the image sent by the device. The Region of interest is applied after the flipping.
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: ReverseY
+/// Display Name: Reverse Y
+/// Tooltip: Flip vertically the image sent by the device.
+/// Description: Flip vertically the image sent by the device. The Region of interest is applied after the flipping.
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: PixelFormat
+/// Display Name: Pixel Format
+/// Tooltip: Format of the pixels provided by the device.
+/// Description: Format of the pixels provided by the device. It represents all the information provided by PixelCoding, PixelSize, PixelColorFilter combined in a single feature.
+/// SNFC Namespace: Standard
+/// Value: [enum] Mono8
+/// Possible values (5):
+///	Mono8		[0x01080001]:  (Y)
+///	Mono10		[0x01100003]:  (Y)
+///	Mono10p		[0x010A0046]:  (Y)
+///	Mono12		[0x01100005]:  (Y)
+///	Mono12p		[0x010C0047]:  (Y)
+
+
+/// Feature Name: PixelSize
+/// Display Name: Pixel Size
+/// Tooltip: Total size in bits of a pixel of the image.
+/// Description: Total size in bits of a pixel of the image.
+/// SNFC Namespace: Standard
+/// Value: [enum] Bpp8
+/// Possible values (10):
+///	Bpp1		[0x00000001]:  (Y)
+///	Bpp2		[0x00000002]:  (Y)
+///	Bpp4		[0x00000004]:  (Y)
+///	Bpp8		[0x00000008]:  (Y)
+///	Bpp10		[0x0000000A]:  (Y)
+///	Bpp12		[0x0000000C]:  (Y)
+///	Bpp14		[0x0000000E]:  (Y)
+///	Bpp16		[0x00000010]:  (Y)
+///	Bpp20		[0x00000014]:  (Y)
+///	Bpp24		[0x00000018]:  (Y)
+
+
+/// Feature Name: SensorBitDepth
+/// Display Name: Sensor Bit Depth
+/// Tooltip: Selects resolution of sensor's ADC.
+/// Description: Selects resolution of sensor's ADC. The adaptive setting causes an automatic selection depending on the selected PixelFormat and limitations of sensor and camera.
+/// SNFC Namespace: Custom
+/// Value: [enum] Bpp12
+/// Possible values (4):
+///	Adaptive		[0x00000000]:  (Y)
+///	Bpp8		[0x00000001]:  (Y)
+///	Bpp10		[0x00000002]:  (Y)
+///	Bpp12		[0x00000003]:  (Y)
+
+
+/// Feature Name: SubRegionSelector
+/// Display Name: Sub Region Selector
+/// Tooltip: Selects the Region of interest to control.
+/// Description: Selects the Region of interest to control. The SubRegionSelector feature allows devices that are able to extract multiple regions out of an image, to configure the features of those individual regions independently.
+/// SNFC Namespace: Standard
+/// Value: [enum] Region0
+/// Possible values (4):
+///	Region0		[0x00000000]:  (Y)
+///	Region1		[0x00000001]:  (Y)
+///	Region2		[0x00000002]:  (Y)
+///	Region3		[0x00000003]:  (Y)
+
+
+/// Feature Name: MultipleRegionEnable
+/// Display Name: Multiple Region Enable
+/// Tooltip: Enable the multi region functionality of the device.
+/// Description: Enable the multi region functionality of the device.
+/// SNFC Namespace: Custom
+/// Value: [bool] 0
+
+/// Feature Name: SubRegionMode
+/// Display Name: Sub Region Mode
+/// Tooltip: Controls if the selected Region of interest is active and streaming.
+/// Description: Controls if the selected Region of interest is active and streaming.
+/// SNFC Namespace: Standard
+/// Value: [enum] On
+/// Possible values (2):
+///	Off		[0x00000000]:  (Y)
+///	On		[0x00000001]:  (Y)
+
+
+/// Feature Name: MultipleRegionArrangement
+/// Display Name: Multiple Region Arrangement
+/// Tooltip: Selects the arrangement of multiple regions.
+/// Description: Selects the arrangement of multiple regions.
+/// SNFC Namespace: Custom
+/// Value: [enum] Free
+/// Possible values (4):
+///	Tile		[0x00000000]:  (Y)
+///	Horizontal		[0x00000001]:  (Y)
+///	Vertical		[0x00000002]:  (Y)
+///	Free		[0x00000003]:  (Y)
+
+
+/// Feature Name: SubRegionWidth
+/// Display Name: Sub Region Width
+/// Tooltip: Width of the selected region in multiple region mode provided by the device (in pixels).
+/// Description: Width of the selected region in multiple region mode provided by the device (in pixels).
+/// SNFC Namespace: Custom
+/// Value: [int] 1944 (16, 1944, 8)
+
+/// Feature Name: SubRegionHeight
+/// Display Name: Sub Region Height
+/// Tooltip: Height of the selected region in multiple region mode provided by the device (in pixels).
+/// Description: Height of the selected region in multiple region mode provided by the device (in pixels).
+/// SNFC Namespace: Custom
+/// Value: [int] 1472 (8, 1472, 8)
+
+/// Feature Name: SubRegionOffsetX
+/// Display Name: Sub Region Offset X
+/// Tooltip: Horizontal offset from the origin to the selected region in multiple region mode (in pixels).
+/// Description: Horizontal offset from the origin to the selected region in multiple region mode (in pixels).
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (0, 0, 8)
+
+/// Feature Name: SubRegionOffsetY
+/// Display Name: Sub Region Offset Y
+/// Tooltip: Vertical offset from the origin to the selected region in multiple region mode (in pixels).
+/// Description: Vertical offset from the origin to the selected region in multiple region mode (in pixels).
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (0, 0, 8)
+
+/// Feature Name: AutoModeRegionSelector
+/// Display Name: Auto Mode Region Selector
+/// Tooltip: Selects the Auto Mode Region to configure.
+/// Description: Selects the Auto Mode Region to configure.
+/// SNFC Namespace: Custom
+/// Value: [enum] AutoModeRegion1
+/// Possible values (1):
+///	AutoModeRegion1		[0x00000000]:  (Y)
+
+
+/// Feature Name: AutoModeRegionWidth
+/// Display Name: Auto Mode Region Width
+/// Tooltip: Defines the width of the window used to measure the actual value for the auto function
+/// Description: Defines the width of the window used to measure the actual value for the auto function
+/// SNFC Namespace: Custom
+/// Value: [int] 1944 (0, 1944, 2)
+
+/// Feature Name: AutoModeRegionHeight
+/// Display Name: Auto Mode Region Height
+/// Tooltip: Defines the height of the window used to measure values for auto functions
+/// Description: Defines the height of the window used to measure values for auto functions
+/// SNFC Namespace: Custom
+/// Value: [int] 1472 (0, 1472, 2)
+
+/// Feature Name: AutoModeRegionOffsetX
+/// Display Name: Auto Mode Region OffsetX
+/// Tooltip: Defines the horizontal position of the window used to measure the actual value for the auto function
+/// Description: Defines the horizontal position of the window used to measure the actual value for the auto function
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (0, 0, 2)
+
+/// Feature Name: AutoModeRegionOffsetY
+/// Display Name: Auto Mode Region OffsetY
+/// Tooltip: Defines the vertical position of the window used to measure the actual value for the auto function.
+/// Description: Defines the vertical position of the window used to measure the actual value for the auto function.
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (0, 0, 2)
+
+/// Feature Name: IntensityControllerSelector
+/// Display Name: Intensity Controller Selector
+/// Tooltip: Selects the Intensity controller to configure.
+/// Description: Selects the Intensity controller to configure.
+/// SNFC Namespace: Custom
+/// Value: [enum] IntensityController1
+/// Possible values (1):
+///	IntensityController1		[0x00000000]:  (Y)
+
+
+/// Feature Name: IntensityControllerOutliersDark
+/// Display Name: Intensity Controller Outliers Dark
+/// Tooltip: Defines the number of pixels from the bottom of the distribution to be ignored
+/// Description: Defines the number of pixels from the bottom of the distribution to be ignored
+/// SNFC Namespace: Custom
+/// Value: [float] 0.000000 (0.000000, 10.000000, 0.010000 [True])
+
+/// Feature Name: IntensityControllerOutliersBright
+/// Display Name: Intensity Controller Outliers Bright
+/// Tooltip: Defines the number of pixels from the top of the distribution to be ignored.
+/// Description: Defines the number of pixels from the top of the distribution to be ignored.
+/// SNFC Namespace: Custom
+/// Value: [float] 0.000000 (0.000000, 10.000000, 0.010000 [True])
+
+/// Feature Name: IntensityControllerTarget
+/// Display Name: Intensity Controller Target
+/// Tooltip: Target intensity value for auto intensity control
+/// Description: Target intensity value for auto intensity control (using ExposureTime, Gain, and Iris as configured).
+/// SNFC Namespace: Custom
+/// Value: [float] 50.000000 (10.000000, 90.000000, 0.100000 [True])
+
+/// Feature Name: IntensityControllerTolerance
+/// Display Name: Intensity Controller Tolerance
+/// Tooltip: Tolerance in variation from the target value in which the algorithm will not react.
+/// Description: Tolerance in variation from the target value in which the algorithm will not react.
+/// SNFC Namespace: Custom
+/// Value: [int] 5 (0, 50, 1)
+
+/// Feature Name: IntensityControllerAlgorithm
+/// Display Name: Intensity Controller Algorithm
+/// Tooltip: Algorithm determining how the histogram is used to determine the current intensity value.
+/// Description: Algorithm determining how the histogram is used to determine the current intensity value.
+/// SNFC Namespace: Custom
+/// Value: [enum] Mean
+/// Possible values (1):
+///	Mean		[0x00000000]:  (Y)
+
+
+/// Feature Name: IntensityControllerRate
+/// Display Name: Intensity Controller Rate
+/// Tooltip: The rate at which the controller should compute an intensity value. This rate also defines the period where the associated auto functions change their control value.
+/// Description: The rate at which the controller should compute an intensity value. This rate also defines the period where the associated auto functions change their control value.
+/// SNFC Namespace: Custom
+/// Value: [int] 100 (1, 100, 1)
+
+/// Feature Name: IntensityControllerRegion
+/// Display Name: Intensity Controller Region
+/// Tooltip: The subregion of the image where the intensity controller operates on.
+/// Description: The subregion of the image where the intensity controller operates on.
+/// SNFC Namespace: Custom
+/// Value: [enum] FullImage
+/// Possible values (2):
+///	FullImage		[0x00000004]:  (Y)
+///	AutoModeRegion1		[0x00000000]:  (Y)
+
+
+/// Feature Name: ExposureAutoMin
+/// Display Name: Exposure Auto Min
+/// Tooltip: Minimum for auto exposure control value.
+/// Description: Minimum for auto exposure control value.The output of the auto exposure function affects the whole image.
+/// SNFC Namespace: Custom
+/// Value: [float] 24.545000 (24.545000, 8999999.657000, 9.778000 [True])
+
+/// Feature Name: ExposureAutoMax
+/// Display Name: Exposure Auto Max
+/// Tooltip: Maximum for auto exposure control value
+/// Description: Maximum for auto exposure control value.The output of the auto exposure function affects the whole image
+/// SNFC Namespace: Custom
+/// Value: [float] 8999999.657000 (24.545000, 10000002.323000, 9.778000 [True])
+
+/// Feature Name: GainAutoMin
+/// Display Name: Gain Auto Min
+/// Tooltip: Minimum for auto gain control value.
+/// Description: Minimum for auto gain control value.The output of the auto gain function affects the whole image.
+/// SNFC Namespace: Custom
+/// Value: [float] 0.000000 (0.000000, 48.000000, 0.100000 [True])
+
+/// Feature Name: GainAutoMax
+/// Display Name: Gain Auto Max
+/// Tooltip: Maximum for auto gain control value
+/// Description: Maximum for auto gain control value.The output of the auto gain function affects the whole image
+/// SNFC Namespace: Custom
+/// Value: [float] 48.000000 (0.000000, 48.000000, 0.100000 [True])
+
+/// Feature Name: IntensityAutoPrecedence
+/// Display Name: Intensity Auto Precedence
+/// Tooltip: Selects the Precedence for Intensity Controller
+/// Description: Selects the Precedence of Intensity Controller
+/// SNFC Namespace: Custom
+/// Value: [enum] Minimizenoise
+/// Possible values (2):
+///	Minimizenoise		[0x00000000]:  (Y)
+///	Minimizeblur		[0x00000001]:  (Y)
+
+
+/// Feature Name: AcquisitionMode
+/// Display Name: Acquisition Mode
+/// Tooltip: Sets the acquisition mode of the device.
+/// Description: Sets the acquisition mode of the device. It defines mainly the number of frames to capture during an acquisition and the way the acquisition stops.
+/// SNFC Namespace: Standard
+/// Value: [enum] Continuous
+/// Possible values (3):
+///	SingleFrame		[0x00000000]:  (Y)
+///	MultiFrame		[0x00000001]:  (Y)
+///	Continuous		[0x00000002]:  (Y)
+
+
+/// Feature Name: AcquisitionStart
+/// Display Name: Acquisition Start
+/// Tooltip: Starts the Acquisition of the device.
+/// Description: Starts the Acquisition of the device. The number of frames captured is specified by AcquisitionMode.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: AcquisitionStop
+/// Display Name: Acquisition Stop
+/// Tooltip: Stops the Acquisition of the device at the end of the current Frame.
+/// Description: Stops the Acquisition of the device at the end of the current Frame. It is mainly used when AcquisitionMode is Continuous but can be used in any acquisition mode.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: AcquisitionFrameCount
+/// Display Name: Acquisition Frame Count
+/// Tooltip: Number of frames to acquire in MultiFrame Acquisition mode.
+/// Description: Number of frames to acquire in MultiFrame Acquisition mode.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: AcquisitionFrameRateEnable
+/// Display Name: Acquisition Frame Rate Enable
+/// Tooltip: Controls if the AcquisitionFrameRate feature is used to control the acquisition rate.
+/// Description: Controls if the AcquisitionFrameRate feature is writable and used to control the acquisition rate. Otherwise, the acquisition rate is implicitly controlled by the combination of other features like ExposureTime, etc...
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: AcquisitionFrameRateMode
+/// Display Name: Acquisition Frame Rate Mode
+/// Tooltip: Defines the interconnection between the AcquisitionFrameRate affecting features.
+/// Description: Defines the interconnection between the AcquisitionFrameRate affecting features.
+/// SNFC Namespace: Custom
+/// Value: [enum] Basic
+/// Possible values (1):
+///	Basic		[0x00000001]:  (Y)
+
+
+/// Feature Name: AcquisitionFrameRate
+/// Display Name: Acquisition Frame Rate
+/// Tooltip: Controls the acquisition rate (in Hertz) at which the frames are captured.
+/// Description: Controls the acquisition rate (in Hertz) at which the frames are captured.
+/// SNFC Namespace: Standard
+/// Value: [float] 65.266579 (0.000010, 65.266579, 0.000000 [False])
+
+/// Feature Name: AcquisitionStatusSelector
+/// Display Name: Acquisition Status Selector
+/// Tooltip: Selects the internal acquisition signal to read using AcquisitionStatus.
+/// Description: Selects the internal acquisition signal to read using AcquisitionStatus.
+/// SNFC Namespace: Standard
+/// Value: [enum] AcquisitionActive
+/// Possible values (2):
+///	AcquisitionActive		[0x00000001]:  (Y)
+///	AcquisitionTransfer		[0x00000002]:  (Y)
+
+
+/// Feature Name: AcquisitionStatus
+/// Display Name: Acquisition Status
+/// Tooltip: Reads the state of the internal acquisition signal selected using AcquisitionStatusSelector.
+/// Description: Reads the state of the internal acquisition signal selected using AcquisitionStatusSelector.
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: TriggerSelector
+/// Display Name: Trigger Selector
+/// Tooltip: Selects the type of trigger to configure.
+/// Description: Selects the type of trigger to configure.
+/// SNFC Namespace: Standard
+/// Value: [enum] FrameStart
+/// Possible values (7):
+///	AcquisitionStart		[0x00000000]:  (Y)
+///	AcquisitionEnd		[0x00000001]:  (Y)
+///	AcquisitionActive		[0x00000002]:  (Y)
+///	FrameStart		[0x00000003]:  (Y)
+///	ExposureStart		[0x0000000A]:  (Y)
+///	ExposureEnd		[0x0000000B]:  (Y)
+///	ExposureActive		[0x0000000C]:  (Y)
+
+
+/// Feature Name: TriggerMode
+/// Display Name: Trigger Mode
+/// Tooltip: Controls if the selected trigger is active.
+/// Description: Controls if the selected trigger is active.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (2):
+///	Off		[0x00000000]:  (Y)
+///	On		[0x00000001]:  (Y)
+
+
+/// Feature Name: TriggerSoftware
+/// Display Name: Trigger Software
+/// Tooltip: Generates an internal trigger.
+/// Description: Generates an internal trigger. TriggerSource must be set to Software.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: TriggerSource
+/// Display Name: Trigger Source
+/// Tooltip: Specifies the internal signal or physical input Line to use as the trigger source.
+/// Description: Specifies the internal signal or physical input Line to use as the trigger source. The selected trigger must have its TriggerMode set to On.
+/// SNFC Namespace: Standard
+/// Value: [enum] Software
+/// Possible values (13):
+///	Software		[0x00000000]:  (Y)
+///	Line0		[0x00000010]:  (Y)
+///	Line1		[0x00000011]:  (Y)
+///	Line2		[0x00000012]:  (Y)
+///	Line3		[0x00000013]:  (Y)
+///	Timer0Active		[0x00000014]:  (Y)
+///	Timer1Active		[0x00000015]:  (Y)
+///	Counter0Active		[0x00000016]:  (Y)
+///	Counter1Active		[0x00000017]:  (Y)
+///	Counter2Active		[0x00000018]:  (Y)
+///	Counter3Active		[0x00000019]:  (Y)
+///	SoftwareSignal0		[0x0000001E]:  (Y)
+///	SoftwareSignal1		[0x0000001F]:  (Y)
+
+
+/// Feature Name: TriggerActivation
+/// Display Name: Trigger Activation
+/// Tooltip: Specifies the activation mode of the trigger.
+/// Description: Specifies the activation mode of the trigger.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (5):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+///	LevelHigh		[0x00000003]:  (Y)
+///	LevelLow		[0x00000004]:  (Y)
+
+
+/// Feature Name: TriggerDelay
+/// Display Name: Trigger Delay
+/// Tooltip: Specifies the delay in microseconds [µs] to apply after the trigger reception before activating it.
+/// Description: Specifies the delay in microseconds [µs] to apply after the trigger reception before activating it.
+/// SNFC Namespace: Standard
+/// Value: [float] 0.000000 (0.000000, 214748364.700000, 0.000000 [False])
+
+/// Feature Name: ExposureMode
+/// Display Name: Exposure Mode
+/// Tooltip: Sets the operation mode of the Exposure (or shutter).
+/// Description: Sets the operation mode of the Exposure (or shutter).
+/// SNFC Namespace: Standard
+/// Value: [enum] Timed
+/// Possible values (3):
+///	Timed		[0x00000001]:  (Y)
+///	TriggerWidth		[0x00000002]:  (Y)
+///	TriggerControlled		[0x00000003]:  (Y)
+
+
+/// Feature Name: ExposureTime
+/// Display Name: Exposure Time
+/// Tooltip: Sets the Exposure time [µs] when ExposureMode is Timed and ExposureAuto is Off.
+/// Description: Sets the Exposure time [µs] when ExposureMode is Timed and ExposureAuto is Off. This controls the duration where the photosensitive cells are exposed to light.
+/// SNFC Namespace: Standard
+/// Value: [float] 5001.434000 (24.545000, 10000002.323000, 9.778000 [True])
+
+/// Feature Name: ExposureAuto
+/// Display Name: Exposure Auto
+/// Tooltip: Sets the auto exposure mode.
+/// Description: Sets the auto exposure mode.The output of the auto exposure function affects the whole image
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (3):
+///	Off		[0x00000000]:  (Y)
+///	Once		[0x00000001]:  (Y)
+///	Continuous		[0x00000002]:  (Y)
+
+
+/// Feature Name: ExposureActiveMode
+/// Display Name: Exposure Active Mode
+/// Tooltip: Selects the mode of the ExposureActive signal.
+/// Description: Selects the mode of the ExposureActive signal.
+/// SNFC Namespace: Custom
+/// Value: [enum] FlashWindow
+/// Possible values (2):
+///	FirstLine		[0x00000000]:  (N)
+///	FlashWindow		[0x00000001]:  (Y)
+
+
+/// Feature Name: GainSelector
+/// Display Name: Gain Selector
+/// Tooltip: Selects which Gain is controlled by the various Gain features.
+/// Description: Selects which Gain is controlled by the various Gain features.
+/// SNFC Namespace: Standard
+/// Value: [enum] All
+/// Possible values (1):
+///	All		[0x00000000]:  (Y)
+
+
+/// Feature Name: Gain
+/// Display Name: Gain
+/// Tooltip: Controls the selected gain [dB] as an absolute physical value.
+/// Description: Controls the selected gain [dB] as an absolute physical value. This is an amplification factor applied to the video signal.
+/// SNFC Namespace: Standard
+/// Value: [float] 0.000000 (0.000000, 48.000000, 0.100000 [True])
+
+/// Feature Name: GainAuto
+/// Display Name: Gain Auto
+/// Tooltip: Sets the auto gain mode.
+/// Description: Sets the auto gain mode.The output of the auto gain function affects the whole image
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (3):
+///	Off		[0x00000000]:  (Y)
+///	Once		[0x00000001]:  (Y)
+///	Continuous		[0x00000002]:  (Y)
+
+
+/// Feature Name: BlackLevelSelector
+/// Display Name: Black Level Selector
+/// Tooltip: Selects which Black Level is controlled by the various Black Level features.
+/// Description: Selects which Black Level is controlled by the various Black Level features.
+/// SNFC Namespace: Standard
+/// Value: [enum] All
+/// Possible values (1):
+///	All		[0x00000000]:  (Y)
+
+
+/// Feature Name: BlackLevel
+/// Display Name: Black Level
+/// Tooltip: Controls the analog black level as an absolute physical value.
+/// Description: Controls the analog black level as an absolute physical value. This represents a DC offset applied to the video signal.
+/// SNFC Namespace: Standard
+/// Value: [float] 0.000000 (0.000000, 4095.000000, 1.000000 [True])
+
+/// Feature Name: Gamma
+/// Display Name: Gamma
+/// Tooltip: Controls the gamma correction of pixel intensity.
+/// Description: Controls the gamma correction of pixel intensity. This is typically used to compensate for non-linearity of the display system (such as CRT).
+/// SNFC Namespace: Standard
+/// Value: [float] 1.000000 (0.400000, 2.400000, 0.050000 [True])
+
+/// Feature Name: LUTSelector
+/// Display Name: LUT Selector
+/// Tooltip: Selects which LUT to control.
+/// Description: Selects which LUT to control.
+/// SNFC Namespace: Standard
+/// Value: [enum] Luminance
+/// Possible values (4):
+///	Luminance		[0x00000000]:  (Y)
+///	Red		[0x00000001]:  (Y)
+///	Green		[0x00000002]:  (Y)
+///	Blue		[0x00000003]:  (Y)
+
+
+/// Feature Name: LUTEnable
+/// Display Name: LUT Enable
+/// Tooltip: Activates the selected LUT.
+/// Description: Activates the selected LUT.
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: LUTIndex
+/// Display Name: LUT Index
+/// Tooltip: Control the index (offset) of the coefficient to access in the selected LUT.
+/// Description: Control the index (offset) of the coefficient to access in the selected LUT.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4095, 1)
+
+/// Feature Name: LUTValueAll
+/// Display Name: LUT Value All
+/// Tooltip: Accesses all the LUT coefficients in a single access without using individual LUTIndex
+/// Description: Accesses all the LUT coefficients in a single access without using individual LUTIndex
+/// SNFC Namespace: Custom
+/// Value: [None]
+
+/// Feature Name: LUTValue
+/// Display Name: LUT Value
+/// Tooltip: Returns the Value at entry LUTIndex of the LUT selected by LUTSelector.
+/// Description: Returns the Value at entry LUTIndex of the LUT selected by LUTSelector.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4095, 1)
+
+/// Feature Name: LineSelector
+/// Display Name: Line Selector
+/// Tooltip: Selects the physical line (or pin) of the external device connector or the virtual line of the Transport Layer to configure.
+/// Description: Selects the physical line (or pin) of the external device connector or the virtual line of the Transport Layer to configure.
+/// SNFC Namespace: Standard
+/// Value: [enum] Line0
+/// Possible values (4):
+///	Line0		[0x00000000]:  (Y)
+///	Line1		[0x00000001]:  (Y)
+///	Line2		[0x00000002]:  (Y)
+///	Line3		[0x00000003]:  (Y)
+
+
+/// Feature Name: LineMode
+/// Display Name: Line Mode
+/// Tooltip: Controls if the physical Line is used to Input or Output a signal.
+/// Description: Controls if the physical Line is used to Input or Output a signal.
+/// SNFC Namespace: Standard
+/// Value: [enum] Input
+/// Possible values (2):
+///	Input		[0x00000000]:  (Y)
+///	Output		[0x00000001]:  (Y)
+
+
+/// Feature Name: LineInverter
+/// Display Name: Line Inverter
+/// Tooltip: Controls the inversion of the signal of the selected input or output Line.
+/// Description: Controls the inversion of the signal of the selected input or output Line.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: LineStatus
+/// Display Name: Line Status
+/// Tooltip: Returns the current status of the selected input or output Line.
+/// Description: Returns the current status of the selected input or output Line.
+/// SNFC Namespace: Standard
+/// Value: [bool] 1
+
+/// Feature Name: LineStatusAll
+/// Display Name: Line StatusAll
+/// Tooltip: Returns the current status of the all input or output Line.
+/// Description: Returns the current status of the all input or output Line.
+/// SNFC Namespace: Standard
+/// Value: [int] 15 (0, 15, 1)
+
+/// Feature Name: LineSource
+/// Display Name: Line Source
+/// Tooltip: Selects which internal acquisition or I/O source signal to output on the selected Line.
+/// Description: Selects which internal acquisition or I/O source signal to output on the selected Line. LineMode must be Output.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: LineDebounceMode
+/// Display Name: Line Debounce Mode
+/// Tooltip: Controls the Line Debouncing feature for a particular input line.
+/// Description: Controls the Line Debouncing feature for a particular input line. Can be turned off to be transparent or switched to one of two functional modes.
+/// SNFC Namespace: Custom
+/// Value: [enum] Off
+/// Possible values (3):
+///	Off		[0x00000000]:  (Y)
+///	Delay		[0x00000001]:  (Y)
+///	Stall		[0x00000002]:  (Y)
+
+
+/// Feature Name: LineDebounceDuration
+/// Display Name: Line Debounce Duration
+/// Tooltip: Controls the time constant in microseconds for Line Debounce Mode.
+/// Description: Controls the time constant in microseconds for Line Debounce Mode. In case of Delay Mode controls how long signal level has to be sustained for before it is accepted. In case of Stall Mode controls insensitivity duration after signal edge.
+/// SNFC Namespace: Custom
+/// Value: [float] 0.040404 (0.040404, 82.747475, 0.000000 [False])
+
+/// Feature Name: SerialHubEnable
+/// Display Name: Serial Hub Enable
+/// Tooltip: Enable or disable serial port.
+/// Description: Enable or disable serial port. When enabled, overrides control of Rx and Tx Lines.
+/// SNFC Namespace: Custom
+/// Value: [bool] 0
+
+/// Feature Name: SerialBaudRate
+/// Display Name: Serial Baud Rate
+/// Tooltip: Selection of Uart port baud rate in bits per second.
+/// Description: Selection of Uart port baud rate in bits per second.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialStopBits
+/// Display Name: Serial Stop Bits
+/// Tooltip: Number of stop bits at the end of UART frame.
+/// Description: Number of stop bits at the end of UART frame.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialParityBit
+/// Display Name: Serial Parity Bit
+/// Tooltip: Parity bit at the end of UART frame.
+/// Description: Parity bit at the end of UART frame.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialRxData
+/// Display Name: Serial Rx Data
+/// Tooltip: Data to be fetched from Rx queue.
+/// Description: Data to be fetched from Rx queue.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialRxSize
+/// Display Name: Serial Rx Size
+/// Tooltip: How many bytes from Rx queue are inserted into Rx data.
+/// Description: How many bytes from Rx queue are inserted into Rx data.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialRxWaiting
+/// Display Name: Serial Rx Waiting
+/// Tooltip: How many bytes in Rx queue are waiting for reception.
+/// Description: How many bytes in Rx queue are waiting for reception.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialTxData
+/// Display Name: Serial Tx Data
+/// Tooltip: Data to be put into serial transmit queue.
+/// Description: Data to be put into serial transmit queue.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialTxSize
+/// Display Name: Serial Tx Size
+/// Tooltip: How many bytes from Tx data are inserted into Tx queue.
+/// Description: How many bytes from Tx data are inserted into Tx queue.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialTxRemaining
+/// Display Name: Serial Tx Remaining
+/// Tooltip: How many bytes in Tx queue remained free.
+/// Description: How many bytes in Tx queue remained free.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: SerialTxLock
+/// Display Name: Serial Tx Lock
+/// Tooltip: Lock or unlock transmission from Tx queue.
+/// Description: Lock or unlock transmission from Tx queue. When unlocked, Tx queue is immidiately sent over serial port.
+/// SNFC Namespace: Custom
+/// Value: The feature is not readable
+
+/// Feature Name: TimerSelector
+/// Display Name: Timer Selector
+/// Tooltip: Selects which Timer to configure.
+/// Description: Selects which Timer to configure.
+/// SNFC Namespace: Standard
+/// Value: [enum] Timer0
+/// Possible values (2):
+///	Timer0		[0x00000000]:  (Y)
+///	Timer1		[0x00000001]:  (Y)
+
+
+/// Feature Name: TimerDuration
+/// Display Name: Timer Duration
+/// Tooltip: Sets the duration (in microseconds) of the Timer pulse.
+/// Description: Sets the duration (in microseconds) of the Timer pulse. When the Timer reaches the TimerDuration value,
+                         a TimerEnd event is generated, the TimerActive signal becomes low and the Timer stops counting
+                         until a new trigger happens or it is explicitly reset with TimerReset. 
+/// SNFC Namespace: Standard
+/// Value: [float] 0.000000 (0.000000, 429496729.500000, 0.000000 [False])
+
+/// Feature Name: TimerDelay
+/// Display Name: Timer Delay
+/// Tooltip: Sets the duration (in microseconds) of the delay to apply at the reception of a trigger before starting the Timer.
+/// Description: Sets the duration (in microseconds) of the delay to apply at the reception of a trigger before starting the Timer.
+/// SNFC Namespace: Standard
+/// Value: [float] 0.000000 (0.000000, 429496729.500000, 0.000000 [False])
+
+/// Feature Name: TimerReset
+/// Display Name: Timer Reset
+/// Tooltip: Does a software reset of the selected timer and starts it.
+/// Description: Does a software reset of the selected timer and starts it. The timer starts immediately after the reset unless a 
+                         timer trigger is active.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: TimerStatus
+/// Display Name: Timer Status
+/// Tooltip: Returns the current status of the Timer.
+/// Description: Returns the current status of the Timer.
+/// SNFC Namespace: Standard
+/// Value: [enum] TimerIdle
+/// Possible values (5):
+///	TimerIdle		[0x00000000]:  (Y)
+///	TimerTriggerWait		[0x00000001]:  (Y)
+///	TimerDelay		[0x00000002]:  (Y)
+///	TimerActive		[0x00000003]:  (Y)
+///	TimerCompleted		[0x00000004]:  (Y)
+
+
+/// Feature Name: TimerTriggerSource
+/// Display Name: Timer Trigger Source
+/// Tooltip: Selects the source of the trigger to start the Timer.
+/// Description: Selects the source of the trigger to start the Timer.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (15):
+///	Off		[0x00000000]:  (Y)
+///	AcquisitionActive		[0x00000001]:  (Y)
+///	ExposureActive		[0x00000002]:  (Y)
+///	Line0		[0x00000003]:  (Y)
+///	Line1		[0x00000004]:  (Y)
+///	Line2		[0x00000005]:  (Y)
+///	Line3		[0x00000006]:  (Y)
+///	Timer0Active		[0x00000007]:  (Y)
+///	Timer1Active		[0x00000008]:  (Y)
+///	Counter0Active		[0x00000009]:  (Y)
+///	Counter1Active		[0x0000000A]:  (Y)
+///	Counter2Active		[0x0000000B]:  (Y)
+///	Counter3Active		[0x0000000C]:  (Y)
+///	SoftwareSignal0		[0x0000000F]:  (Y)
+///	SoftwareSignal1		[0x00000010]:  (Y)
+
+
+/// Feature Name: TimerTriggerActivation
+/// Display Name: Timer Trigger Activation
+/// Tooltip: Selects the activation mode of the trigger to start the Timer.
+/// Description: Selects the activation mode of the trigger to start the Timer.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (5):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+///	LevelHigh		[0x00000003]:  (Y)
+///	LevelLow		[0x00000004]:  (Y)
+
+
+/// Feature Name: CounterSelector
+/// Display Name: Counter Selector
+/// Tooltip: Selects which counter to configure.
+/// Description: Selects which counter to configure.
+/// SNFC Namespace: Standard
+/// Value: [enum] Counter0
+/// Possible values (4):
+///	Counter0		[0x00000000]:  (Y)
+///	Counter1		[0x00000001]:  (Y)
+///	Counter2		[0x00000002]:  (Y)
+///	Counter3		[0x00000003]:  (Y)
+
+
+/// Feature Name: CounterStatus
+/// Display Name: Counter Status
+/// Tooltip: The current status of the counter.
+/// Description: The current status of the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] CounterIdle
+/// Possible values (5):
+///	CounterIdle		[0x00000000]:  (Y)
+///	CounterTriggerWait		[0x00000001]:  (Y)
+///	CounterActive		[0x00000002]:  (Y)
+///	CounterCompleted		[0x00000003]:  (Y)
+///	CounterOverflow		[0x00000004]:  (Y)
+
+
+/// Feature Name: CounterValue
+/// Display Name: Counter Value
+/// Tooltip: The current value of the counter.
+/// Description: The current value of the counter.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: CounterValueAtReset
+/// Display Name: Counter Value At Reset
+/// Tooltip: The last counter value latched before resetting the counter.
+/// Description: The last counter value latched before resetting the counter.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: CounterDuration
+/// Display Name: Counter Duration
+/// Tooltip: The number of events before the CounterEnd event is generated.
+/// Description: When the counter reaches the CounterDuration value, a CounterEnd event is generated, the CounterActive
+                         signal becomes inactive and the counter stops counting until a new trigger happens or it is explicitly reset with
+                         CounterReset.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: CounterReset
+/// Display Name: Counter Reset
+/// Tooltip: Does a software reset of the counter and starts it.
+/// Description: Does a software reset of the counter and starts it. The counter starts counting events immediately after the reset unless a
+                         counter trigger is active.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: CounterTriggerSource
+/// Display Name: Counter Trigger Source
+/// Tooltip: The signal source that starts the counter.
+/// Description: The signal source that starts the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (15):
+///	Off		[0x00000000]:  (Y)
+///	AcquisitionActive		[0x00000001]:  (Y)
+///	ExposureActive		[0x00000002]:  (Y)
+///	Line0		[0x00000003]:  (Y)
+///	Line1		[0x00000004]:  (Y)
+///	Line2		[0x00000005]:  (Y)
+///	Line3		[0x00000006]:  (Y)
+///	Timer0Active		[0x00000007]:  (Y)
+///	Timer1Active		[0x00000008]:  (Y)
+///	Counter0Active		[0x0000000B]:  (Y)
+///	Counter1Active		[0x0000000C]:  (Y)
+///	Counter2Active		[0x0000000D]:  (Y)
+///	Counter3Active		[0x0000000E]:  (Y)
+///	SoftwareSignal0		[0x00000011]:  (Y)
+///	SoftwareSignal1		[0x00000012]:  (Y)
+
+
+/// Feature Name: CounterTriggerActivation
+/// Display Name: Counter Trigger Activation
+/// Tooltip: Selects the activation mode of the trigger to start the counter.
+/// Description: Selects the activation mode of the trigger to start the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (5):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+///	LevelHigh		[0x00000003]:  (Y)
+///	LevelLow		[0x00000004]:  (Y)
+
+
+/// Feature Name: CounterEventSource
+/// Display Name: Counter Event Source
+/// Tooltip: The event that will be the source to increment the counter.
+/// Description: The event that will be the source to increment the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (15):
+///	Off		[0x00000000]:  (Y)
+///	AcquisitionActive		[0x00000001]:  (Y)
+///	ExposureActive		[0x00000002]:  (Y)
+///	Line0		[0x00000003]:  (Y)
+///	Line1		[0x00000004]:  (Y)
+///	Line2		[0x00000005]:  (Y)
+///	Line3		[0x00000006]:  (Y)
+///	Timer0Active		[0x00000007]:  (Y)
+///	Timer1Active		[0x00000008]:  (Y)
+///	Counter0Active		[0x0000000B]:  (Y)
+///	Counter1Active		[0x0000000C]:  (Y)
+///	Counter2Active		[0x0000000D]:  (Y)
+///	Counter3Active		[0x0000000E]:  (Y)
+///	SoftwareSignal0		[0x00000011]:  (Y)
+///	SoftwareSignal1		[0x00000012]:  (Y)
+
+
+/// Feature Name: CounterEventActivation
+/// Display Name: Counter Event Activation
+/// Tooltip: Selects the activation mode for the event that increments the counter.
+/// Description: Selects the activation mode for the event that increments the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (3):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+
+
+/// Feature Name: CounterResetSource
+/// Display Name: Counter Reset Source
+/// Tooltip: The signal source that resets the counter.
+/// Description: The signal source that resets the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (15):
+///	Off		[0x00000000]:  (Y)
+///	AcquisitionActive		[0x00000001]:  (Y)
+///	ExposureActive		[0x00000002]:  (Y)
+///	Line0		[0x00000003]:  (Y)
+///	Line1		[0x00000004]:  (Y)
+///	Line2		[0x00000005]:  (Y)
+///	Line3		[0x00000006]:  (Y)
+///	Timer0Active		[0x00000007]:  (Y)
+///	Timer1Active		[0x00000008]:  (Y)
+///	Counter0Active		[0x0000000B]:  (Y)
+///	Counter1Active		[0x0000000C]:  (Y)
+///	Counter2Active		[0x0000000D]:  (Y)
+///	Counter3Active		[0x0000000E]:  (Y)
+///	SoftwareSignal0		[0x00000011]:  (Y)
+///	SoftwareSignal1		[0x00000012]:  (Y)
+
+
+/// Feature Name: CounterResetActivation
+/// Display Name: Counter Reset Activation
+/// Tooltip: Selects the activation mode of the trigger to reset the counter.
+/// Description: Selects the activation mode of the trigger to reset the counter.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (5):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+///	LevelHigh		[0x00000003]:  (Y)
+///	LevelLow		[0x00000004]:  (Y)
+
+
+/// Feature Name: UserSetSelector
+/// Display Name: User Set Selector
+/// Tooltip: Selects the feature User Set to load, save or configure.
+/// Description: Selects the feature User Set to load, save or configure.
+/// SNFC Namespace: Standard
+/// Value: [enum] Default
+/// Possible values (5):
+///	Default		[0x00000000]:  (Y)
+///	UserSet1		[0x00000001]:  (Y)
+///	UserSet2		[0x00000002]:  (Y)
+///	UserSet3		[0x00000003]:  (Y)
+///	UserSet4		[0x00000004]:  (Y)
+
+
+/// Feature Name: UserSetLoad
+/// Display Name: User Set Load
+/// Tooltip: Loads the User Set specified by UserSetSelector to the device and makes it active.
+/// Description: Loads the User Set specified by UserSetSelector to the device and makes it active.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: UserSetSave
+/// Display Name: User Set Save
+/// Tooltip: Save the User Set specified by UserSetSelector to the non-volatile memory of the device.
+/// Description: Save the User Set specified by UserSetSelector to the non-volatile memory of the device.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: UserSetDefault
+/// Display Name: User Set Default
+/// Tooltip: Selects the feature User Set to load and make active by default when the device is reset.
+/// Description: Selects the feature User Set to load and make active by default when the device is reset.
+/// SNFC Namespace: Standard
+/// Value: [enum] Default
+/// Possible values (5):
+///	Default		[0x00000000]:  (Y)
+///	UserSet1		[0x00000001]:  (N)
+///	UserSet2		[0x00000002]:  (N)
+///	UserSet3		[0x00000003]:  (N)
+///	UserSet4		[0x00000004]:  (N)
+
+
+/// Feature Name: SequencerMode
+/// Display Name: Sequencer Mode
+/// Tooltip: Controls if the sequencer mechanism is active.
+/// Description: Controls if the sequencer mechanism is active.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (2):
+///	On		[0x00000001]:  (Y)
+///	Off		[0x00000000]:  (Y)
+
+
+/// Feature Name: SequencerConfigurationMode
+/// Display Name: Sequencer Configuration Mode
+/// Tooltip: Controls if the sequencer configuration mode is active.
+/// Description: Controls if the sequencer configuration mode is active.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (2):
+///	On		[0x00000001]:  (Y)
+///	Off		[0x00000000]:  (Y)
+
+
+/// Feature Name: SequencerFeatureSelector
+/// Display Name: Sequencer Feature Selector
+/// Tooltip: Selects which sequencer features to control.
+/// Description: Selects which sequencer features to control.
+/// SNFC Namespace: Standard
+/// Value: [enum] Width
+/// Possible values (20):
+///	Width		[0x00000000]:  (Y)
+///	Height		[0x00000001]:  (Y)
+///	OffsetX		[0x00000002]:  (Y)
+///	OffsetY		[0x00000003]:  (Y)
+///	BinningHorizontal		[0x00000004]:  (Y)
+///	BinningVertical		[0x00000005]:  (Y)
+///	ExposureTime		[0x00000006]:  (Y)
+///	AcquisitionFrameRate		[0x00000007]:  (Y)
+///	AcquisitionFrameRateEnable		[0x00000008]:  (Y)
+///	BalanceRatio		[0x00000009]:  (N)
+///	Gamma		[0x0000000A]:  (Y)
+///	Gain		[0x0000000B]:  (Y)
+///	PixelFormat		[0x0000000C]:  (Y)
+///	Hue		[0x0000000D]:  (N)
+///	Saturation		[0x0000000E]:  (N)
+///	ColorTransformationValue		[0x0000000F]:  (N)
+///	ColorTransformationEnable		[0x00000010]:  (N)
+///	LUTEnable		[0x00000011]:  (Y)
+///	ChunkEnable		[0x00000012]:  (Y)
+///	ChunkModeActive		[0x00000013]:  (Y)
+
+
+/// Feature Name: SequencerFeatureEnable
+/// Display Name: Sequencer Feature Enable
+/// Tooltip: Enables the selected feature and make it active in all the sequencer sets.
+/// Description: Enables the selected feature and make it active in all the sequencer sets.
+/// SNFC Namespace: Standard
+/// Value: [bool] 0
+
+/// Feature Name: SequencerSetSelector
+/// Display Name: Sequencer Set Selector
+/// Tooltip: Selects the sequencer set to which further feature settings applies.
+/// Description: Selects the sequencer set to which further feature settings applies.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 15, 1)
+
+/// Feature Name: SequencerSetSave
+/// Display Name: Sequencer Set Save
+/// Tooltip: Saves the current device state to the sequencer set selected by the SequencerSetSelector.
+/// Description: Saves the current device state to the sequencer set selected by the SequencerSetSelector.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: SequencerSetLoad
+/// Display Name: Sequencer Set Load
+/// Tooltip: Loads the sequencer set selected by SequencerSetSelector in the device.
+/// Description: Loads the sequencer set selected by SequencerSetSelector in the device. Even if SequencerMode is off, this will change the device state to the configuration of the selected set.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: SequencerSetActive
+/// Display Name: Sequencer Set Active
+/// Tooltip: Contains the currently active sequencer set.
+/// Description: Contains the currently active sequencer set.
+/// SNFC Namespace: Standard
+/// Value: [int] 1 (0, 4294967295, 1)
+
+/// Feature Name: SequencerSetStart
+/// Display Name: Sequencer Set Start
+/// Tooltip: Sets the initial/start sequencer set, which is the first set used within a sequencer.
+/// Description: Sets the initial/start sequencer set, which is the first set used within a sequencer.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: SequencerPathSelector
+/// Display Name: Sequencer Path Selector
+/// Tooltip: Selects to which branching path further path settings applies.
+/// Description: Selects to which branching path further path settings applies.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 7, 1)
+
+/// Feature Name: SequencerSetNext
+/// Display Name: Sequencer Set Next
+/// Tooltip: Specifies the next sequencer set.
+/// Description: Specifies the next sequencer set.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 15, 1)
+
+/// Feature Name: SequencerTriggerSource
+/// Display Name: Sequencer Trigger Source
+/// Tooltip: Specifies the internal signal or physical input line to use as the sequencer trigger source.
+/// Description: Specifies the internal signal or physical input line to use as the sequencer trigger source.
+/// SNFC Namespace: Standard
+/// Value: [enum] Off
+/// Possible values (15):
+///	Off		[0x00000000]:  (Y)
+///	FrameActive		[0x00000001]:  (Y)
+///	ExposureActive		[0x00000002]:  (Y)
+///	Line0		[0x00000003]:  (Y)
+///	Line1		[0x00000004]:  (Y)
+///	Line2		[0x00000005]:  (Y)
+///	Line3		[0x00000006]:  (Y)
+///	Timer0Active		[0x00000007]:  (Y)
+///	Timer1Active		[0x00000008]:  (Y)
+///	Counter0Active		[0x00000009]:  (Y)
+///	Counter1Active		[0x0000000A]:  (Y)
+///	Counter2Active		[0x0000000B]:  (Y)
+///	Counter3Active		[0x0000000C]:  (Y)
+///	SoftwareSignal0		[0x0000000D]:  (Y)
+///	SoftwareSignal1		[0x0000000E]:  (Y)
+
+
+/// Feature Name: SequencerTriggerActivation
+/// Display Name: Sequencer Trigger Activation
+/// Tooltip: Specifies the activation mode of the sequencer trigger.
+/// Description: Specifies the activation mode of the sequencer trigger.
+/// SNFC Namespace: Standard
+/// Value: [enum] RisingEdge
+/// Possible values (5):
+///	RisingEdge		[0x00000000]:  (Y)
+///	FallingEdge		[0x00000001]:  (Y)
+///	AnyEdge		[0x00000002]:  (Y)
+///	LevelHigh		[0x00000003]:  (Y)
+///	LevelLow		[0x00000004]:  (Y)
+
+
+/// Feature Name: TestPendingAck
+/// Display Name: Test Pending Ack
+/// Tooltip: Tests the device's pending acknowledge feature.
+/// Description: Tests the device's pending acknowledge feature. When this feature is written, the device waits a time period corresponding to the value of TestPendingAck before acknowledging the write.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 60000, 1)
+
+/// Feature Name: PayloadSize
+/// Display Name: Payload Size
+/// Tooltip: Provides the number of bytes transferred for each image or chunk on the stream channel.
+/// Description: Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.
+/// SNFC Namespace: Standard
+/// Value: [int] 2861568 (0, 9223372036854775807, 1)
+
+/// Feature Name: FileSelector
+/// Display Name: File Selector
+/// Tooltip: Selects the target file in the device.
+/// Description: Selects the target file in the device.
+/// SNFC Namespace: Standard
+/// Value: [enum] UserData
+/// Possible values (10):
+///	Firmware		[0x00000001]:  (Y)
+///	UserData		[0x00000011]:  (Y)
+///	DefectPixelCorrectionPreset		[0x00000020]:  (Y)
+///	DefectPixelCorrectionUser		[0x00000021]:  (Y)
+///	FixedPatternNoiseCorrectionPreset		[0x00000024]:  (Y)
+///	FixedPatternNoiseCorrectionUser		[0x00000025]:  (Y)
+///	UserSet1		[0x00000027]:  (Y)
+///	UserSet2		[0x00000028]:  (Y)
+///	UserSet3		[0x00000029]:  (Y)
+///	UserSet4		[0x0000002A]:  (Y)
+
+
+/// Feature Name: FileOperationSelector
+/// Display Name: File Operation Selector
+/// Tooltip: Selects the target operation for the selected file in the device.
+/// Description: Selects the target operation for the selected file in the device. This Operation is executed when the FileOperationExecute feature is called.
+/// SNFC Namespace: Standard
+/// Value: [enum] Open
+/// Possible values (5):
+///	Open		[0x00000000]:  (Y)
+///	Close		[0x00000001]:  (Y)
+///	Read		[0x00000002]:  (Y)
+///	Write		[0x00000003]:  (Y)
+///	Delete		[0x00000004]:  (Y)
+
+
+/// Feature Name: FileOperationExecute
+/// Display Name: File Operation Execute
+/// Tooltip: Executes the operation selected by FileOperationSelector on the selected file.
+/// Description: Executes the operation selected by FileOperationSelector on the selected file.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: FileOpenMode
+/// Display Name: File Open Mode
+/// Tooltip: Selects the access mode in which a file is opened in the device.
+/// Description: Selects the access mode in which a file is opened in the device.
+/// SNFC Namespace: Standard
+/// Value: [enum] Read
+/// Possible values (2):
+///	Read		[0x00000001]:  (Y)
+///	Write		[0x00000002]:  (Y)
+
+
+/// Feature Name: FileAccessBuffer
+/// Display Name: File Access Buffer
+/// Tooltip: Defines the intermediate access buffer that allows the exchange of data between the device file storage and the application.
+/// Description: Defines the intermediate access buffer that allows the exchange of data between the device file storage and the application.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: FileAccessOffset
+/// Display Name: File Access Offset
+/// Tooltip: Controls the Offset of the mapping between the device file storage and the FileAccessBuffer.
+/// Description: Controls the Offset of the mapping between the device file storage and the FileAccessBuffer.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: FileAccessLength
+/// Display Name: File Access Length
+/// Tooltip: Controls the Length of the mapping between the device file storage and the FileAccessBuffer.
+/// Description: Controls the Length of the mapping between the device file storage and the FileAccessBuffer.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: FileOperationStatus
+/// Display Name: File Operation Status
+/// Tooltip: Represents the file operation execution status.
+/// Description: Represents the file operation execution status.
+/// SNFC Namespace: Standard
+/// Value: [enum] Success
+/// Possible values (7):
+///	Success		[0x00000000]:  (Y)
+///	Failure		[0x00000001]:  (Y)
+///	Invalid		[0x00000003]:  (Y)
+///	Denied		[0x00000004]:  (Y)
+///	Error		[0x00000005]:  (Y)
+///	Fault1		[0x00000006]:  (Y)
+///	Fault2		[0x00000007]:  (Y)
+
+
+/// Feature Name: FileProcessStatus
+/// Display Name: File Process Status
+/// Tooltip: Represents an additional process status.
+/// Description: Represents an additional process status.
+/// SNFC Namespace: Custom
+/// Value: [enum] None
+/// Possible values (2):
+///	None		[0x00000000]:  (Y)
+///	UpdateNotRequired		[0x00000001]:  (Y)
+
+
+/// Feature Name: FileOperationResult
+/// Display Name: File Operation Result
+/// Tooltip: Represents the file operation result.
+/// Description: Represents the file operation result. For Read or Write operations, the number of successfully read/written bytes is returned.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: FileSize
+/// Display Name: File Size
+/// Tooltip: Represents the size of the selected file in bytes.
+/// Description: Represents the size of the selected file in bytes.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: FileStatus
+/// Display Name: File Status
+/// Tooltip: Represents the status of the selected file.
+/// Description: Represents the status of the selected file. Allied Vision feature.
+/// SNFC Namespace: Custom
+/// Value: [enum] Closed
+/// Possible values (2):
+///	Closed		[0x00000000]:  (Y)
+///	Open		[0x00000001]:  (Y)
+
+
+/// Feature Name: TransferSelector
+/// Display Name: Transfer Selector
+/// Tooltip: Selects which stream transfers are currently controlled by the selected Transfer features.
+/// Description: Selects which stream transfers are currently controlled by the selected Transfer features.
+/// SNFC Namespace: Standard
+/// Value: [enum] Stream0
+/// Possible values (1):
+///	Stream0		[0x00000000]:  (Y)
+
+
+/// Feature Name: TransferControlMode
+/// Display Name: Transfer Control Mode
+/// Tooltip: Selects the control method for the transfers.
+/// Description: Selects the control method for the transfers.
+/// SNFC Namespace: Standard
+/// Value: [enum] Basic
+/// Possible values (1):
+///	Basic		[0x00000000]:  (Y)
+
+
+/// Feature Name: TransferQueueMaxBlockCount
+/// Display Name: Transfer Queue Max Block Count
+/// Tooltip: Controls the maximum number of data blocks that can be stored in the block queue of the selected stream.
+/// Description: Controls the maximum number of data blocks that can be stored in the block queue of the selected stream.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: TransferQueueCurrentBlockCount
+/// Display Name: Transfer Queue Current Block Count
+/// Tooltip: Returns the number of Block(s) currently in the transfer queue.
+/// Description: Returns the number of Block(s) currently in the transfer queue.
+/// SNFC Namespace: Standard
+/// Value: [int] 0 (0, 4294967295, 1)
+
+/// Feature Name: CorrectionSelector
+/// Display Name: Correction Selector
+/// Tooltip: Selects the type of Correction to configure.
+/// Description: Selects the type of Correction to configure.
+/// SNFC Namespace: Custom
+/// Value: [enum] DefectPixelCorrection
+/// Possible values (2):
+///	DefectPixelCorrection		[0x00000000]:  (Y)
+///	FixedPatternNoiseCorrection		[0x00000001]:  (Y)
+
+
+/// Feature Name: CorrectionMode
+/// Display Name: Correction Mode
+/// Tooltip: Controls if the selected type of Correction is active.
+/// Description: Controls if the selected type of Correction is active.
+/// SNFC Namespace: Custom
+/// Value: [enum] On
+/// Possible values (2):
+///	On		[0x00000001]:  (Y)
+///	Off		[0x00000000]:  (Y)
+
+
+/// Feature Name: CorrectionSet
+/// Display Name: Correction Set
+/// Tooltip: Defines the Correction Set to be used currently.
+/// Description: Defines the Correction Set to be used currently.
+/// SNFC Namespace: Custom
+/// Value: [enum] Preset
+/// Possible values (2):
+///	Preset		[0x00000000]:  (Y)
+///	User		[0x00000001]:  (N)
+
+
+/// Feature Name: CorrectionSetDefault
+/// Display Name: Correction Set Default
+/// Tooltip: Defines the default Correction Set used when the device is reset.
+/// Description: Defines the default Correction Set used when the device is reset.
+/// SNFC Namespace: Custom
+/// Value: [enum] Preset
+/// Possible values (2):
+///	Preset		[0x00000000]:  (Y)
+///	User		[0x00000001]:  (N)
+
+
+/// Feature Name: CorrectionDataSize
+/// Display Name: Correction Data Size
+/// Tooltip: Defines the current size of the correction data that is stored inside the camera.
+/// Description: Defines the current size of the correction data that is stored inside the camera.
+/// SNFC Namespace: Custom
+/// Value: [int] 7776 (-9223372036854775808, 9223372036854775807, 1)
+
+/// Feature Name: CorrectionEntryType
+/// Display Name: Correction Entry Type
+/// Tooltip: Defines the Entry Type (Correction Type specific variant).
+/// Description: Defines the Entry Type (Correction Type specific variant).
+/// SNFC Namespace: Custom
+/// Value: [int] 1 (-9223372036854775808, 9223372036854775807, 1)
+
+/// Feature Name: ConvolutionMode
+/// Display Name: Convolution Mode
+/// Tooltip: Selects the use of a convolution filter to manipulate the image. The used filter might be based on a N x N (typically 3x3 or 5x5) kernel, or 1 x N kernel.
+/// Description: Selects the use of a convolution filter to manipulate the image. The used filter might be based on a N x N (typically 3x3 or 5x5) kernel, or 1 x N kernel.
+/// SNFC Namespace: Custom
+/// Value: [enum] Off
+/// Possible values (4):
+///	Sharpness		[0x00000000]:  (Y)
+///	CustomConvolution		[0x00000001]:  (Y)
+///	AdaptiveNoiseSuppression		[0x00000002]:  (Y)
+///	Off		[0x00000003]:  (Y)
+
+
+/// Feature Name: Sharpness
+/// Display Name: Sharpness
+/// Tooltip: Specifies sharpness value which is used to calculate 5x5 convolution filter coefficients.
+/// Description: Sharpness feature uses a 5x5 convolution filter. A value of 0 has no effect on the image. Positive values increase sharpness, negative values blur the image.
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (-12, 12, 1)
+
+/// Feature Name: CustomConvolutionValueSelector
+/// Display Name: Custom Convolution Value Selector
+/// Tooltip: Defines the position to read or write with CustomConvolutionValue in the CustomConvolution kernel.
+/// Description: Defines the position to read or write with CustomConvolutionValue in the CustomConvolution kernel.
+/// SNFC Namespace: Custom
+/// Value: [enum] Coefficient00
+/// Possible values (25):
+///	Coefficient00		[0x00000000]:  (Y)
+///	Coefficient01		[0x00000001]:  (Y)
+///	Coefficient02		[0x00000002]:  (Y)
+///	Coefficient03		[0x00000003]:  (Y)
+///	Coefficient04		[0x00000004]:  (Y)
+///	Coefficient10		[0x00000005]:  (Y)
+///	Coefficient11		[0x00000006]:  (Y)
+///	Coefficient12		[0x00000007]:  (Y)
+///	Coefficient13		[0x00000008]:  (Y)
+///	Coefficient14		[0x00000009]:  (Y)
+///	Coefficient20		[0x0000000A]:  (Y)
+///	Coefficient21		[0x0000000B]:  (Y)
+///	Coefficient22		[0x0000000C]:  (Y)
+///	Coefficient23		[0x0000000D]:  (Y)
+///	Coefficient24		[0x0000000E]:  (Y)
+///	Coefficient30		[0x0000000F]:  (Y)
+///	Coefficient31		[0x00000010]:  (Y)
+///	Coefficient32		[0x00000011]:  (Y)
+///	Coefficient33		[0x00000012]:  (Y)
+///	Coefficient34		[0x00000013]:  (Y)
+///	Coefficient40		[0x00000014]:  (Y)
+///	Coefficient41		[0x00000015]:  (Y)
+///	Coefficient42		[0x00000016]:  (Y)
+///	Coefficient43		[0x00000017]:  (Y)
+///	Coefficient44		[0x00000018]:  (Y)
+
+
+/// Feature Name: CustomConvolutionValue
+/// Display Name: Custom Convolution Value
+/// Tooltip: Sets the value of the currently selected position in the CustomConvolution kernel, selected by CustomConvolutionValueSelector.
+/// Description: Sets the value of the currently selected position in the CustomConvolution kernel, selected by CustomConvolutionValueSelector.
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (-255, 255, 1)
+
+/// Feature Name: AdaptiveNoiseSuppressionFactor
+/// Display Name: Adaptive Noise Suppression Factor
+/// Tooltip: Determines the standard deviation of the Gauss filter kernel used.
+/// Description: Determines the standard deviation of the Gauss filter kernel used. 
+/// SNFC Namespace: Custom
+/// Value: [float] 1.000000 (0.500000, 2.000000, 0.000000 [False])
+
+/// Feature Name: SoftwareSignalSelector
+/// Display Name: Software Signal Selector
+/// Tooltip: Selects which Software Signal features to control.
+/// Description: Selects which Software Signal features to control.
+/// SNFC Namespace: Standard
+/// Value: [enum] SoftwareSignal0
+/// Possible values (2):
+///	SoftwareSignal0		[0x00000000]:  (Y)
+///	SoftwareSignal1		[0x00000001]:  (Y)
+
+
+/// Feature Name: SoftwareSignalPulse
+/// Display Name: Software Signal Pulse
+/// Tooltip: Generates a pulse signal that can be used as a software trigger.
+/// Description: Generates a pulse signal that can be used as a software trigger. This command can be used to trigger other modules that accept a SoftwareSignal as trigger source.
+/// SNFC Namespace: Standard
+/// Value: The feature is not readable
+
+/// Feature Name: ContrastEnable
+/// Display Name: Contrast Enable
+/// Tooltip: Enable Contrast Enhancement feature
+/// Description: Enable Contrast Enhancement feature.
+/// SNFC Namespace: Custom
+/// Value: [bool] 0
+
+/// Feature Name: ContrastDarkLimit
+/// Display Name: Contrast Dark Limit
+/// Tooltip: Contrast Dark Limit
+/// Description: ContrastDarkLimit.
+/// SNFC Namespace: Custom
+/// Value: [int] 0 (0, 254, 1)
+
+/// Feature Name: ContrastBrightLimit
+/// Display Name: Contrast Bright Limit
+/// Tooltip: Contrast Bright Limit
+/// Description: ContrastBrightLimit.
+/// SNFC Namespace: Custom
+/// Value: [int] 255 (1, 255, 1)
+
+/// Feature Name: ContrastShape
+/// Display Name: Contrast Shape
+/// Tooltip: Contrast Shape
+/// Description: ContrastShape.
+/// SNFC Namespace: Custom
+/// Value: [int] 4 (1, 10, 1)
+

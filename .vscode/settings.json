@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "alliedcam.h": "c",
+        "alliedcam.c": "c",
+    },
+}
