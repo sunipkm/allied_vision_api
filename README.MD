@@ -32,12 +32,7 @@ int main()
 {
     VmbError_t err;
     AlliedCameraHandle_t handle;
-    err = allied_open_camera(&handle, NULL); // open the first available camera
-    if (err != VmbErrorSuccess)
-    {
-        // do error handling
-    }
-    err = allied_alloc_framebuffer(handle, 2); // allocate two frames for the framebuffer
+    err = allied_open_camera(&handle, NULL, 2); // open the first available camera with two frames for framebuffer
     if (err != VmbErrorSuccess)
     {
         // do error handling

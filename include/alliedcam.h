@@ -71,33 +71,35 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **_Nonnull cameras, VmbUint32_t *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
  * @param mode Camera access mode. Can be of `VmbAccessModeFull`, `VmbAccessModeRead` or `VmbAccessModeExclusive`.
+ * @param num_frames Number of frames to allocate for the framebuffer.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, VmbAccessMode_t mode);
+VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, VmbAccessMode_t mode, uint32_t num_frames);
 
 /**
  * @brief Open an Allied Vision Camera by ID in exclusive mode.
  *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
+ * @param num_frames Number of frames to allocate for the framebuffer.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id)
+static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames)
 {
-    return allied_open_camera_generic(handle, id, VmbAccessModeExclusive);
+    return allied_open_camera_generic(handle, id, VmbAccessModeExclusive, num_frames);
 }
 
 /**
- * @brief Allocate and queue a frame buffer for image capture.
+ * @brief Re-allocate and queue a frame buffer for image capture.
  *
  * @param handle Handle to Allied Vision camera.
  * @param num_frames Number of frames to allocate.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_alloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
+VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
 
 /**
- * @brief Start image acquisition. {@link allied_alloc_framebuffer} must be called with non-zero number of frames before calling this function.
+ * @brief Start image acquisition.
  *
  * @param handle Handle to Allied Vision camera.
  * @param callback A callback function to be called when an image is captured.
@@ -122,6 +124,14 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle);
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
 VmbError_t allied_close_camera(AlliedCameraHandle_t *handle);
+
+/**
+ * @brief Reset the camera. This is a soft-reset, and this operation closes the camera handle. The camera must be reopened after this operation.
+ * 
+ * @param handle Pointer to the camera handle.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_reset_camera(AlliedCameraHandle_t *handle);
 
 /**
  * @brief Select the camera temperature source, measured using {@link allied_get_temperature}.

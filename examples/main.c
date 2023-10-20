@@ -135,7 +135,7 @@ int main()
 
     free(cameras);
 
-    err = allied_open_camera(&handle, NULL);
+    err = allied_open_camera(&handle, NULL, 2);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error opening camera: %d\n", err);
@@ -179,13 +179,6 @@ int main()
     else
     {
         printf("Sensor size: %lld x %lld\n", swidth, sheight);
-    }
-
-    err = allied_alloc_framebuffer(handle, 2);
-    if (err != VmbErrorSuccess)
-    {
-        fprintf(stderr, "Error allocating frame buffer: %d\n", err);
-        goto cleanup;
     }
 
     err = allied_set_image_size(handle, 512, 256);
