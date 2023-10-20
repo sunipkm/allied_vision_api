@@ -68,6 +68,7 @@ typedef struct _name_handlewrapper
     bool streaming;
     VmbFrame_t *framebuf;
     VmbUint32_t num_frames;
+    bool announced;
 } _AlliedCameraHandle_t;
 
 VmbError_t allied_init_api(const char *config_path)
@@ -234,6 +235,7 @@ VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *handle, const char *
     }
     ihandle->acquiring = false;
     ihandle->streaming = false;
+    ihandle->announced = false;
     ihandle->framebuf = NULL;
     ihandle->num_frames = 0;
     *handle = ihandle;
@@ -353,15 +355,6 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t n
         iframebuf[i].bufferSize = payloadSize;
         iframebuf[i].context[CONTEXT_IDX_HANDLE] = ihandle; // store the handle in the context
     }
-    // announce the buffers
-    for (VmbUint32_t i = 0; i < num_frames; i++)
-    {
-        err = VmbFrameAnnounce(ihandle->handle, &iframebuf[i], sizeof(VmbFrame_t));
-        if (err != VmbErrorSuccess)
-        {
-            goto err_alloc;
-        }
-    }
     ihandle->framebuf = iframebuf;
     ihandle->num_frames = num_frames;
     return VmbErrorSuccess;
@@ -409,11 +402,21 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
     {
         return VmbErrorResources;
     }
+    // announce the buffers
+    for (VmbUint32_t i = 0; i < ihandle->num_frames; i++)
+    {
+        err = VmbFrameAnnounce(ihandle->handle, &(ihandle->framebuf[i]), sizeof(VmbFrame_t));
+        if (err != VmbErrorSuccess)
+        {
+            goto err_cleanup;
+        }
+        ihandle->announced = true;
+    }
     // start the capture engine
     err = VmbCaptureStart(ihandle->handle);
     if (err != VmbErrorSuccess)
     {
-        return err;
+        goto err_cleanup;
     }
     eprintlf("Started capture");
     ihandle->streaming = true;
@@ -445,8 +448,9 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
         }
     }
     // if we reach here, something went wrong
+err_cleanup:
     allied_stop_capture(handle);
-    return VmbErrorInternalFault;
+    return err;
 }
 
 VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
@@ -481,9 +485,10 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
         ihandle->streaming = false;
     }
     VmbCaptureQueueFlush(ihandle->handle);
-    while (VmbErrorSuccess != VmbFrameRevokeAll(ihandle->handle))
+    while (ihandle->announced &&  (VmbErrorSuccess != VmbFrameRevokeAll(ihandle->handle)))
     {
     }
+    ihandle->announced = false;
     return VmbErrorSuccess;
 }
 
