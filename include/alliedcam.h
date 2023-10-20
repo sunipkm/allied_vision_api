@@ -57,7 +57,16 @@ typedef void *AlliedCameraHandle_t;
 typedef void (*AlliedCaptureCallback)(const AlliedCameraHandle_t handle, const VmbHandle_t stream, VmbFrame_t *frame, void *_Nullable user_data);
 
 /**
- * @brief List available Allied Vision (and other GenICam) cameras.
+ * @brief Start the Allied Vision Camera API. This function MUST be called before any other function in this library.
+ * This function registers an {@link atexit} handler to stop the API when the program exits.
+ * 
+ * @param config_path A string containing a semicolon (Windows) or colon (other os) separated list of paths. The paths contain directories to search for .cti files, paths to .cti files and optionally the path to a configuration xml file. If null is passed the parameter is the cti files found in the paths the GENICAM_GENTL{32|64}_PATH environment variable are considered.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_init_api(const char *_Nullable config_path);
+
+/**
+ * @brief List available Allied Vision (and other GenICam) cameras. {@link allied_init_api} MUST be called before calling this function.
  *
  * @param cameras Reference to a pointer to store the camera list. Note: Memory is allocated by the function and must be freed by the caller.
  * @param count Reference to a variable to store the number of cameras found.

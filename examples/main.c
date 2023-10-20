@@ -120,6 +120,13 @@ int main()
     char **fmt;
     VmbBool_t *avail;
 
+    err = allied_init_api(NULL);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error initializing API: %d\n", err);
+        return EXIT_FAILURE;
+    }
+
     err = allied_list_cameras(&cameras, &count);
     if (err != VmbErrorSuccess)
     {
@@ -298,8 +305,14 @@ int main()
     }
     free(fmt);
     free(avail);
-cleanup:
 
+    err = allied_stop_capture(handle);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error stopping capture: %d\n", err);
+        goto cleanup;
+    }
+cleanup:
     err = allied_close_camera(&handle);
     if (err != VmbErrorSuccess)
     {

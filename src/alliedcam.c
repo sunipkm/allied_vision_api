@@ -70,22 +70,32 @@ typedef struct _name_handlewrapper
     VmbUint32_t num_frames;
 } _AlliedCameraHandle_t;
 
+VmbError_t allied_init_api(const char *config_path)
+{
+    VmbError_t err = VmbErrorSuccess;
+    if (!is_init)
+    {
+        err = VmbStartup(config_path);
+        if (err != VmbErrorSuccess)
+        {
+            return err;
+        }
+        atexit(shutdown_atexit);
+        is_init = true;
+    }
+    return err;
+}
+
 VmbError_t allied_list_cameras(VmbCameraInfo_t **cameras, VmbUint32_t *count)
 {
     assert(cameras);
     assert(count);
 
-    VmbError_t err;
     if (!is_init)
     {
-        err = VmbStartup(NULL);
-        if (err != VmbErrorSuccess)
-        {
-            return VmbErrorNotInitialized;
-        }
-        atexit(shutdown_atexit);
-        is_init = true;
+        return VmbErrorNotInitialized;
     }
+    VmbError_t err;
     VmbUint32_t camCount = 0;
     err = VmbCamerasList(NULL, 0, &camCount, sizeof(VmbCameraInfo_t)); // get the number of cameras
     if (err != VmbErrorSuccess)
@@ -448,6 +458,10 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
     assert(handle);
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    if (!ihandle->acquiring && !ihandle->streaming)
+    {
+        return VmbErrorSuccess;
+    }
     if (ihandle->acquiring)
     {
         err = VmbFeatureCommandRun(ihandle->handle, "AcquisitionStop");

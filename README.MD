@@ -31,6 +31,11 @@ void Callback(const AlliedCameraHandle_t handle, const VmbHandle_t stream, VmbFr
 int main()
 {
     VmbError_t err;
+    err = allied_init_api(NULL); // start the API
+    if (err != VmbErrorSuccess)
+    {
+        // do error handling
+    }
     AlliedCameraHandle_t handle;
     err = allied_open_camera(&handle, NULL, 2); // open the first available camera with two frames for framebuffer
     if (err != VmbErrorSuccess)
