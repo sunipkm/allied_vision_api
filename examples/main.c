@@ -155,7 +155,7 @@ int main()
     }
     free((void *)camera_id);
 
-    err = allied_get_temperature_src_list(handle, &fmt, &avail, &count);
+    err = allied_get_temperature_src_list(handle, &fmt, NULL, &count);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error getting temperature source list: %d\n", err);
@@ -166,7 +166,7 @@ int main()
         printf("Available temperature sources:\n");
         for (i = 0; i < count; i++)
         {
-            printf("%s: %s\n", fmt[i], avail[i] ? "available" : "not available");
+            printf("%s\n", fmt[i]);
         }
     }
 
@@ -270,7 +270,7 @@ int main()
     printf("\n");
 
     free(fmt);
-    free(avail);
+    // free(avail);
 
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)

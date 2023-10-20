@@ -146,11 +146,11 @@ VmbError_t allied_get_temperature_src(AlliedCameraHandle_t handle, const char **
  * 
  * @param handle Handle to Allied Vision camera.
  * @param srcs Pointer to store the list of temperature source strings.
- * @param available Pointer to store the list of booleans indicating whether the temperature source is available.
+ * @param available Pointer to store the list of booleans indicating whether the temperature source is available. Pass NULL if not required.
  * @param count Pointer to store the number of temperature sources.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera temperature.
@@ -252,11 +252,11 @@ VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
  *
  * @param handle Handle to Allied Vision camera.
  * @param depths Pointer to store the list of bit depth strings.
- * @param available Pointer to store the list of booleans indicating whether the bit depth is available.
+ * @param available Pointer to store the list of booleans indicating whether the bit depth is available. Pass NULL if not required.
  * @param count Pointer to store the number of bit depths.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***_Nonnull depths, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***_Nonnull depths, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera pixel format.
@@ -281,11 +281,11 @@ VmbError_t allied_set_image_format(AlliedCameraHandle_t handle, const char *_Non
  *
  * @param handle Handle to Allied Vision camera.
  * @param formats Pointer to store the list of pixel format strings.
- * @param available Pointer to store the list of booleans indicating whether the pixel format is available.
+ * @param available Pointer to store the list of booleans indicating whether the pixel format is available. Pass NULL if not required.
  * @param count Pointer to store the number of pixel formats.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***_Nonnull formats, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***_Nonnull formats, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Flip the image on the camera.
@@ -435,11 +435,11 @@ VmbError_t allied_set_indicator_mode(AlliedCameraHandle_t handle, const char *_N
  * 
  * @param handle Handle to Allied Vision camera.
  * @param modes Pointer to store the list of indicator mode strings.
- * @param available Pointer to store the list of booleans indicating whether the indicator mode is available.
+ * @param available Pointer to store the list of booleans indicating whether the indicator mode is available. Pass NULL if not required.
  * @param count Pointer to store the number of indicator modes.
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
-VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nonnull available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera indicator LED brightness.
@@ -469,6 +469,178 @@ VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t lum
  * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
  */
 VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nonnull step);
+
+/**
+ * @brief Get the list of available trigger lines. User has to free the memory allocated for the lists.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param lines Pointer to store the available trigger lines list. Pass NULL if not required.
+ * @param available Pointer to store the list of booleans indicating whether the trigger line is available. Pass NULL if not required.
+ * @param count Number of trigger lines.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char ***_Nonnull lines, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the trigger line currently selected for configuration.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param line Pointer to store the trigger line name.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **_Nonnull line);
+
+/**
+ * @brief Set the trigger line to configure.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param line Trigger line name.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline(AlliedCameraHandle_t handle, const char *_Nonnull line);
+
+/**
+ * @brief Get the trigger line mode.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param mode Pointer to store the trigger line mode string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_mode(AlliedCameraHandle_t handle, const char **_Nonnull mode);
+
+/**
+ * @brief Set the trigger line mode.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param mode Trigger line mode string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
+
+/**
+ * @brief Get the list of available trigger line modes. User has to free the memory allocated for the lists.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param modes Pointer to store the list of trigger line mode strings.
+ * @param available Pointer to store the list of booleans indicating whether the trigger line mode is available. Pass NULL if not required.
+ * @param count Pointer to store the number of trigger line modes.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the trigger line source.
+ * NOTE: The trigger line must be in "Output" mode to get the source.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param src Pointer to store the trigger line source string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_src(AlliedCameraHandle_t handle, const char **_Nonnull src);
+
+/**
+ * @brief Set the trigger line source.
+ * NOTE: The trigger line must be in "Output" mode to set the source.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param src Trigger line source string.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline_src(AlliedCameraHandle_t handle, const char *_Nonnull src);
+
+/**
+ * @brief Get the list of available trigger line sources. User has to free the memory allocated for the lists.
+ * NOTE: The trigger line must be in "Output" mode to get the source list.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param srcs Pointer to store the list of trigger line source strings.
+ * @param available Pointer to store the list of booleans indicating whether the trigger line source is available. Pass NULL if not required.
+ * @param count Pointer to store the number of trigger line sources.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the trigger line polarity.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param polarity Pointer to store the trigger line polarity.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *inverted);
+
+/**
+ * @brief Set the trigger line polarity.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param polarity Trigger line polarity.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t inverted);
+
+/**
+ * @brief Get the trigger line debounce mode.
+ * NOTE: The trigger line must be in "Input" mode to get the debounce mode.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param time Pointer to store the trigger line debounce mode.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_debounce_mode(AlliedCameraHandle_t handle, char **_Nonnull mode);
+
+/**
+ * @brief Set the trigger line debounce mode.
+ * NOTE: The trigger line must be in "Input" mode to set the debounce mode.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param time Trigger line debounce mode.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline_debounce_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
+
+/**
+ * @brief Get the list of available trigger line debounce modes. User has to free the memory allocated for the lists.
+ * NOTE: The trigger line must be in "Input" mode to get the debounce mode list.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param modes Pointer to store the list of trigger line debounce mode strings.
+ * @param available Pointer to store the list of booleans indicating whether the trigger line debounce mode is available. Pass NULL if not required.
+ * @param count Pointer to store the number of trigger line debounce modes.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the trigger line debounce time.
+ * NOTE: The trigger line must be in "Input" mode to get the debounce time.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param time Pointer to store the trigger line debounce time.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double *_Nonnull time);
+
+/**
+ * @brief Set the trigger line debounce time.
+ * NOTE: The trigger line must be in "Input" mode to set the debounce time.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param time Trigger line debounce time.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double time);
+
+/**
+ * @brief Get the trigger line debounce time range.
+ * NOTE: The trigger line must be in "Input" mode to get the debounce time range.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param minval Pointer to store the minimum trigger line debounce time.
+ * @param maxval Pointer to store the maximum trigger line debounce time.
+ * @param step Pointer to store the trigger line debounce time step size.
+ * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ */
+VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
 /**
  * @brief Get the camera ID string.

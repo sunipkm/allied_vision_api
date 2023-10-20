@@ -46,7 +46,7 @@ static void shutdown_atexit()
 }
 
 static VmbError_t vmb_adjust_pkt_sz(const char *id);
-static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t * alignment);
+static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t *alignment);
 static VmbError_t allied_free_framebuf(VmbFrame_t **framebuf, VmbUint32_t num_frames);
 
 #ifdef ALLIED_DEBUG
@@ -95,7 +95,7 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **cameras, VmbUint32_t *count)
 
     if (camCount == 0)
     {
-        printf("no cameras found\n");
+        eprintlf("no cameras found");
         return VmbErrorNotFound;
     }
 
@@ -238,7 +238,7 @@ cleanup:
     return err;
 }
 
-static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t * alignment)
+static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t *alignment)
 {
     assert(alignment);
     VmbError_t err;
@@ -483,7 +483,7 @@ VmbError_t allied_close_camera(AlliedCameraHandle_t *handle)
         return VmbErrorNotInitialized;
     }
     VmbError_t err;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)(* handle);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)(*handle);
     err = allied_stop_capture(*handle);
     if (err != VmbErrorSuccess)
     {
@@ -869,21 +869,235 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
         else
         {
             free(_formats);
+            free(_available);
             *formats = NULL;
-            *available = NULL;
+            if (available != NULL)
+            {
+                *available = NULL;
+            }
         }
         *formats = _formats;
-        *available = _available;
+        if (available != NULL)
+        {
+            *available = _available;
+        }
+        else
+        {
+            free(_available);
+        }
     }
     *count = list_len;
     return VmbErrorSuccess;
+}
+
+VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **line)
+{
+    assert(handle);
+    assert(line);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumGet(handle, "LineSelector", (const char **)line);
+    return err;
+}
+
+VmbError_t allied_set_trigline(AlliedCameraHandle_t handle, const char *line)
+{
+    assert(handle);
+    assert(line);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumSet(handle, "LineSelector", line);
+    return err;
+}
+
+VmbError_t allied_get_trigline_mode(AlliedCameraHandle_t handle, const char **mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumGet(handle, "LineMode", mode);
+    return err;
+}
+
+VmbError_t allied_set_trigline_mode(AlliedCameraHandle_t handle, const char *mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumSet(handle, "LineMode", mode);
+    return err;
+}
+
+VmbError_t allied_get_trigline_src(AlliedCameraHandle_t handle, const char **src)
+{
+    assert(handle);
+    assert(src);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumGet(handle, "LineSource", src);
+    return err;
+}
+
+VmbError_t allied_set_trigline_src(AlliedCameraHandle_t handle, const char *src)
+{
+    assert(handle);
+    assert(src);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumSet(handle, "LineSource", src);
+    return err;
+}
+
+VmbError_t allied_get_trigline_src_list(AlliedCameraHandle_t handle, char ***srcs, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(srcs);
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "LineSource", srcs, available, count);
+}
+
+VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(modes);
+
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "LineMode", modes, available, count);
+}
+
+VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *polarity)
+{
+    assert(handle);
+    assert(polarity);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureBoolGet(handle, "LineInverter", polarity);
+    return err;
+}
+
+VmbError_t allied_set_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t polarity)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureBoolSet(handle, "LineInverter", polarity);
+    return err;
+}
+
+VmbError_t allied_get_trigline_debounce_mode(AlliedCameraHandle_t handle, char **mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumGet(handle, "LineDebouncerMode", (const char **)mode);
+    return err;
+}
+
+VmbError_t allied_set_trigline_debounce_mode(AlliedCameraHandle_t handle, const char *mode)
+{
+    assert(handle);
+    assert(mode);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureEnumSet(handle, "LineDebouncerMode", mode);
+    return err;
+}
+
+VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(modes);
+
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "LineDebouncerMode", modes, available, count);
+}
+
+VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double *time)
+{
+    assert(handle);
+    assert(time);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureFloatGet(handle, "LineDebounceDuration", time);
+    return err;
+}
+
+VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double time)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err = VmbFeatureFloatSet(handle, "LineDebounceDuration", time);
+    return err;
+}
+
+VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
+{
+    assert(handle);
+    assert(minval);
+    assert(maxval);
+    assert(step);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    *minval = 0;
+    *maxval = 0;
+    *step = 0;
+    VmbError_t err = VmbFeatureFloatRangeQuery(handle, "LineDebounceDuration", minval, maxval);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    VmbBool_t _unused;
+    err = VmbFeatureFloatIncrementQuery(handle, "LineDebounceDuration", &_unused, step);
+    return err;
 }
 
 VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***formats, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
     assert(formats);
-    assert(available);
+
     assert(count);
     if (!is_init)
     {
@@ -896,7 +1110,7 @@ VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char **
 {
     assert(handle);
     assert(depths);
-    assert(available);
+
     assert(count);
     if (!is_init)
     {
@@ -909,7 +1123,7 @@ VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***
 {
     assert(handle);
     assert(srcs);
-    assert(available);
+
     assert(count);
     if (!is_init)
     {
@@ -918,11 +1132,24 @@ VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***
     return allied_get_enum_list(handle, "DeviceTemperatureSelector", srcs, available, count);
 }
 
+VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char ***lines, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(lines);
+
+    assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    return allied_get_enum_list(handle, "LineSelector", lines, available, count);
+}
+
 VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
     assert(modes);
-    assert(available);
+
     assert(count);
     if (!is_init)
     {
@@ -1156,7 +1383,7 @@ VmbError_t allied_set_gain(AlliedCameraHandle_t handle, double value)
     return VmbFeatureFloatSet(ihandle->handle, "Gain", value);
 }
 
-VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double * framerate)
+VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *framerate)
 {
     assert(handle);
     assert(framerate);
@@ -1166,7 +1393,7 @@ VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double * framer
     }
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     *framerate = 0;
-    return VmbFeatureFloatGet(ihandle->handle, "AcquisitionFrameRate", framerate);  
+    return VmbFeatureFloatGet(ihandle->handle, "AcquisitionFrameRate", framerate);
 }
 
 VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerate)
@@ -1181,7 +1408,7 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
         return VmbErrorInvalidValue;
     }
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    return VmbFeatureFloatSet(ihandle->handle, "AcquisitionFrameRate", framerate);  
+    return VmbFeatureFloatSet(ihandle->handle, "AcquisitionFrameRate", framerate);
 }
 
 VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
