@@ -243,7 +243,7 @@ VmbError_t allied_get_gain(AlliedCameraHandle_t handle, double *_Nonnull value);
  * @param step Pointer to store the gain step size.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_gain_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
+VmbError_t allied_get_gain_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nullable step);
 
 /**
  * @brief Set the camera exposure time in microseconds.
@@ -272,7 +272,7 @@ VmbError_t allied_get_exposure_us(AlliedCameraHandle_t handle, double *_Nonnull 
  * @param step Pointer to store the exposure time step size in microseconds.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
+VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nullable step);
 
 /**
  * @brief Get the sensor bit depth.
@@ -429,6 +429,24 @@ VmbError_t allied_set_image_size(AlliedCameraHandle_t handle, VmbUint32_t width,
 VmbError_t allied_get_image_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull width, VmbInt64_t *_Nonnull height);
 
 /**
+ * @brief Check automatic frame rate control status.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param auto_on Pointer to store automatic frame rate control status.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_acq_framerate_auto(AlliedCameraHandle_t handle, bool *_Nonnull auto_on);
+
+/**
+ * @brief Enable/disable automatic frame rate control.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param auto_on Enable/disable automatic frame rate control.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_set_acq_framerate_auto(AlliedCameraHandle_t handle, bool auto_on);
+
+/**
  * @brief Get the camera frame rate.
  *
  * @param handle Handle to Allied Vision camera.
@@ -438,7 +456,7 @@ VmbError_t allied_get_image_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnu
 VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *_Nonnull framerate);
 
 /**
- * @brief Set the camera frame rate.
+ * @brief Set the camera frame rate. Automatic frame rate control must be disabled using {@link allied_set_acq_framerate_auto} for this function to work.
  *
  * @param handle Handle to Allied Vision camera.
  * @param framerate Frame rate in Hz.
@@ -455,7 +473,7 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
  * @param step Pointer to store the frame rate step size in Hz.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
+VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nullable step);
 
 /**
  * @brief Get the camera indicator LED mode.
@@ -513,7 +531,7 @@ VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t lum
  * @param step Pointer to store the indicator brightness step size.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nonnull step);
+VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nullable step);
 
 /**
  * @brief Get the list of available trigger lines. User has to free the memory allocated for the set using the {@allied_free_list} function.
@@ -692,7 +710,7 @@ VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double
  * @param step Pointer to store the trigger line debounce time step size.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
+VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nullable step);
 
 /**
  * @brief Get the camera ID string.

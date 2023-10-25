@@ -883,7 +883,10 @@ VmbError_t allied_get_features_list(AlliedCameraHandle_t handle, VmbFeatureInfo_
     assert(handle);
     assert(features);
     assert(count);
-
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     VmbUint32_t list_len = 0;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
@@ -919,6 +922,10 @@ VmbError_t allied_get_feature_info(AlliedCameraHandle_t handle, const char *name
     assert(handle);
     assert(name);
     assert(info);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     VmbHandle_t moduleHandle = ihandle->handle;
@@ -931,6 +938,10 @@ VmbError_t allied_get_feature_int(AlliedCameraHandle_t handle, const char *name,
     assert(handle);
     assert(name);
     assert(value);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     VmbHandle_t moduleHandle = ihandle->handle;
@@ -942,6 +953,10 @@ VmbError_t allied_set_feature_int(AlliedCameraHandle_t handle, const char *name,
 {
     assert(handle);
     assert(name);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     VmbHandle_t moduleHandle = ihandle->handle;
@@ -955,7 +970,10 @@ VmbError_t allied_get_feature_int_range(AlliedCameraHandle_t handle, const char 
     assert(name);
     assert(minval);
     assert(maxval);
-
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     VmbInt64_t _step = 0;
     *minval = 0;
@@ -986,7 +1004,10 @@ VmbError_t allied_get_feature_int_valset(AlliedCameraHandle_t handle, const char
     assert(name);
     assert(buffer);
     assert(count);
-
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     *buffer = NULL;
     *count = 0;
 
@@ -1026,6 +1047,10 @@ VmbError_t allied_get_feature_float(AlliedCameraHandle_t handle, const char *nam
     assert(handle);
     assert(name);
     assert(value);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     VmbHandle_t moduleHandle = ihandle->handle;
@@ -1039,6 +1064,10 @@ VmbError_t allied_set_feature_float(AlliedCameraHandle_t handle, const char *nam
     assert(handle);
     assert(name);
     VmbError_t err;
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     VmbHandle_t moduleHandle = ihandle->handle;
     err = VmbFeatureFloatSet(moduleHandle, name, value);
@@ -1051,7 +1080,10 @@ VmbError_t allied_get_feature_float_range(AlliedCameraHandle_t handle, const cha
     assert(name);
     assert(minval);
     assert(maxval);
-
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     *minval = 0;
     *maxval = 0;
     if (step != NULL)
@@ -1090,6 +1122,10 @@ VmbError_t allied_get_feature_enum(AlliedCameraHandle_t handle, const char *name
     assert(handle);
     assert(name);
     assert(value);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     *value = empty;
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
@@ -1104,6 +1140,10 @@ VmbError_t allied_set_feature_enum(AlliedCameraHandle_t handle, const char *name
     assert(handle);
     assert(name);
     assert(value);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     err = VmbFeatureEnumSet(ihandle->handle, name, value);
@@ -1116,6 +1156,10 @@ VmbError_t allied_get_feature_enum_list(AlliedCameraHandle_t handle, const char 
     assert(name);
     assert(list);
     assert(count);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
     VmbError_t err;
     VmbUint32_t list_len = 0;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
@@ -1359,25 +1403,7 @@ VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double
 
 VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
 {
-    assert(handle);
-    assert(minval);
-    assert(maxval);
-    assert(step);
-    if (!is_init)
-    {
-        return VmbErrorNotInitialized;
-    }
-    *minval = 0;
-    *maxval = 0;
-    *step = 0;
-    VmbError_t err = VmbFeatureFloatRangeQuery(handle, "LineDebounceDuration", minval, maxval);
-    if (err != VmbErrorSuccess)
-    {
-        return err;
-    }
-    VmbBool_t _unused;
-    err = VmbFeatureFloatIncrementQuery(handle, "LineDebounceDuration", &_unused, step);
-    return err;
+    return allied_get_feature_float_range(handle, "LineDebounceDuration", minval, maxval, step);
 }
 
 VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***formats, VmbBool_t **available, VmbUint32_t *count)
@@ -1498,27 +1524,7 @@ VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t lum
 
 VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *minval, VmbInt64_t *maxval, VmbInt64_t *step)
 {
-    assert(handle);
-    assert(minval);
-    assert(maxval);
-    assert(step);
-    if (!is_init)
-    {
-        return VmbErrorNotInitialized;
-    }
-    VmbError_t err;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    *minval = 0;
-    *maxval = 0;
-    *step = 0;
-
-    err = VmbFeatureIntRangeQuery(ihandle->handle, "DeviceIndicatorLuminance", minval, maxval);
-    if (err != VmbErrorSuccess)
-    {
-        return err;
-    }
-    err = VmbFeatureIntIncrementQuery(ihandle->handle, "DeviceIndicatorLuminance", step);
-    return err;
+    return allied_get_feature_int_range(handle, "DeviceIndicatorLuminance", minval, maxval, step);
 }
 
 VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *depth)
@@ -1556,28 +1562,7 @@ VmbError_t allied_get_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
 
 VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
 {
-    assert(handle);
-    assert(minval);
-    assert(maxval);
-    assert(step);
-    if (!is_init)
-    {
-        return VmbErrorNotInitialized;
-    }
-    VmbError_t err;
-    VmbBool_t _unused;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    *minval = 0.0;
-    *maxval = 0.0;
-    *step = 0.0;
-
-    err = VmbFeatureFloatRangeQuery(ihandle->handle, "ExposureTime", minval, maxval);
-    if (err != VmbErrorSuccess)
-    {
-        return err;
-    }
-    err = VmbFeatureFloatIncrementQuery(ihandle->handle, "ExposureTime", &_unused, step);
-    return err;
+    return allied_get_feature_float_range(handle, "ExposureTime", minval, maxval, step);
 }
 
 VmbError_t allied_set_exposure_us(AlliedCameraHandle_t handle, double value)
@@ -1610,28 +1595,7 @@ VmbError_t allied_get_exposure_us(AlliedCameraHandle_t handle, double *value)
 
 VmbError_t allied_get_gain_range(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
 {
-    assert(handle);
-    assert(minval);
-    assert(maxval);
-    assert(step);
-    if (!is_init)
-    {
-        return VmbErrorNotInitialized;
-    }
-    VmbError_t err;
-    VmbBool_t _unused;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    *minval = 0.0;
-    *maxval = 0.0;
-    *step = 0.0;
-
-    err = VmbFeatureFloatRangeQuery(ihandle->handle, "Gain", minval, maxval);
-    if (err != VmbErrorSuccess)
-    {
-        return err;
-    }
-    err = VmbFeatureFloatIncrementQuery(ihandle->handle, "Gain", &_unused, step);
-    return err;
+    return allied_get_feature_float_range(handle, "Gain", minval, maxval, step);
 }
 
 VmbError_t allied_get_gain(AlliedCameraHandle_t handle, double *value)
@@ -1660,6 +1624,38 @@ VmbError_t allied_set_gain(AlliedCameraHandle_t handle, double value)
     }
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
     return VmbFeatureFloatSet(ihandle->handle, "Gain", value);
+}
+
+VmbError_t allied_get_acq_framerate_auto(AlliedCameraHandle_t handle, bool *auto_on)
+{
+    assert(handle);
+    assert(auto_on);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    VmbBool_t _auto_on = VmbBoolFalse;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureBoolGet(ihandle->handle, "AcquisitionFrameRateEnable", &_auto_on);
+    if (err != VmbErrorSuccess)
+    {
+        *auto_on = false;
+        return err;
+    }
+    *auto_on = _auto_on == VmbBoolTrue;
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_set_acq_framerate_auto(AlliedCameraHandle_t handle, bool auto_on)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    return VmbFeatureBoolSet(ihandle->handle, "AcquisitionFrameRateEnable", auto_on ? VmbBoolTrue : VmbBoolFalse);
 }
 
 VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *framerate)
@@ -1692,28 +1688,7 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
 
 VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *minval, double *maxval, double *step)
 {
-    assert(handle);
-    assert(minval);
-    assert(maxval);
-    assert(step);
-    if (!is_init)
-    {
-        return VmbErrorNotInitialized;
-    }
-    VmbError_t err;
-    VmbBool_t _unused;
-    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    *minval = 0.0;
-    *maxval = 0.0;
-    *step = 0.0;
-
-    err = VmbFeatureFloatRangeQuery(ihandle->handle, "AcquisitionFrameRate", minval, maxval);
-    if (err != VmbErrorSuccess)
-    {
-        return err;
-    }
-    err = VmbFeatureFloatIncrementQuery(ihandle->handle, "AcquisitionFrameRate", &_unused, step);
-    return err;
+    return allied_get_feature_float_range(handle, "AcquisitionFrameRate", minval, maxval, step);
 }
 
 VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **id)

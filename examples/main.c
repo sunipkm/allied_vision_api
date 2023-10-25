@@ -11,8 +11,8 @@
 
 #define MS_TO_US(ms) ((ms) * 1000)                    // ms to us
 #define US_TO_SECS(us) ((us) / 1000000.0)             // us to ms
-#define CYCLE_TIME MS_TO_US(100)                      // 100 ms
-#define NUM_CYCLES 100                                // 100 cycles
+#define CYCLE_TIME MS_TO_US(1000)                     // 100 ms
+#define NUM_CYCLES 10                                 // 100 cycles
 #define TOTAL_SECS US_TO_SECS(CYCLE_TIME *NUM_CYCLES) // 10 s
 
 static inline void timespec_diff(struct timespec *start, struct timespec *end, struct timespec *diff)
@@ -87,15 +87,15 @@ static void ReadAndPrintTemperatures(const AlliedCameraHandle_t handle, const ch
         err = allied_set_temperature_src(handle, srcs[i]);
         if (err != VmbErrorSuccess)
         {
-            printf("Failed to select \"%s\" [%s]\t", srcs[i], allied_strerr(err));
-            continue;
+            temp = -280;
+            goto print;
         }
         err = allied_get_temperature(handle, &temp);
         if (err != VmbErrorSuccess)
         {
-            printf("Failed to read \"%s\" [%s]\t", srcs[i], allied_strerr(err));
-            continue;
+            temp = -280;
         }
+    print:
         printf("%.2lf C [%s]\t", temp, srcs[i]);
     }
     fflush(stdout);
@@ -312,6 +312,7 @@ int main()
         fprintf(stderr, "Error stopping capture: %d\n", err);
         goto cleanup;
     }
+
 cleanup:
     err = allied_close_camera(&handle);
     if (err != VmbErrorSuccess)
