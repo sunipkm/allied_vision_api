@@ -24,11 +24,11 @@ test: $(LIBTARGET)
 
 clean:
 	rm -vf $(COBJS)
+	rm -vf $(CDEPS)
+	rm -vf $(LIBTARGET)
 	rm -vf *.out
 
 spotless: clean
-	rm -vf $(CDEPS)
-	rm -vf $(LIBTARGET)
 	rm -rf doc
 
 doc:

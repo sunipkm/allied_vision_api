@@ -35,6 +35,14 @@ extern "C"
 #define _Nullable
 #endif
 
+#ifndef _Const
+/**
+ * @brief Indicates that the variable/pointer is constant.
+ *
+ */
+#define _Const
+#endif
+
 #include <stdbool.h>
 #include <VmbC/VmbC.h>
 
@@ -59,9 +67,9 @@ typedef void (*AlliedCaptureCallback)(const AlliedCameraHandle_t handle, const V
 /**
  * @brief Start the Allied Vision Camera API. This function MUST be called before any other function in this library.
  * This function registers an {@link atexit} handler to stop the API when the program exits.
- * 
+ *
  * @param config_path A string containing a semicolon (Windows) or colon (other os) separated list of paths. The paths contain directories to search for .cti files, paths to .cti files and optionally the path to a configuration xml file. If null is passed the parameter is the cti files found in the paths the GENICAM_GENTL{32|64}_PATH environment variable are considered.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_init_api(const char *_Nullable config_path);
 
@@ -70,7 +78,7 @@ VmbError_t allied_init_api(const char *_Nullable config_path);
  *
  * @param cameras Reference to a pointer to store the camera list. Note: Memory is allocated by the function and must be freed by the caller.
  * @param count Reference to a variable to store the number of cameras found.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_list_cameras(VmbCameraInfo_t **_Nonnull cameras, VmbUint32_t *_Nonnull count);
 
@@ -81,7 +89,7 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **_Nonnull cameras, VmbUint32_t *
  * @param id Camera ID string. If NULL, the first camera found is opened.
  * @param mode Camera access mode. Can be of `VmbAccessModeFull`, `VmbAccessModeRead` or `VmbAccessModeExclusive`.
  * @param num_frames Number of frames to allocate for the framebuffer.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, VmbAccessMode_t mode, uint32_t num_frames);
 
@@ -91,7 +99,7 @@ VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, con
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
  * @param num_frames Number of frames to allocate for the framebuffer.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames)
 {
@@ -103,7 +111,7 @@ static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handl
  *
  * @param handle Handle to Allied Vision camera.
  * @param num_frames Number of frames to allocate.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
 
@@ -113,7 +121,7 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t n
  * @param handle Handle to Allied Vision camera.
  * @param callback A callback function to be called when an image is captured.
  * @param user_data Pointer to custom user data to be passed to the callback.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback _Nonnull callback, void *user_data);
 
@@ -121,7 +129,7 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
  * @brief Stop image acquisition.
  *
  * @param handle Handle to Allied Vision camera.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_stop_capture(AlliedCameraHandle_t handle);
 
@@ -130,24 +138,42 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle);
  * Reuse of the camera handle without calling {@link allied_open_camera} again will cause your program to crash.
  *
  * @param handle Pointer to the camera handle.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_close_camera(AlliedCameraHandle_t *handle);
 
 /**
  * @brief Reset the camera. This is a soft-reset, and this operation closes the camera handle. The camera must be reopened after this operation.
- * 
+ *
  * @param handle Pointer to the camera handle.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_reset_camera(AlliedCameraHandle_t *handle);
+
+/**
+ * @brief Check if the camera is currently streaming.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @return true
+ * @return false
+ */
+bool allied_camera_streaming(AlliedCameraHandle_t handle);
+
+/**
+ * @brief Check if the camera is currently acquiring images.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @return true
+ * @return false
+ */
+bool allied_camera_acquiring(AlliedCameraHandle_t handle);
 
 /**
  * @brief Select the camera temperature source, measured using {@link allied_get_temperature}.
  *
  * @param handle Handle to Allied Vision camera.
  * @param src "Sensor" for sensor temperature, "Mainboard" for FPGA temperature.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_temperature_src(AlliedCameraHandle_t handle, const char *src);
 
@@ -156,27 +182,27 @@ VmbError_t allied_set_temperature_src(AlliedCameraHandle_t handle, const char *s
  *
  * @param handle Handle to Allied Vision camera.
  * @param src Pointer to store the temperature source.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_temperature_src(AlliedCameraHandle_t handle, const char **_Nonnull src);
 
 /**
- * @brief Get the list of available temperature sources. User has to free the memory allocated for the lists.
- * 
+ * @brief Get the list of available temperature sources. User has to free the memory allocated for the set using the {@allied_free_list} function.
+ *
  * @param handle Handle to Allied Vision camera.
- * @param srcs Pointer to store the list of temperature source strings.
+ * @param srcs Pointer to store the list of temperature source strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the temperature source is available. Pass NULL if not required.
  * @param count Pointer to store the number of temperature sources.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera temperature.
  *
  * @param handle Handle to Allied Vision camera.
  * @param temp Pointer to store the temperature.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_temperature(AlliedCameraHandle_t handle, double *_Nonnull temp);
 
@@ -186,7 +212,7 @@ VmbError_t allied_get_temperature(AlliedCameraHandle_t handle, double *_Nonnull 
  * @param handle Handle to Allied Vision camera.
  * @param width Pointer to store the sensor width.
  * @param height Pointer to store the sensor height.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_sensor_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull width, VmbInt64_t *_Nonnull height);
 
@@ -195,7 +221,7 @@ VmbError_t allied_get_sensor_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonn
  *
  * @param handle Handle to Allied Vision camera.
  * @param value Gain value to set.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_gain(AlliedCameraHandle_t handle, double value);
 
@@ -204,7 +230,7 @@ VmbError_t allied_set_gain(AlliedCameraHandle_t handle, double value);
  *
  * @param handle Handle to Allied Vision camera.
  * @param value Pointer to store the gain value.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_gain(AlliedCameraHandle_t handle, double *_Nonnull value);
 
@@ -215,7 +241,7 @@ VmbError_t allied_get_gain(AlliedCameraHandle_t handle, double *_Nonnull value);
  * @param minval Pointer to store the minimum gain value.
  * @param maxval Pointer to store the maximum gain value.
  * @param step Pointer to store the gain step size.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_gain_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
@@ -224,7 +250,7 @@ VmbError_t allied_get_gain_range(AlliedCameraHandle_t handle, double *_Nonnull m
  *
  * @param handle Handle to Allied Vision camera.
  * @param value Exposure time in microseconds.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_exposure_us(AlliedCameraHandle_t handle, double value);
 
@@ -233,7 +259,7 @@ VmbError_t allied_set_exposure_us(AlliedCameraHandle_t handle, double value);
  *
  * @param handle Handle to Allied Vision camera.
  * @param value Pointer to store the exposure time in microseconds.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_exposure_us(AlliedCameraHandle_t handle, double *_Nonnull value);
 
@@ -244,7 +270,7 @@ VmbError_t allied_get_exposure_us(AlliedCameraHandle_t handle, double *_Nonnull 
  * @param minval Pointer to store the minimum exposure time in microseconds.
  * @param maxval Pointer to store the maximum exposure time in microseconds.
  * @param step Pointer to store the exposure time step size in microseconds.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
@@ -253,7 +279,7 @@ VmbError_t allied_get_exposure_range_us(AlliedCameraHandle_t handle, double *_No
  *
  * @param handle Handle to Allied Vision camera.
  * @param depth Pointer to store the bit depth string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_sensor_bit_depth(AlliedCameraHandle_t handle, const char **_Nonnull depth);
 
@@ -262,27 +288,27 @@ VmbError_t allied_get_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
  *
  * @param handle Handle to Allied Vision camera.
  * @param depth Bit depth string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *_Nonnull depth);
 
 /**
- * @brief Get the list of available sensor bit depths. User has to free the memory allocated for the lists.
+ * @brief Get the list of available sensor bit depths. User has to free the memory allocated for the set using the {@allied_free_list} function.
  *
  * @param handle Handle to Allied Vision camera.
- * @param depths Pointer to store the list of bit depth strings.
+ * @param depths Pointer to store the list of bit depth strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the bit depth is available. Pass NULL if not required.
  * @param count Pointer to store the number of bit depths.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***_Nonnull depths, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *depths, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera pixel format.
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pixel format string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_image_format(AlliedCameraHandle_t handle, const char **_Nonnull format);
 
@@ -291,20 +317,20 @@ VmbError_t allied_get_image_format(AlliedCameraHandle_t handle, const char **_No
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pixel format string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_image_format(AlliedCameraHandle_t handle, const char *_Nonnull format);
 
 /**
- * @brief Get the list of available pixel formats. User has to free the memory allocated for the lists.
+ * @brief Get the list of available pixel formats. User has to free the memory allocated for the set using the {@allied_free_list} function.
  *
  * @param handle Handle to Allied Vision camera.
- * @param formats Pointer to store the list of pixel format strings.
+ * @param formats Pointer to store the list of pixel format strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the pixel format is available. Pass NULL if not required.
  * @param count Pointer to store the number of pixel formats.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***_Nonnull formats, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *formats, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Flip the image on the camera.
@@ -312,7 +338,7 @@ VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***_No
  * @param handle Handle to Allied Vision camera.
  * @param flipx Flip image horizontally.
  * @param flipy Flip image vertically.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_image_flip(AlliedCameraHandle_t handle, VmbBool_t flipx, VmbBool_t flipy);
 
@@ -322,7 +348,7 @@ VmbError_t allied_set_image_flip(AlliedCameraHandle_t handle, VmbBool_t flipx, V
  * @param handle Handle to Allied Vision camera.
  * @param flipx Pointer to store the horizontal flip setting.
  * @param flipy Pointer to store the vertical flip setting.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_image_flip(AlliedCameraHandle_t handle, VmbBool_t *_Nonnull flipx, VmbBool_t *_Nonnull flipy);
 
@@ -331,7 +357,7 @@ VmbError_t allied_get_image_flip(AlliedCameraHandle_t handle, VmbBool_t *_Nonnul
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Binning factor.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_binning_factor(AlliedCameraHandle_t handle, VmbUint32_t factor);
 
@@ -340,7 +366,7 @@ VmbError_t allied_set_binning_factor(AlliedCameraHandle_t handle, VmbUint32_t fa
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pointer to store the binning factor.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_binning_factor(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull factor);
 
@@ -349,7 +375,7 @@ VmbError_t allied_get_binning_factor(AlliedCameraHandle_t handle, VmbInt64_t *_N
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Binning mode string ("Sum" or "Average").
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_binning_mode(AlliedCameraHandle_t handle, const char **_Nonnull mode);
 
@@ -358,7 +384,7 @@ VmbError_t allied_get_binning_mode(AlliedCameraHandle_t handle, const char **_No
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Binning mode string ("Sum" or "Average").
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_binning_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
 
@@ -378,7 +404,7 @@ VmbError_t allied_set_image_ofst(AlliedCameraHandle_t handle, VmbUint32_t x, Vmb
  * @param handle Handle to Allied Vision camera.
  * @param x Pointer to store the image X offset.
  * @param y Pointer to store the image Y offset.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_image_ofst(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull x, VmbInt64_t *_Nonnull y);
 
@@ -388,7 +414,7 @@ VmbError_t allied_get_image_ofst(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnu
  * @param handle Handle to Allied Vision camera.
  * @param width Image width.
  * @param height Image height.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_image_size(AlliedCameraHandle_t handle, VmbUint32_t width, VmbUint32_t height);
 
@@ -398,7 +424,7 @@ VmbError_t allied_set_image_size(AlliedCameraHandle_t handle, VmbUint32_t width,
  * @param handle Handle to Allied Vision camera.
  * @param width Pointer to store the image width.
  * @param height Pointer to store the image height.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_image_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull width, VmbInt64_t *_Nonnull height);
 
@@ -407,7 +433,7 @@ VmbError_t allied_get_image_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnu
  *
  * @param handle Handle to Allied Vision camera.
  * @param framerate Pointer to store frame rate in Hz.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *_Nonnull framerate);
 
@@ -416,7 +442,7 @@ VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *_Nonnul
  *
  * @param handle Handle to Allied Vision camera.
  * @param framerate Frame rate in Hz.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerate);
 
@@ -427,7 +453,7 @@ VmbError_t allied_set_acq_framerate(AlliedCameraHandle_t handle, double framerat
  * @param minval Pointer to store the minimum frame rate in Hz.
  * @param maxval Pointer to store the maximum frame rate in Hz.
  * @param step Pointer to store the frame rate step size in Hz.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
@@ -436,36 +462,36 @@ VmbError_t allied_get_acq_framerate_range(AlliedCameraHandle_t handle, double *_
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pointer to store indicator mode string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_indicator_mode(AlliedCameraHandle_t handle, const char **_Nonnull mode);
 
 /**
  * @brief Set the camera indicator LED mode.
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param mode Indicator mode string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_indicator_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
 
 /**
- * @brief Get the list of available indicator modes. User has to free the memory allocated for the lists.
- * 
+ * @brief Get the list of available indicator modes. User has to free the memory allocated for the set using the {@allied_free_list} function.
+ *
  * @param handle Handle to Allied Vision camera.
- * @param modes Pointer to store the list of indicator mode strings.
+ * @param modes Pointer to store the list of indicator mode strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the indicator mode is available. Pass NULL if not required.
  * @param count Pointer to store the number of indicator modes.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the camera indicator LED brightness.
  *
  * @param handle Handle to Allied Vision camera.
  * @param luma Pointer to store the indicator brightness.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull luma);
 
@@ -474,7 +500,7 @@ VmbError_t allied_get_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t *_N
  *
  * @param handle Handle to Allied Vision camera.
  * @param luma Indicator brightness.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t luma);
 
@@ -485,27 +511,27 @@ VmbError_t allied_set_indicator_luma(AlliedCameraHandle_t handle, VmbInt64_t lum
  * @param minval Pointer to store the minimum indicator brightness.
  * @param maxval Pointer to store the maximum indicator brightness.
  * @param step Pointer to store the indicator brightness step size.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_indicator_luma_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nonnull step);
 
 /**
- * @brief Get the list of available trigger lines. User has to free the memory allocated for the lists.
- * 
+ * @brief Get the list of available trigger lines. User has to free the memory allocated for the set using the {@allied_free_list} function.
+ *
  * @param handle Handle to Allied Vision camera.
- * @param lines Pointer to store the available trigger lines list. Pass NULL if not required.
+ * @param lines Pointer to store the available trigger lines list. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the trigger line is available. Pass NULL if not required.
  * @param count Number of trigger lines.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char ***_Nonnull lines, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *lines, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the trigger line currently selected for configuration.
  *
  * @param handle Handle to Allied Vision camera.
  * @param line Pointer to store the trigger line name.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **_Nonnull line);
 
@@ -514,7 +540,7 @@ VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **_Nonnull line
  *
  * @param handle Handle to Allied Vision camera.
  * @param line Trigger line name.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline(AlliedCameraHandle_t handle, const char *_Nonnull line);
 
@@ -523,7 +549,7 @@ VmbError_t allied_set_trigline(AlliedCameraHandle_t handle, const char *_Nonnull
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Pointer to store the trigger line mode string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_mode(AlliedCameraHandle_t handle, const char **_Nonnull mode);
 
@@ -532,20 +558,20 @@ VmbError_t allied_get_trigline_mode(AlliedCameraHandle_t handle, const char **_N
  *
  * @param handle Handle to Allied Vision camera.
  * @param mode Trigger line mode string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
 
 /**
- * @brief Get the list of available trigger line modes. User has to free the memory allocated for the lists.
- * 
+ * @brief Get the list of available trigger line modes. User has to free the memory allocated for the set using the {@allied_free_list} function.
+ *
  * @param handle Handle to Allied Vision camera.
- * @param modes Pointer to store the list of trigger line mode strings.
+ * @param modes Pointer to store the list of trigger line mode strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the trigger line mode is available. Pass NULL if not required.
  * @param count Pointer to store the number of trigger line modes.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the trigger line source.
@@ -553,7 +579,7 @@ VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char ***_N
  *
  * @param handle Handle to Allied Vision camera.
  * @param src Pointer to store the trigger line source string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_src(AlliedCameraHandle_t handle, const char **_Nonnull src);
 
@@ -563,28 +589,35 @@ VmbError_t allied_get_trigline_src(AlliedCameraHandle_t handle, const char **_No
  *
  * @param handle Handle to Allied Vision camera.
  * @param src Trigger line source string.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline_src(AlliedCameraHandle_t handle, const char *_Nonnull src);
 
 /**
- * @brief Get the list of available trigger line sources. User has to free the memory allocated for the lists.
+ * @brief Get the list of available trigger line sources. User has to free the memory allocated for the set using the {@allied_free_list} function.
  * NOTE: The trigger line must be in "Output" mode to get the source list.
- * 
+ *
  * @param handle Handle to Allied Vision camera.
- * @param srcs Pointer to store the list of trigger line source strings.
+ * @param srcs Pointer to store the list of trigger line source strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the trigger line source is available. Pass NULL if not required.
  * @param count Pointer to store the number of trigger line sources.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_trigline_src_list(AlliedCameraHandle_t handle, char ***_Nonnull srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_trigline_src_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *srcs, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Free the memory allocated for by `allied_get_*_list` functions.
+ *
+ * @param list Pointer to the list.
+ */
+void allied_free_list(char *_Nonnull *_Const *list);
 
 /**
  * @brief Get the trigger line polarity.
  *
  * @param handle Handle to Allied Vision camera.
  * @param polarity Pointer to store the trigger line polarity.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *inverted);
 
@@ -593,7 +626,7 @@ VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *
  *
  * @param handle Handle to Allied Vision camera.
  * @param polarity Trigger line polarity.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t inverted);
 
@@ -603,7 +636,7 @@ VmbError_t allied_set_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t i
  *
  * @param handle Handle to Allied Vision camera.
  * @param time Pointer to store the trigger line debounce mode.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_debounce_mode(AlliedCameraHandle_t handle, char **_Nonnull mode);
 
@@ -613,21 +646,21 @@ VmbError_t allied_get_trigline_debounce_mode(AlliedCameraHandle_t handle, char *
  *
  * @param handle Handle to Allied Vision camera.
  * @param time Trigger line debounce mode.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline_debounce_mode(AlliedCameraHandle_t handle, const char *_Nonnull mode);
 
 /**
- * @brief Get the list of available trigger line debounce modes. User has to free the memory allocated for the lists.
+ * @brief Get the list of available trigger line debounce modes. User has to free the memory allocated for the set using the {@allied_free_list} function.
  * NOTE: The trigger line must be in "Input" mode to get the debounce mode list.
- * 
+ *
  * @param handle Handle to Allied Vision camera.
- * @param modes Pointer to store the list of trigger line debounce mode strings.
+ * @param modes Pointer to store the list of trigger line debounce mode strings. This is a pointer to an array of `const char *`.
  * @param available Pointer to store the list of booleans indicating whether the trigger line debounce mode is available. Pass NULL if not required.
  * @param count Pointer to store the number of trigger line debounce modes.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, char ***_Nonnull modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
+VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, char *_Nonnull *_Const *modes, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the trigger line debounce time.
@@ -635,7 +668,7 @@ VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, c
  *
  * @param handle Handle to Allied Vision camera.
  * @param time Pointer to store the trigger line debounce time.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double *_Nonnull time);
 
@@ -645,7 +678,7 @@ VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double
  *
  * @param handle Handle to Allied Vision camera.
  * @param time Trigger line debounce time.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double time);
 
@@ -657,7 +690,7 @@ VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double
  * @param minval Pointer to store the minimum trigger line debounce time.
  * @param maxval Pointer to store the maximum trigger line debounce time.
  * @param step Pointer to store the trigger line debounce time step size.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, double *_Nonnull minval, double *_Nonnull maxval, double *_Nonnull step);
 
@@ -666,27 +699,136 @@ VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, 
  *
  * @param handle Handle to Allied Vision camera.
  * @param id Pointer to store the camera ID string. The memory is allocated by the function and must be freed by the caller.
- * @return VmbError_t VmbErrorSuccess if successful, otherwise an error code.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **_Nonnull id);
 
 /**
- * @brief Check if the camera is currently streaming.
+ * @brief Get a list of avaliable features and associated information. User has to free the memory allocated for the list.
  *
  * @param handle Handle to Allied Vision camera.
- * @return true
- * @return false
+ * @param features Pointer to store the list of feature info.
+ * @param count Number of features.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-bool allied_camera_streaming(AlliedCameraHandle_t handle);
+VmbError_t allied_get_features_list(AlliedCameraHandle_t handle, VmbFeatureInfo_t **_Nonnull features, VmbUint32_t *_Nonnull count);
 
 /**
- * @brief Check if the camera is currently acquiring images.
+ * @brief Get the feature information for a given feature name.
  *
  * @param handle Handle to Allied Vision camera.
- * @return true
- * @return false
+ * @param name Feature name.
+ * @param info Pointer to store the feature information.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-bool allied_camera_acquiring(AlliedCameraHandle_t handle);
+VmbError_t allied_get_feature_info(AlliedCameraHandle_t handle, const char *_Nonnull name, VmbFeatureInfo_t *_Nonnull info);
+
+/**
+ * @brief Get the integer value of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Pointer to store the feature value.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_int(AlliedCameraHandle_t handle, const char *_Nonnull name, VmbInt64_t *_Nonnull value);
+
+/**
+ * @brief Set the integer value of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Feature value.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_set_feature_int(AlliedCameraHandle_t handle, const char *_Nonnull name, VmbInt64_t value);
+
+/**
+ * @brief Get the integer value range of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param minval Pointer to store the minimum feature value.
+ * @param maxval Pointer to store the maximum feature value.
+ * @param step Pointer to store the feature value step size.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_int_range(AlliedCameraHandle_t handle, const char *_Nonnull name, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nullable step);
+
+/**
+ * @brief Get the set of integer values of a feature. User has to free the memory allocated for the set.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param buffer Pointer to store the feature value set.
+ * @param count Pointer to store the number of feature values.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_int_valset(AlliedCameraHandle_t handle, const char *_Nonnull name, VmbInt64_t **_Nonnull buffer, VmbUint32_t *_Nonnull count);
+
+/**
+ * @brief Get the float value of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Pointer to store the feature value.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_float(AlliedCameraHandle_t handle, const char *_Nonnull name, double *_Nonnull value);
+
+/**
+ * @brief Set the float value of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Feature value.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_set_feature_float(AlliedCameraHandle_t handle, const char *_Nonnull name, double value);
+
+/**
+ * @brief Get the float value range of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param minval Pointer to store the minimum feature value.
+ * @param maxval Pointer to store the maximum feature value.
+ * @param step Pointer to store the feature value step size. This pointer can be NULL.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_float_range(AlliedCameraHandle_t handle, const char *_Nonnull name, double *_Nonnull minval, double *_Nonnull maxval, double *_Nullable step);
+
+/**
+ * @brief Get the current string value of a feature. The user does not own the memory allocated for the string, and must not free it.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Pointer to store the feature value string. The user must not free this memory.
+ * @return VmbError_t
+ */
+VmbError_t allied_get_feature_enum(AlliedCameraHandle_t handle, const char *_Nonnull name, char **_Nonnull const value);
+
+/**
+ * @brief Set the string value of a feature.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Feature name.
+ * @param value Feature value string.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_set_feature_enum(AlliedCameraHandle_t handle, const char *_Nonnull name, const char *_Nonnull value);
+
+/**
+ * @brief Get the set of valid string values of a feature. User has to free the memory allocated for the set using the {@allied_free_list} function.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @param name Name of the feature.
+ * @param list Pointer to store the list of feature values. This is a pointer to an array of `const char *`.
+ * @param available Pointer to store the list of booleans indicating whether the feature value is available. Pass NULL if not required.
+ * @param count Pointer to store the number of feature values.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_get_feature_enum_list(AlliedCameraHandle_t handle, const char *_Nonnull name, char *_Nonnull *_Const *list, VmbBool_t **_Nullable available, VmbUint32_t *_Nonnull count);
 
 /**
  * @brief Get the message string corresponding to a {@link VmbError_t} status code.

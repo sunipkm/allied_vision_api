@@ -138,17 +138,6 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **cameras, VmbUint32_t *count)
     return err;
 }
 
-char *strdup(const char *s)
-{
-    size_t len = strlen(s) + 1;
-    void *new = malloc(len);
-    if (new == NULL)
-    {
-        return NULL;
-    }
-    return (char *)memcpy(new, s, len);
-}
-
 static VmbError_t vmb_adjust_pkt_sz(const char *id)
 {
     assert(id);
@@ -485,7 +474,7 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
         ihandle->streaming = false;
     }
     VmbCaptureQueueFlush(ihandle->handle);
-    while (ihandle->announced &&  (VmbErrorSuccess != VmbFrameRevokeAll(ihandle->handle)))
+    while (ihandle->announced && (VmbErrorSuccess != VmbFrameRevokeAll(ihandle->handle)))
     {
     }
     ihandle->announced = false;
@@ -889,8 +878,244 @@ VmbError_t allied_get_image_format(AlliedCameraHandle_t handle, const char **for
     return err;
 }
 
-VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, char ***formats, VmbBool_t **available, VmbUint32_t *count)
+VmbError_t allied_get_features_list(AlliedCameraHandle_t handle, VmbFeatureInfo_t **features, VmbUint32_t *count)
 {
+    assert(handle);
+    assert(features);
+    assert(count);
+
+    VmbError_t err;
+    VmbUint32_t list_len = 0;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    // get the length of the list
+    err = VmbFeaturesList(moduleHandle, NULL, 0, &list_len, sizeof(VmbFeatureInfo_t));
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    // allocate space
+    VmbFeatureInfo_t *_features = (VmbFeatureInfo_t *)malloc(list_len * sizeof(VmbFeatureInfo_t));
+    if (_features == NULL)
+    {
+        return VmbErrorResources;
+    }
+    memset(_features, 0, list_len * sizeof(VmbFeatureInfo_t));
+    // get the list
+    err = VmbFeaturesList(moduleHandle, _features, list_len, NULL, sizeof(VmbFeatureInfo_t));
+    if (err != VmbErrorSuccess)
+    {
+        free(_features);
+        return err;
+    }
+    // return vals
+    *features = _features;
+    *count = list_len;
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_get_feature_info(AlliedCameraHandle_t handle, const char *name, VmbFeatureInfo_t *info)
+{
+    assert(handle);
+    assert(name);
+    assert(info);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    err = VmbFeatureInfoQuery(moduleHandle, name, info, sizeof(VmbFeatureInfo_t));
+    return err;
+}
+
+VmbError_t allied_get_feature_int(AlliedCameraHandle_t handle, const char *name, VmbInt64_t *value)
+{
+    assert(handle);
+    assert(name);
+    assert(value);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    err = VmbFeatureIntGet(moduleHandle, name, value);
+    return err;
+}
+
+VmbError_t allied_set_feature_int(AlliedCameraHandle_t handle, const char *name, VmbInt64_t value)
+{
+    assert(handle);
+    assert(name);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    err = VmbFeatureIntSet(moduleHandle, name, value);
+    return err;
+}
+
+VmbError_t allied_get_feature_int_range(AlliedCameraHandle_t handle, const char *name, VmbInt64_t *minval, VmbInt64_t *maxval, VmbInt64_t *step)
+{
+    assert(handle);
+    assert(name);
+    assert(minval);
+    assert(maxval);
+
+    VmbError_t err;
+    VmbInt64_t _step = 0;
+    *minval = 0;
+    *maxval = 0;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    err = VmbFeatureIntRangeQuery(moduleHandle, name, minval, maxval);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    if (step == NULL)
+    {
+        return VmbErrorSuccess;
+    }
+    err = VmbFeatureIntIncrementQuery(moduleHandle, name, &_step);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    *step = _step;
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_get_feature_int_valset(AlliedCameraHandle_t handle, const char *name, VmbInt64_t **buffer, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(name);
+    assert(buffer);
+    assert(count);
+
+    *buffer = NULL;
+    *count = 0;
+
+    VmbError_t err;
+    VmbUint32_t list_len = 0;
+    VmbInt64_t *list = NULL;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    // get the length of the list
+    err = VmbFeatureIntValidValueSetQuery(moduleHandle, name, NULL, 0, &list_len);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    // allocate space
+    list = (VmbInt64_t *)malloc(list_len * sizeof(VmbInt64_t));
+    if (list == NULL)
+    {
+        return VmbErrorResources;
+    }
+    memset(list, 0, list_len * sizeof(VmbInt64_t));
+    // get the list
+    err = VmbFeatureIntValidValueSetQuery(moduleHandle, name, list, list_len, NULL);
+    if (err != VmbErrorSuccess)
+    {
+        free(list);
+        return err;
+    }
+    // return vals
+    *buffer = list;
+    *count = list_len;
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_get_feature_float(AlliedCameraHandle_t handle, const char *name, double *value)
+{
+    assert(handle);
+    assert(name);
+    assert(value);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    *value = 0;
+    err = VmbFeatureFloatGet(moduleHandle, name, value);
+    return err;
+}
+
+VmbError_t allied_set_feature_float(AlliedCameraHandle_t handle, const char *name, double value)
+{
+    assert(handle);
+    assert(name);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+    err = VmbFeatureFloatSet(moduleHandle, name, value);
+    return err;
+}
+
+VmbError_t allied_get_feature_float_range(AlliedCameraHandle_t handle, const char *name, double *minval, double *maxval, double *step)
+{
+    assert(handle);
+    assert(name);
+    assert(minval);
+    assert(maxval);
+
+    *minval = 0;
+    *maxval = 0;
+    if (step != NULL)
+    {
+        *step = 0;
+    }
+
+    VmbError_t err;
+    double _step = 0;
+    VmbBool_t _unused = VmbBoolFalse;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+
+    err = VmbFeatureFloatRangeQuery(moduleHandle, name, minval, maxval);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    if (step == NULL)
+    {
+        return VmbErrorSuccess;
+    }
+
+    err = VmbFeatureFloatIncrementQuery(moduleHandle, name, &_unused, &_step);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    *step = _step;
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_get_feature_enum(AlliedCameraHandle_t handle, const char *name, char **const value)
+{
+    static char *empty = "";
+    assert(handle);
+    assert(name);
+    assert(value);
+    *value = empty;
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbHandle_t moduleHandle = ihandle->handle;
+
+    err = VmbFeatureEnumGet(moduleHandle, name, (const char **)value);
+    return err;
+}
+
+VmbError_t allied_set_feature_enum(AlliedCameraHandle_t handle, const char *name, const char *value)
+{
+    assert(handle);
+    assert(name);
+    assert(value);
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureEnumSet(ihandle->handle, name, value);
+    return err;
+}
+
+VmbError_t allied_get_feature_enum_list(AlliedCameraHandle_t handle, const char *name, char ***list, VmbBool_t **available, VmbUint32_t *count)
+{
+    assert(handle);
+    assert(name);
+    assert(list);
+    assert(count);
     VmbError_t err;
     VmbUint32_t list_len = 0;
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
@@ -914,7 +1139,7 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
         memset(_formats, 0, list_len * sizeof(char **));
         // 2. Get the features
         err = VmbFeatureEnumRangeQuery(moduleHandle, name, (const char **)_formats, list_len, NULL);
-        if (err == VmbErrorSuccess && formats != NULL)
+        if (err == VmbErrorSuccess && list != NULL)
         {
             for (int i = 0; i < list_len; i++)
             {
@@ -925,13 +1150,13 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
         {
             free(_formats);
             free(_available);
-            *formats = NULL;
+            *list = NULL;
             if (available != NULL)
             {
                 *available = NULL;
             }
         }
-        *formats = _formats;
+        *list = _formats;
         if (available != NULL)
         {
             *available = _available;
@@ -943,6 +1168,19 @@ VmbError_t allied_get_enum_list(AlliedCameraHandle_t handle, const char *name, c
     }
     *count = list_len;
     return VmbErrorSuccess;
+}
+
+void allied_free_list(char ***list)
+{
+    assert(list);
+    char **_list = *list;
+    if (_list == NULL)
+    {
+        return;
+    }
+    free(_list);
+    *list = NULL;
+    return;
 }
 
 VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **line)
@@ -1020,26 +1258,22 @@ VmbError_t allied_set_trigline_src(AlliedCameraHandle_t handle, const char *src)
 VmbError_t allied_get_trigline_src_list(AlliedCameraHandle_t handle, char ***srcs, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(srcs);
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "LineSource", srcs, available, count);
+    return allied_get_feature_enum_list(handle, "LineSource", srcs, available, count);
 }
 
 VmbError_t allied_get_trigline_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(modes);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "LineMode", modes, available, count);
+    return allied_get_feature_enum_list(handle, "LineMode", modes, available, count);
 }
 
 VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *polarity)
@@ -1092,14 +1326,12 @@ VmbError_t allied_set_trigline_debounce_mode(AlliedCameraHandle_t handle, const 
 VmbError_t allied_get_trigline_debounce_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(modes);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "LineDebouncerMode", modes, available, count);
+    return allied_get_feature_enum_list(handle, "LineDebouncerMode", modes, available, count);
 }
 
 VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double *time)
@@ -1151,40 +1383,34 @@ VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, 
 VmbError_t allied_get_image_format_list(AlliedCameraHandle_t handle, char ***formats, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(formats);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "PixelFormat", formats, available, count);
+    return allied_get_feature_enum_list(handle, "PixelFormat", formats, available, count);
 }
 
 VmbError_t allied_get_sensor_bit_depth_list(AlliedCameraHandle_t handle, char ***depths, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(depths);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "SensorBitDepth", depths, available, count);
+    return allied_get_feature_enum_list(handle, "SensorBitDepth", depths, available, count);
 }
 
 VmbError_t allied_get_temperature_src_list(AlliedCameraHandle_t handle, char ***srcs, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(srcs);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "DeviceTemperatureSelector", srcs, available, count);
+    return allied_get_feature_enum_list(handle, "DeviceTemperatureSelector", srcs, available, count);
 }
 
 VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char ***lines, VmbBool_t **available, VmbUint32_t *count)
@@ -1197,20 +1423,18 @@ VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char ***lines,
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "LineSelector", lines, available, count);
+    return allied_get_feature_enum_list(handle, "LineSelector", lines, available, count);
 }
 
 VmbError_t allied_get_indicator_mode_list(AlliedCameraHandle_t handle, char ***modes, VmbBool_t **available, VmbUint32_t *count)
 {
     assert(handle);
-    assert(modes);
 
-    assert(count);
     if (!is_init)
     {
         return VmbErrorNotInitialized;
     }
-    return allied_get_enum_list(handle, "DeviceIndicatorMode", modes, available, count);
+    return allied_get_feature_enum_list(handle, "DeviceIndicatorMode", modes, available, count);
 }
 
 VmbError_t allied_get_indicator_mode(AlliedCameraHandle_t handle, const char **mode)
@@ -1528,7 +1752,6 @@ bool allied_camera_acquiring(AlliedCameraHandle_t handle)
 
 const char *allied_strerr(VmbError_t status)
 {
-
     switch (status)
     {
     case VmbErrorSuccess:
