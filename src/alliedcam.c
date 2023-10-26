@@ -1640,10 +1640,10 @@ VmbError_t allied_get_acq_framerate_auto(AlliedCameraHandle_t handle, bool *auto
     err = VmbFeatureBoolGet(ihandle->handle, "AcquisitionFrameRateEnable", &_auto_on);
     if (err != VmbErrorSuccess)
     {
-        *auto_on = false;
+        *auto_on = true;
         return err;
     }
-    *auto_on = _auto_on == VmbBoolTrue;
+    *auto_on = !(_auto_on == VmbBoolTrue);
     return VmbErrorSuccess;
 }
 
@@ -1655,7 +1655,7 @@ VmbError_t allied_set_acq_framerate_auto(AlliedCameraHandle_t handle, bool auto_
         return VmbErrorNotInitialized;
     }
     _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
-    return VmbFeatureBoolSet(ihandle->handle, "AcquisitionFrameRateEnable", auto_on ? VmbBoolTrue : VmbBoolFalse);
+    return VmbFeatureBoolSet(ihandle->handle, "AcquisitionFrameRateEnable", !auto_on ? VmbBoolTrue : VmbBoolFalse);
 }
 
 VmbError_t allied_get_acq_framerate(AlliedCameraHandle_t handle, double *framerate)
