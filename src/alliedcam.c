@@ -1227,7 +1227,7 @@ void allied_free_list(char ***list)
     return;
 }
 
-VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **line)
+VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, const char **line)
 {
     assert(handle);
     assert(line);
@@ -1235,7 +1235,8 @@ VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **line)
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumGet(handle, "LineSelector", (const char **)line);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumGet(ihandle->handle, "LineSelector", line);
     return err;
 }
 
@@ -1247,7 +1248,8 @@ VmbError_t allied_set_trigline(AlliedCameraHandle_t handle, const char *line)
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumSet(handle, "LineSelector", line);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumSet(ihandle->handle, "LineSelector", line);
     return err;
 }
 
@@ -1259,7 +1261,8 @@ VmbError_t allied_get_trigline_mode(AlliedCameraHandle_t handle, const char **mo
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumGet(handle, "LineMode", mode);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumGet(ihandle->handle, "LineMode", mode);
     return err;
 }
 
@@ -1271,7 +1274,8 @@ VmbError_t allied_set_trigline_mode(AlliedCameraHandle_t handle, const char *mod
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumSet(handle, "LineMode", mode);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumSet(ihandle->handle, "LineMode", mode);
     return err;
 }
 
@@ -1283,7 +1287,8 @@ VmbError_t allied_get_trigline_src(AlliedCameraHandle_t handle, const char **src
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumGet(handle, "LineSource", src);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumGet(ihandle->handle, "LineSource", src);
     return err;
 }
 
@@ -1295,7 +1300,8 @@ VmbError_t allied_set_trigline_src(AlliedCameraHandle_t handle, const char *src)
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumSet(handle, "LineSource", src);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumSet(ihandle->handle, "LineSource", src);
     return err;
 }
 
@@ -1328,7 +1334,8 @@ VmbError_t allied_get_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t *
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureBoolGet(handle, "LineInverter", polarity);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureBoolGet(ihandle->handle, "LineInverter", polarity);
     return err;
 }
 
@@ -1339,7 +1346,8 @@ VmbError_t allied_set_trigline_polarity(AlliedCameraHandle_t handle, VmbBool_t p
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureBoolSet(handle, "LineInverter", polarity);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureBoolSet(ihandle->handle, "LineInverter", polarity);
     return err;
 }
 
@@ -1351,7 +1359,8 @@ VmbError_t allied_get_trigline_debounce_mode(AlliedCameraHandle_t handle, char *
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumGet(handle, "LineDebouncerMode", (const char **)mode);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumGet(ihandle->handle, "LineDebouncerMode", (const char **)mode);
     return err;
 }
 
@@ -1363,7 +1372,8 @@ VmbError_t allied_set_trigline_debounce_mode(AlliedCameraHandle_t handle, const 
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureEnumSet(handle, "LineDebouncerMode", mode);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureEnumSet(ihandle->handle, "LineDebouncerMode", mode);
     return err;
 }
 
@@ -1386,7 +1396,8 @@ VmbError_t allied_get_trigline_debounce_time(AlliedCameraHandle_t handle, double
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureFloatGet(handle, "LineDebounceDuration", time);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureFloatGet(ihandle->handle, "LineDebounceDuration", time);
     return err;
 }
 
@@ -1397,7 +1408,8 @@ VmbError_t allied_set_trigline_debounce_time(AlliedCameraHandle_t handle, double
     {
         return VmbErrorNotInitialized;
     }
-    VmbError_t err = VmbFeatureFloatSet(handle, "LineDebounceDuration", time);
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbError_t err = VmbFeatureFloatSet(ihandle->handle, "LineDebounceDuration", time);
     return err;
 }
 

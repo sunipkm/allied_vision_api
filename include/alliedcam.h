@@ -551,7 +551,7 @@ VmbError_t allied_get_triglines_list(AlliedCameraHandle_t handle, char *_Nonnull
  * @param line Pointer to store the trigger line name.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, char **_Nonnull line);
+VmbError_t allied_get_trigline(AlliedCameraHandle_t handle, const char **_Nonnull line);
 
 /**
  * @brief Set the trigger line to configure.
