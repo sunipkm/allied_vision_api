@@ -19,6 +19,8 @@
 #include <stdbool.h>
 #include <assert.h>
 
+#include <VmbC/VmbC.h>
+
 #ifndef ADJUST_PACKAGE_SIZE_COMMAND
 #define ADJUST_PACKAGE_SIZE_COMMAND "GVSPAdjustPacketSize"
 #endif // !ADJUST_PACKAGE_SIZE_COMMAND

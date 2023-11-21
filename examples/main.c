@@ -269,7 +269,7 @@ int main()
 
     printf("\n");
 
-    free(fmt);
+    allied_free_list(&fmt);
     // free(avail);
 
     err = allied_stop_capture(handle);
@@ -303,7 +303,7 @@ int main()
             printf("%s: %s\n", fmt[i], avail[i] ? "available" : "not available");
         }
     }
-    free(fmt);
+    allied_free_list(&fmt);
     free(avail);
 
     err = allied_stop_capture(handle);

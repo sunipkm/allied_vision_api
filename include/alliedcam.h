@@ -44,7 +44,7 @@ extern "C"
 #endif
 
 #include <stdbool.h>
-#include <VmbC/VmbC.h>
+#include <VmbC/VmbCTypeDefinitions.h>
 
 /**
  * @brief Handle to an Allied Vision camera.
