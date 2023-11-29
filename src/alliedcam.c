@@ -1725,6 +1725,90 @@ VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **id)
     return VmbErrorSuccess;
 }
 
+VmbError_t allied_get_link_speed(AlliedCameraHandle_t handle, VmbInt64_t *speed)
+{
+    assert(handle);
+    assert(speed);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureIntGet(ihandle->handle, "DeviceLinkSpeed", speed);  
+    return err;  
+}
+
+VmbError_t allied_get_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t *speed)
+{
+    assert(handle);
+    assert(speed);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureIntGet(ihandle->handle, "DeviceLinkThroughputLimit", speed);
+    return err;
+}
+
+VmbError_t allied_set_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t speed)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    if (speed <= 0)
+    {
+        return VmbErrorInvalidValue;
+    }
+    VmbError_t err;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    VmbInt64_t minval = 0, maxval = 0;
+    err = allied_get_throughput_limit_range(handle, &minval, &maxval, NULL);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    if ((speed > maxval) || (speed < minval))
+    {
+        return VmbErrorInvalidValue;
+    }
+    return VmbFeatureIntSet(ihandle->handle, "DeviceLinkThroughputLimit", speed);
+}
+
+VmbError_t allied_get_throughput_limit_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nullable step)
+{
+    assert(handle);
+    assert(minval);
+    assert(maxval);
+    if (!is_init)
+    {
+        return VmbErrorNotInitialized;
+    }
+    VmbError_t err;
+    VmbInt64_t _step = 0;
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    err = VmbFeatureIntRangeQuery(ihandle->handle, "DeviceLinkThroughputLimit", minval, maxval);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    if (step == NULL)
+    {
+        return VmbErrorSuccess;
+    }
+    err = VmbFeatureIntIncrementQuery(ihandle->handle, "DeviceLinkThroughputLimit", &_step);
+    if (err != VmbErrorSuccess)
+    {
+        return err;
+    }
+    *step = _step;
+    return VmbErrorSuccess;
+}
+
 bool allied_camera_streaming(AlliedCameraHandle_t handle)
 {
     assert(handle);

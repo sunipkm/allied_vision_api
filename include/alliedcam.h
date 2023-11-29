@@ -722,6 +722,44 @@ VmbError_t allied_get_trigline_debounce_time_range(AlliedCameraHandle_t handle, 
 VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **_Nonnull id);
 
 /**
+ * @brief Get the camera link speed (MB/s).
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param speed Pointer to store the camera link speed.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+*/
+VmbError_t allied_get_link_speed(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull speed);
+
+/**
+ * @brief Get the camera link speed range (MB/s).
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param minval Pointer to store the minimum camera link speed.
+ * @param maxval Pointer to store the maximum camera link speed.
+ * @param step Pointer to store the camera link speed step size. Can be NULL.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+*/
+VmbError_t allied_get_throughput_limit_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nullable step);
+
+/**
+ * @brief Get the camera link throughput limit (MB/s).
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param limit Pointer to store the camera link throughput limit.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+*/
+VmbError_t allied_get_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull limit);
+
+/**
+ * @brief Set the camera link throughput limit (MB/s).
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @param limit Camera link throughput limit.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+*/
+VmbError_t allied_set_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t limit);
+
+/**
  * @brief Get a list of avaliable features and associated information. User has to free the memory allocated for the list.
  *
  * @param handle Handle to Allied Vision camera.
