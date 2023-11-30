@@ -87,23 +87,23 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **_Nonnull cameras, VmbUint32_t *
  *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
+ * @param num_frames Number of frames to allocate for the framebuffer, must be greater than 0.
  * @param mode Camera access mode. Can be of `VmbAccessModeFull`, `VmbAccessModeRead` or `VmbAccessModeExclusive`.
- * @param num_frames Number of frames to allocate for the framebuffer.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, VmbAccessMode_t mode, uint32_t num_frames);
+VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames, VmbAccessMode_t mode);
 
 /**
  * @brief Open an Allied Vision Camera by ID in exclusive mode.
  *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
- * @param num_frames Number of frames to allocate for the framebuffer.
+ * @param num_frames Number of frames to allocate for the framebuffer, must be greater than 0.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames)
 {
-    return allied_open_camera_generic(handle, id, VmbAccessModeExclusive, num_frames);
+    return allied_open_camera_generic(handle, id, num_frames, VmbAccessModeExclusive);
 }
 
 /**
@@ -114,6 +114,14 @@ static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handl
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
+
+/**
+ * @brief Get the size of images in bytes.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @return Image size in bytes.
+ */
+uint32_t allied_get_frame_size(AlliedCameraHandle_t handle);
 
 /**
  * @brief Start image acquisition.

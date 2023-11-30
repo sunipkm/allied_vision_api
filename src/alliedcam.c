@@ -167,7 +167,7 @@ static VmbError_t vmb_adjust_pkt_sz(const char *id)
     return VmbErrorSuccess;
 }
 
-VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *handle, const char *id, VmbAccessMode_t mode, uint32_t num_frames)
+VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *handle, const char *id, uint32_t num_frames, VmbAccessMode_t mode)
 {
     assert(handle);
     assert(num_frames > 0);
@@ -246,6 +246,21 @@ cleanup:
         free((void *)id);
     }
     return err;
+}
+
+uint32_t allied_get_frame_size(AlliedCameraHandle_t handle)
+{
+    assert(handle);
+    if (!is_init)
+    {
+        return 0;
+    }
+    _AlliedCameraHandle_t *ihandle = (_AlliedCameraHandle_t *)handle;
+    if (ihandle->framebuf == NULL)
+    {
+        return 0;
+    }
+    return ihandle->framebuf[0].bufferSize;
 }
 
 static VmbError_t vmb_get_buffer_alignment_by_handle(VmbHandle_t handle, VmbInt64_t *alignment)
