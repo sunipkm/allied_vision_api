@@ -2,5 +2,6 @@
     "files.associations": {
         "alliedcam.h": "c",
         "alliedcam.c": "c",
+        "string.h": "c"
     },
 }

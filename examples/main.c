@@ -5,6 +5,11 @@
 #include <time.h>
 #include <assert.h>
 #include <stdbool.h>
+
+#include <fcntl.h>
+#include <signal.h>
+#include <termios.h>
+#include <errno.h>
 #include <math.h>
 
 #include <alliedcam.h>
@@ -14,6 +19,13 @@
 #define CYCLE_TIME MS_TO_US(1000)                     // 100 ms
 #define NUM_CYCLES 10                                 // 100 cycles
 #define TOTAL_SECS US_TO_SECS(CYCLE_TIME *NUM_CYCLES) // 10 s
+
+#define error_message(fmt, ...) \
+    printf(fmt "\n", ##__VA_ARGS__)
+
+// serial functions
+int set_interface_attribs(int fd, int speed, int parity);
+void set_blocking(int fd, int should_block);
 
 static inline void timespec_diff(struct timespec *start, struct timespec *end, struct timespec *diff)
 {
@@ -50,6 +62,7 @@ typedef struct
     double avg;
     double avg2;
     uint32_t n;
+    int fd;
 } frame_stat_t;
 
 static void Callback(const AlliedCameraHandle_t handle, const VmbHandle_t stream, VmbFrame_t *frame, void *user_data)
@@ -65,6 +78,10 @@ static void Callback(const AlliedCameraHandle_t handle, const VmbHandle_t stream
         stat->avg2 = 0;
         stat->avg = 0;
         return;
+    }
+    if (stat->fd > STDERR_FILENO)
+    {
+        write(stat->fd, "1", 1);
     }
     clock_gettime(CLOCK_MONOTONIC, &end);
     timespec_diff(&start, &end, &diff);
@@ -102,7 +119,7 @@ static void ReadAndPrintTemperatures(const AlliedCameraHandle_t handle, const ch
     printf("\r");
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     VmbCameraInfo_t *cameras;
     VmbUint32_t count;
@@ -111,6 +128,21 @@ int main()
     VmbUint32_t i;
 
     frame_stat_t stat;
+
+    stat.fd = -1;
+    char *serdev = "/dev/ttyACM1";
+    if (argc == 2)
+        serdev = argv[1];
+    int ser = open(serdev, O_RDWR | O_NOCTTY | O_SYNC);
+    if (ser < 0)
+    {
+        printf("Error opening serial port\n");
+    } else {
+        printf("Opened serial port: %d\n", ser);
+        set_interface_attribs(ser, B921600, 0);
+        set_blocking(ser, 0);
+        stat.fd = ser;
+    }
 
     double exposure;
     double framerate;
@@ -188,7 +220,27 @@ int main()
         printf("Sensor size: %lld x %lld\n", swidth, sheight);
     }
 
-    err = allied_set_image_size(handle, 512, 256);
+    err = allied_set_sensor_bit_depth(handle, "Mono12");
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error setting sensor bit depth: %d\n", err);
+    }
+    else
+    {
+        printf("Sensor bit depth set to Mono12\n");
+    }
+
+    err = allied_get_sensor_bit_depth(handle, &camera_id);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error getting sensor bit depth: %d\n", err);
+    }
+    else
+    {
+        printf("Sensor bit depth: %s\n", camera_id);
+    }
+
+    err = allied_set_image_size(handle, 128, 128);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error setting image size: %d\n", err);
@@ -251,6 +303,35 @@ int main()
     {
         fprintf(stderr, "Error setting indicator luma: %d\n", err);
     }
+
+    err = allied_set_trigline(handle, "Line0");
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error setting trigger line: %d\n", err);
+    }
+    else
+    {
+        err = allied_set_trigline_mode(handle, "Output");
+        if (err != VmbErrorSuccess)
+        {
+            fprintf(stderr, "Error setting trigger line mode: %d\n", err);
+        }
+        else
+        {
+            err = allied_set_trigline_src(handle, "ExposureActive");
+            if (err != VmbErrorSuccess)
+            {
+                fprintf(stderr, "Error setting trigger line source: %d\n", err);
+            }
+            else
+            {
+                printf("Trigger line set to Line0: ExposureActive\n");
+            }
+        }
+    }
+
+    printf("\n\nPress Enter to start capture\n");
+    getchar();
 
     err = allied_start_capture(handle, &Callback, (void *)&stat);
     if (err != VmbErrorSuccess)
@@ -321,5 +402,65 @@ cleanup:
         return EXIT_FAILURE;
     }
     printf("Closed camera: %p\n", handle);
+    if (ser > STDERR_FILENO)
+    {
+        close(ser);
+    }
     return EXIT_SUCCESS;
+}
+
+int set_interface_attribs(int fd, int speed, int parity)
+{
+    struct termios tty;
+    if (tcgetattr(fd, &tty) != 0)
+    {
+        error_message("error %d from tcgetattr", errno);
+        return -1;
+    }
+
+    cfsetospeed(&tty, speed);
+    cfsetispeed(&tty, speed);
+
+    tty.c_cflag = (tty.c_cflag & ~CSIZE) | CS8; // 8-bit chars
+    // disable IGNBRK for mismatched speed tests; otherwise receive break
+    // as \000 chars
+    tty.c_iflag &= ~IGNBRK; // disable break processing
+    tty.c_lflag = 0;        // no signaling chars, no echo,
+                            // no canonical processing
+    tty.c_oflag = 0;        // no remapping, no delays
+    tty.c_cc[VMIN] = 0;     // read doesn't block
+    tty.c_cc[VTIME] = 5;    // 0.5 seconds read timeout
+
+    tty.c_iflag &= ~(IXON | IXOFF | IXANY); // shut off xon/xoff ctrl
+
+    tty.c_cflag |= (CLOCAL | CREAD);   // ignore modem controls,
+                                       // enable reading
+    tty.c_cflag &= ~(PARENB | PARODD); // shut off parity
+    tty.c_cflag |= parity;
+    tty.c_cflag &= ~CSTOPB;
+    tty.c_cflag &= ~CRTSCTS;
+
+    if (tcsetattr(fd, TCSANOW, &tty) != 0)
+    {
+        error_message("error %d from tcsetattr", errno);
+        return -1;
+    }
+    return 0;
+}
+
+void set_blocking(int fd, int should_block)
+{
+    struct termios tty;
+    memset(&tty, 0, sizeof tty);
+    if (tcgetattr(fd, &tty) != 0)
+    {
+        error_message("error %d from tggetattr", errno);
+        return;
+    }
+
+    tty.c_cc[VMIN] = should_block ? 1 : 0;
+    tty.c_cc[VTIME] = 5; // 0.5 seconds read timeout
+
+    if (tcsetattr(fd, TCSANOW, &tty) != 0)
+        error_message("error %d setting term attributes", errno);
 }
