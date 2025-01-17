@@ -29,6 +29,18 @@ extern "C"
 #define ALLIED_DEBUG 0
 #endif
 
+#ifndef ALLIED_MAX_FRAMES
+/**
+ * @brief Maximum number of frames to queue for image capture.
+ *
+ */
+#define ALLIED_MAX_FRAMES 1024
+#endif
+
+#if (!defined(ALLIED_MAX_FRAMES) || ALLIED_MAX_FRAMES < 1)
+#error "ALLIED_MAX_FRAMES must be greater than 0."
+#endif
+
 #ifndef _Nonnull
 /**
  * @brief Indicates that variable must not be NULL.

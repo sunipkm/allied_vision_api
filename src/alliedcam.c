@@ -444,6 +444,7 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
     VmbInt64_t alignment = 0;
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
     AlliedFrameBuffer_t framebuf = ihandle->framebuf;
+    assert(framebuf);
     ALLIEDEXIT(VmbGetBufferAlignmentByHandle, ihandle->handle, &alignment);
     ALLIEDEXIT(VmbPayloadSizeGet, ihandle->handle, &payloadSize);
     assert(payloadSize % alignment == 0);
@@ -477,7 +478,7 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
     {
         // payload size has changed, but alignment has not - we need to recreate the frames
         allied_free_framebuf(framebuf, true);
-        size_t num_frames = framebuf->alloc_size / payloadSize;
+        size_t num_frames = (framebuf->alloc_size / payloadSize) % (ALLIED_MAX_FRAMES + 1);
         assert(num_frames > 0);
         assert(payloadSize <= framebuf->alloc_size);
         VmbFrame_t *iframebuf = (VmbFrame_t *)malloc(num_frames * sizeof(VmbFrame_t));
