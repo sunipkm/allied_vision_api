@@ -141,14 +141,30 @@ static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handl
 uint32_t allied_get_frame_size(AlliedCameraHandle_t handle);
 
 /**
- * @brief Start image acquisition.
+ * @brief Get the number of frames in the camera buffer.
  *
+ * @param handle Handle to Allied Vision camera.
+ * @return Number of frames.
+ */
+uint32_t allied_get_num_frames(AlliedCameraHandle_t handle);
+
+/**
+ * @brief Queue a capture event for the camera. This function must be called after the camera is opened and before starting image acquisition.
+ * 
  * @param handle Handle to Allied Vision camera.
  * @param callback A callback function to be called when an image is captured.
  * @param user_data Pointer to custom user data to be passed to the callback.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback _Nonnull callback, void *user_data);
+VmbError_t allied_queue_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback callback, void *user_data);
+
+/**
+ * @brief Start image acquisition.
+ *
+ * @param handle Handle to Allied Vision camera.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_start_capture(AlliedCameraHandle_t handle);
 
 /**
  * @brief Stop image acquisition.
@@ -157,6 +173,14 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
 VmbError_t allied_stop_capture(AlliedCameraHandle_t handle);
+
+/**
+ * @brief Dequeue frames set up using {@link allied_queue_capture} for event capture.
+ * 
+ * @param handle Handle to Allied Vision camera.
+ * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
+ */
+VmbError_t allied_dequeue_capture(AlliedCameraHandle_t handle);
 
 /**
  * @brief Close the camera and free all associated memory allocations.

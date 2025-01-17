@@ -42,7 +42,12 @@ int main()
     {
         // do error handling
     }
-    err = allied_start_capture(handle, &Callback, NULL); // start capturing, pass in the capture callback and any user data
+    err = allied_queue_capture(handle, &Callback, NULL); // Queue frames for image capture
+    if (err != VmbErrorSuccess)
+    {
+        // do error handling
+    }
+    err = allied_start_capture(handle); // start capturing, pass in the capture callback and any user data
     if (err != VmbErrorSuccess)
     {
         // do error handling

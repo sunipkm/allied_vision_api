@@ -59,6 +59,7 @@ static inline double rolling_avg2(double avg2, double new, uint32_t n)
 
 typedef struct
 {
+    bool ran_before;
     double avg;
     double avg2;
     uint32_t n;
@@ -68,12 +69,11 @@ typedef struct
 static void Callback(const AlliedCameraHandle_t handle, const VmbHandle_t stream, VmbFrame_t *frame, void *user_data)
 {
     static struct timespec start, end, diff;
-    static bool first_run = true;
     frame_stat_t *stat = (frame_stat_t *)user_data;
-    if (first_run)
+    if (!stat->ran_before)
     {
         clock_gettime(CLOCK_MONOTONIC, &start);
-        first_run = false;
+        stat->ran_before = true;
         stat->n = 0;
         stat->avg2 = 0;
         stat->avg = 0;
@@ -127,7 +127,7 @@ int main(int argc, char *argv[])
     AlliedCameraHandle_t handle;
     VmbUint32_t i;
 
-    frame_stat_t stat;
+    frame_stat_t stat = {0};
 
     char *camera_id = NULL;
     char *cti_path = NULL;
@@ -376,13 +376,23 @@ int main(int argc, char *argv[])
         }
     }
 
+    printf("Queueing capture on %u frames...", allied_get_num_frames(handle));
+    fflush(stdout);
+    err = allied_queue_capture(handle, &Callback, (void *)&stat);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error queueing capture: %s\n", allied_strerr(err));
+        goto cleanup;
+    }
+    printf("Done.\n");
+
     printf("\n\nPress Enter to start capture\n");
     getchar();
 
-    err = allied_start_capture(handle, &Callback, (void *)&stat);
+    err = allied_start_capture(handle);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error starting capture: %s\n", allied_strerr(err));
+        fprintf(stderr, "Error starting capture: %d\n", err);
         goto cleanup;
     }
 
@@ -409,6 +419,25 @@ int main(int argc, char *argv[])
     printf("Captured %d frames\n", stat.n);
     printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
     printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
+
+    memset(&stat, 0, sizeof(frame_stat_t));
+    err = allied_start_capture(handle);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error starting capture: %d\n", err);
+        goto cleanup;
+    }
+    sleep(2);
+    err = allied_stop_capture(handle);
+    if (err != VmbErrorSuccess)
+    {
+        fprintf(stderr, "Error stopping capture: %d\n", err);
+        goto cleanup;
+    }
+    printf("Captured %d frames\n", stat.n);
+    printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
+    printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
+
 
     err = allied_set_indicator_luma(handle, 10);
     if (err != VmbErrorSuccess)

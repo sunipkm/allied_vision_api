@@ -129,6 +129,7 @@ typedef struct framebuffer_s
     VmbUchar_t *buffer; // the actual buffer that is split into frames
     VmbFrame_t *frames; // vmb frames
     bool announced;     // if the frames are announced
+    bool queued;        // if the frames are queued for capture, this is set to true after all the frames are queued
 } AlliedFrameBuffer_s;
 
 typedef AlliedFrameBuffer_s *AlliedFrameBuffer_t;
@@ -302,12 +303,13 @@ VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *handle, const char *
     {
         goto cleanup;
     }
+    memset(ihandle, 0, sizeof(_AlliedCameraHandle_s));
     AlliedFrameBuffer_t framebuf = (AlliedFrameBuffer_t)malloc(sizeof(AlliedFrameBuffer_s));
     if (framebuf == NULL)
     {
         goto cleanup_handle;
     }
-    memset(ihandle, 0, sizeof(_AlliedCameraHandle_s));
+    memset(framebuf, 0, sizeof(AlliedFrameBuffer_s));
     // open the camera
     eprintlf("Open camera: Handle %p", ihandle);
     err = ALLIEDCALL(VmbCameraOpen, id, mode, &(ihandle->handle));
@@ -364,6 +366,21 @@ uint32_t allied_get_frame_size(AlliedCameraHandle_t handle)
         return 0;
     }
     return ihandle->framebuf->frames->bufferSize;
+}
+
+uint32_t allied_get_num_frames(AlliedCameraHandle_t handle)
+{
+    assert(handle);
+    if (atomic_load(&is_init) == false)
+    {
+        return 0;
+    }
+    _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
+    if (ihandle->framebuf == NULL || ihandle->framebuf->frames == NULL)
+    {
+        return 0;
+    }
+    return ihandle->framebuf->num_frames;
 }
 
 static VmbError_t VmbGetBufferAlignmentByHandle(VmbHandle_t handle, VmbInt64_t *alignment)
@@ -431,6 +448,7 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
     ALLIEDEXIT(VmbPayloadSizeGet, ihandle->handle, &payloadSize);
     assert(payloadSize % alignment == 0);
     ALLIEDEXIT(allied_stop_capture, handle);
+    ALLIEDEXIT(allied_dequeue_capture, handle);
     // check if we need reallocation of the buffer
     bool need_realloc = false;
     if (framebuf->alignment != alignment || framebuf->alloc_size < payloadSize) // if alignment is different, we need to realloc
@@ -454,7 +472,7 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
                  ihandle->framebuf->alignment);
     }
     if (
-        framebuf->frames == NULL || // if we have no frames, first time setup
+        framebuf->frames == NULL ||                  // if we have no frames, first time setup
         framebuf->frames->bufferSize != payloadSize) // if payload size has changed, we need to recreate the frames
     {
         // payload size has changed, but alignment has not - we need to recreate the frames
@@ -497,7 +515,7 @@ static void FrameCaptureCallback(const VmbHandle_t handle, const VmbHandle_t str
     VmbCaptureFrameQueue(handle, frame, &FrameCaptureCallback);
 }
 
-VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback callback, void *user_data)
+VmbError_t allied_queue_capture(AlliedCameraHandle_t handle, AlliedCaptureCallback callback, void *user_data)
 {
     assert(handle);
     assert(callback);
@@ -508,19 +526,20 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
     eprintlf("Starting capture: %p", handle);
     VmbError_t err;
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
-    if (ihandle->framebuf == NULL)
+    AlliedFrameBuffer_t framebuf = ihandle->framebuf;
+    if (framebuf == NULL)
     {
         return VmbErrorResources;
     }
     // announce the buffers
-    for (VmbUint32_t i = 0; i < ihandle->framebuf->num_frames; i++)
+    for (VmbUint32_t i = 0; i < framebuf->num_frames; i++)
     {
-        err = ALLIEDCALL(VmbFrameAnnounce, ihandle->handle, &(ihandle->framebuf->frames[i]), sizeof(VmbFrame_t));
+        err = ALLIEDCALL(VmbFrameAnnounce, ihandle->handle, &(framebuf->frames[i]), sizeof(VmbFrame_t));
         if (err != VmbErrorSuccess)
         {
             goto err_cleanup;
         }
-        ihandle->framebuf->announced = true;
+        framebuf->announced = true;
     }
     // start the capture engine
     err = ALLIEDCALL(VmbCaptureStart, ihandle->handle);
@@ -531,35 +550,61 @@ VmbError_t allied_start_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
     eprintlf("Started capture");
     ihandle->streaming = true;
     // store callback ptr
-    for (VmbUint32_t i = 0; i < ihandle->framebuf->num_frames; i++)
+    for (VmbUint32_t i = 0; i < framebuf->num_frames; i++)
     {
-        ihandle->framebuf->frames[i].context[CONTEXT_CB_HANDLE] = callback;
-        ihandle->framebuf->frames[i].context[CONTEXT_DATA_HANDLE] = user_data;
+        framebuf->frames[i].context[CONTEXT_CB_HANDLE] = callback;
+        framebuf->frames[i].context[CONTEXT_DATA_HANDLE] = user_data;
     }
     // queue up the frames
-    for (VmbUint32_t i = 0; i < ihandle->framebuf->num_frames; i++)
+    VmbUint32_t frames_unqueued = framebuf->num_frames;
+    while (--frames_unqueued)
     {
-        err = ALLIEDCALL(VmbCaptureFrameQueue, ihandle->handle, &(ihandle->framebuf->frames[i]), &FrameCaptureCallback);
+        uint32_t frame_index = framebuf->num_frames - frames_unqueued - 1;
+        err = ALLIEDCALL(VmbCaptureFrameQueue, ihandle->handle, &(framebuf->frames[frame_index]), &FrameCaptureCallback);
         if (err != VmbErrorSuccess)
         {
             break;
         }
-        eprintlf("Queued frame %d", i);
+        eprintlf("Queued frame %u", frame_index);
     }
-
-    if (err == VmbErrorSuccess)
+    if (!frames_unqueued)
     {
-        err = ALLIEDCALL(VmbFeatureCommandRun, ihandle->handle, "AcquisitionStart");
-        if (err == VmbErrorSuccess)
-        {
-            ihandle->acquiring = true;
-            eprintlf("Started acquisition");
-            return VmbErrorSuccess;
-        }
+        framebuf->queued = true;
+        return VmbErrorSuccess;
     }
     // if we reach here, something went wrong
 err_cleanup:
     allied_stop_capture(handle);
+    allied_dequeue_capture(handle);
+    return err;
+}
+
+VmbError_t allied_start_capture(AlliedCameraHandle_t handle)
+{
+    assert(handle);
+    if (atomic_load(&is_init) == false)
+    {
+        return VmbErrorNotInitialized;
+    }
+    _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
+    if (!ihandle->streaming)
+    {
+        return VmbErrorInvalidAccess;
+    }
+    if (!ihandle->framebuf->queued)
+    {
+        return VmbErrorInvalidAccess;
+    }
+    VmbError_t err = ALLIEDCALL(VmbFeatureCommandRun, ihandle->handle, "AcquisitionStart");
+    if (err == VmbErrorSuccess)
+    {
+        ihandle->acquiring = true;
+        eprintlf("Started acquisition");
+        return VmbErrorSuccess;
+    }
+
+    ihandle->acquiring = false;
+    eprintlf("Error starting acquisition: %s", allied_strerr(err));
     return err;
 }
 
@@ -571,7 +616,7 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
     }
     assert(handle);
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
-    if (!ihandle->acquiring && !ihandle->streaming)
+    if (!ihandle->acquiring)
     {
         return VmbErrorSuccess;
     }
@@ -580,12 +625,24 @@ VmbError_t allied_stop_capture(AlliedCameraHandle_t handle)
         ALLIEDEXIT(VmbFeatureCommandRun, ihandle->handle, "AcquisitionStop");
         ihandle->acquiring = false;
     }
+    return VmbErrorSuccess;
+}
+
+VmbError_t allied_dequeue_capture(AlliedCameraHandle_t handle)
+{
+    if (atomic_load(&is_init) == false)
+    {
+        return VmbErrorNotInitialized;
+    }
+    assert(handle);
+    _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
     if (ihandle->streaming)
     {
         ALLIEDEXIT(VmbCaptureEnd, ihandle->handle);
         ihandle->streaming = false;
     }
     VmbCaptureQueueFlush(ihandle->handle);
+    ihandle->framebuf->queued = false;
     while (ihandle->framebuf->announced && (VmbErrorSuccess != VmbFrameRevokeAll(ihandle->handle)))
     {
     }
@@ -641,6 +698,7 @@ VmbError_t allied_close_camera(AlliedCameraHandle_t *handle)
     }
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)(*handle);
     ALLIEDEXIT(allied_stop_capture, *handle);
+    ALLIEDEXIT(allied_dequeue_capture, *handle);
     allied_free_framebuf(ihandle->framebuf, false);
     ALLIEDEXIT(VmbCameraClose, ihandle->handle);
     free(ihandle);
