@@ -53,6 +53,22 @@ extern "C"
 #define _Const
 #endif
 
+#ifndef KIB
+/**
+ * @brief Convert KiB to bytes.
+ *
+ */
+#define KIB(x) (x * 1024)
+#endif // !KIB
+
+#ifndef MIB
+/**
+ * @brief Convert MiB to bytes.
+ *
+ */
+#define MIB(x) (x * 1024 * 1024)
+#endif // !MIB
+
 #include <stdbool.h>
 #include <VmbC/VmbCTypeDefinitions.h>
 
@@ -72,7 +88,7 @@ typedef void *AlliedCameraHandle_t;
  * @param frame Image frame containing data.
  * @param user_data User data passed to the callback.
  */
-typedef void (*AlliedCaptureCallback)(const AlliedCameraHandle_t handle, const VmbHandle_t stream, VmbFrame_t *frame, void *_Nullable user_data);
+typedef void (*AlliedCaptureCallback)(const AlliedCameraHandle_t, const VmbHandle_t, VmbFrame_t *_Nonnull, void *_Nullable);
 
 /**
  * @brief Start the Allied Vision Camera API. This function MUST be called before any other function in this library.
@@ -97,33 +113,24 @@ VmbError_t allied_list_cameras(VmbCameraInfo_t **_Nonnull cameras, VmbUint32_t *
  *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
- * @param num_frames Number of frames to allocate for the framebuffer, must be greater than 0.
+ * @param bufsize Size of the frame buffer for this camera in bytes. Must be greater than 0.
  * @param mode Camera access mode. Can be of `VmbAccessModeFull`, `VmbAccessModeRead` or `VmbAccessModeExclusive`.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames, VmbAccessMode_t mode);
+VmbError_t allied_open_camera_generic(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t bufsize, VmbAccessMode_t mode);
 
 /**
  * @brief Open an Allied Vision Camera by ID in exclusive mode.
  *
  * @param handle Pointer to store the camera handle.
  * @param id Camera ID string. If NULL, the first camera found is opened.
- * @param num_frames Number of frames to allocate for the framebuffer, must be greater than 0.
+ * @param bufsize Size of the frame buffer for this camera in bytes. Must be greater than 0.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
  */
-static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t num_frames)
+static inline VmbError_t allied_open_camera(AlliedCameraHandle_t *_Nonnull handle, const char *_Nullable id, uint32_t bufsize)
 {
-    return allied_open_camera_generic(handle, id, num_frames, VmbAccessModeExclusive);
+    return allied_open_camera_generic(handle, id, bufsize, VmbAccessModeExclusive);
 }
-
-/**
- * @brief Re-allocate and queue a frame buffer for image capture.
- *
- * @param handle Handle to Allied Vision camera.
- * @param num_frames Number of frames to allocate.
- * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
- */
-VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle, VmbUint32_t num_frames);
 
 /**
  * @brief Get the size of images in bytes.
@@ -448,7 +455,7 @@ VmbError_t allied_get_image_size(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnu
 
 /**
  * @brief Check automatic frame rate control status.
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param auto_on Pointer to store automatic frame rate control status.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
@@ -457,7 +464,7 @@ VmbError_t allied_get_acq_framerate_auto(AlliedCameraHandle_t handle, bool *_Non
 
 /**
  * @brief Enable/disable automatic frame rate control.
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param auto_on Enable/disable automatic frame rate control.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
@@ -741,40 +748,40 @@ VmbError_t allied_get_camera_id(AlliedCameraHandle_t handle, char **_Nonnull id)
 
 /**
  * @brief Get the camera link speed (MB/s).
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param speed Pointer to store the camera link speed.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
-*/
+ */
 VmbError_t allied_get_link_speed(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull speed);
 
 /**
  * @brief Get the camera link speed range (MB/s).
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param minval Pointer to store the minimum camera link speed.
  * @param maxval Pointer to store the maximum camera link speed.
  * @param step Pointer to store the camera link speed step size. Can be NULL.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
-*/
+ */
 VmbError_t allied_get_throughput_limit_range(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull minval, VmbInt64_t *_Nonnull maxval, VmbInt64_t *_Nullable step);
 
 /**
  * @brief Get the camera link throughput limit (MB/s).
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param limit Pointer to store the camera link throughput limit.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
-*/
+ */
 VmbError_t allied_get_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t *_Nonnull limit);
 
 /**
  * @brief Set the camera link throughput limit (MB/s).
- * 
+ *
  * @param handle Handle to Allied Vision camera.
  * @param limit Camera link throughput limit.
  * @return VmbError_t `VmbErrorSuccess` if successful, otherwise an error code.
-*/
+ */
 VmbError_t allied_set_throughput_limit(AlliedCameraHandle_t handle, VmbInt64_t limit);
 
 /**

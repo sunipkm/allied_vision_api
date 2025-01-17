@@ -129,15 +129,62 @@ int main(int argc, char *argv[])
 
     frame_stat_t stat;
 
-    stat.fd = -1;
+    char *camera_id = NULL;
+    char *cti_path = NULL;
     char *serdev = "/dev/ttyACM1";
+    uint32_t bufsize = 16; // 16 MiB by default
+
+    // process args
+    {
+        int c;
+        while ((c = getopt(argc, argv, "c:f:p:s:h")) != -1)
+        {
+            switch (c)
+            {
+            case 'c':
+            {
+                printf("Camera ID from command line: %s\n", optarg);
+                camera_id = optarg;
+                break;
+            }
+            case 'f':
+            {
+                bufsize = atoi(optarg);
+                printf("Buffer size: %dMiB\n", bufsize);
+                break;
+            }
+            case 'p':
+            {
+                printf("CTI path: %s\n", optarg);
+                cti_path = optarg;
+                break;
+            }
+            case 's':
+            {
+                printf("Serial device: %s\n", optarg);
+                serdev = optarg;
+                break;
+            }
+            case 'h':
+            default:
+            {
+                printf("\nUsage: %s [-c camera_id] [-f Framebuffer size (MiB)] [-p /path/to/cti/files] [-s /path/to/serial] [-h Show this message]\n\n", argv[0]);
+                exit(EXIT_SUCCESS);
+            }
+            }
+        }
+    }
+
+    stat.fd = -1;
     if (argc == 2)
         serdev = argv[1];
     int ser = open(serdev, O_RDWR | O_NOCTTY | O_SYNC);
     if (ser < 0)
     {
         printf("Error opening serial port\n");
-    } else {
+    }
+    else
+    {
         printf("Opened serial port: %d\n", ser);
         set_interface_attribs(ser, B921600, 0);
         set_blocking(ser, 0);
@@ -148,11 +195,10 @@ int main(int argc, char *argv[])
     double framerate;
     double fps_min, fps_max, fps_step;
     VmbInt64_t width, height, swidth, sheight;
-    char *camera_id;
     char **fmt;
     VmbBool_t *avail;
 
-    err = allied_init_api(NULL);
+    err = allied_init_api(cti_path);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error initializing API: %d\n", err);
@@ -174,7 +220,7 @@ int main(int argc, char *argv[])
 
     free(cameras);
 
-    err = allied_open_camera(&handle, NULL, 2);
+    err = allied_open_camera(&handle, camera_id, MIB(bufsize));
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error opening camera: %d\n", err);
@@ -230,7 +276,7 @@ int main(int argc, char *argv[])
         printf("Sensor bit depth set to Mono12\n");
     }
 
-    err = allied_get_sensor_bit_depth(handle, &camera_id);
+    err = allied_get_sensor_bit_depth(handle, (const char **)&camera_id);
     if (err != VmbErrorSuccess)
     {
         fprintf(stderr, "Error getting sensor bit depth: %d\n", err);

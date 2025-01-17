@@ -1,4 +1,4 @@
-# Allied Vision Camera Simplified API
+# Allied Vision Camera Simplified API (v0.2.0)
 This repository is a thin wrapper around the [VimbaX SDK](https://www.alliedvision.com/en/products/software/vimba-x-sdk/), and breaks out some of the features available in the cameras to individual functions for ease of programming.
 
 ## Testing
@@ -37,7 +37,7 @@ int main()
         // do error handling
     }
     AlliedCameraHandle_t handle;
-    err = allied_open_camera(&handle, NULL, 2); // open the first available camera with two frames for framebuffer
+    err = allied_open_camera(&handle, NULL, MIB(2)); // open the first available camera with a 2MiB framebuffer
     if (err != VmbErrorSuccess)
     {
         // do error handling
