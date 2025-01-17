@@ -201,14 +201,14 @@ int main(int argc, char *argv[])
     err = allied_init_api(cti_path);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error initializing API: %d\n", err);
+        fprintf(stderr, "Error initializing API: %s\n", allied_strerr(err));
         return EXIT_FAILURE;
     }
 
     err = allied_list_cameras(&cameras, &count);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error listing cameras: %d\n", err);
+        fprintf(stderr, "Error listing cameras: %s\n", allied_strerr(err));
         return EXIT_FAILURE;
     }
 
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     err = allied_open_camera(&handle, camera_id, MIB(bufsize));
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error opening camera: %d\n", err);
+        fprintf(stderr, "Error opening camera: %s\n", allied_strerr(err));
         return EXIT_FAILURE;
     }
 
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
 
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting camera ID: %d\n", err);
+        fprintf(stderr, "Error getting camera ID: %s\n", allied_strerr(err));
         goto cleanup;
     }
     else
@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     err = allied_get_temperature_src_list(handle, &fmt, NULL, &count);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting temperature source list: %d\n", err);
+        fprintf(stderr, "Error getting temperature source list: %s\n", allied_strerr(err));
         goto cleanup;
     }
     else
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
     err = allied_get_sensor_size(handle, &swidth, &sheight);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting sensor size: %d\n", err);
+        fprintf(stderr, "Error getting sensor size: %s\n", allied_strerr(err));
         goto cleanup;
     }
     else
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
     err = allied_set_sensor_bit_depth(handle, "Mono12");
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting sensor bit depth: %d\n", err);
+        fprintf(stderr, "Error setting sensor bit depth: %s\n", allied_strerr(err));
     }
     else
     {
@@ -279,7 +279,7 @@ int main(int argc, char *argv[])
     err = allied_get_sensor_bit_depth(handle, (const char **)&camera_id);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting sensor bit depth: %d\n", err);
+        fprintf(stderr, "Error getting sensor bit depth: %s\n", allied_strerr(err));
     }
     else
     {
@@ -289,13 +289,13 @@ int main(int argc, char *argv[])
     err = allied_set_image_size(handle, 128, 128);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting image size: %d\n", err);
+        fprintf(stderr, "Error setting image size: %s\n", allied_strerr(err));
         goto cleanup;
     }
     err = allied_get_image_size(handle, &width, &height);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting image size: %d\n", err);
+        fprintf(stderr, "Error getting image size: %s\n", allied_strerr(err));
         goto cleanup;
     }
     else
@@ -306,7 +306,7 @@ int main(int argc, char *argv[])
     err = allied_get_acq_framerate(handle, &framerate);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting framerate: %d\n", err);
+        fprintf(stderr, "Error getting framerate: %s\n", allied_strerr(err));
     }
     else
     {
@@ -316,7 +316,7 @@ int main(int argc, char *argv[])
     err = allied_get_acq_framerate_range(handle, &fps_min, &fps_max, &fps_step);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting framerate range: %d\n", err);
+        fprintf(stderr, "Error getting framerate range: %s\n", allied_strerr(err));
     }
     else
     {
@@ -326,7 +326,7 @@ int main(int argc, char *argv[])
     err = allied_get_exposure_us(handle, &exposure);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting exposure: %d\n", err);
+        fprintf(stderr, "Error getting exposure: %s\n", allied_strerr(err));
     }
     else
     {
@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
     err = allied_set_exposure_us(handle, 100);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting exposure: %d\n", err);
+        fprintf(stderr, "Error setting exposure: %s\n", allied_strerr(err));
     }
     else
     {
@@ -347,27 +347,27 @@ int main(int argc, char *argv[])
     err = allied_set_indicator_luma(handle, 0);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting indicator luma: %d\n", err);
+        fprintf(stderr, "Error setting indicator luma: %s\n", allied_strerr(err));
     }
 
     err = allied_set_trigline(handle, "Line0");
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting trigger line: %d\n", err);
+        fprintf(stderr, "Error setting trigger line: %s\n", allied_strerr(err));
     }
     else
     {
         err = allied_set_trigline_mode(handle, "Output");
         if (err != VmbErrorSuccess)
         {
-            fprintf(stderr, "Error setting trigger line mode: %d\n", err);
+            fprintf(stderr, "Error setting trigger line mode: %s\n", allied_strerr(err));
         }
         else
         {
             err = allied_set_trigline_src(handle, "ExposureActive");
             if (err != VmbErrorSuccess)
             {
-                fprintf(stderr, "Error setting trigger line source: %d\n", err);
+                fprintf(stderr, "Error setting trigger line source: %s\n", allied_strerr(err));
             }
             else
             {
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
     err = allied_start_capture(handle);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error starting capture: %d\n", err);
+        fprintf(stderr, "Error starting capture: %s\n", allied_strerr(err));
         goto cleanup;
     }
 
@@ -412,7 +412,7 @@ int main(int argc, char *argv[])
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error stopping capture: %d\n", err);
+        fprintf(stderr, "Error stopping capture: %s\n", allied_strerr(err));
         goto cleanup;
     }
 
@@ -420,35 +420,41 @@ int main(int argc, char *argv[])
     printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
     printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
 
-    memset(&stat, 0, sizeof(frame_stat_t));
-    err = allied_start_capture(handle);
-    if (err != VmbErrorSuccess)
-    {
-        fprintf(stderr, "Error starting capture: %d\n", err);
-        goto cleanup;
-    }
-    sleep(2);
-    err = allied_stop_capture(handle);
-    if (err != VmbErrorSuccess)
-    {
-        fprintf(stderr, "Error stopping capture: %d\n", err);
-        goto cleanup;
-    }
-    printf("Captured %d frames\n", stat.n);
-    printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
-    printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
+    // err = allied_set_image_size(handle, 32, 32);
+    // if (err != VmbErrorSuccess)
+    // {
+    //     fprintf(stderr, "Error setting image size: %s\n", allied_strerr(err));
+    //     goto cleanup;
+    // }
+    // memset(&stat, 0, sizeof(frame_stat_t));
+    // err = allied_start_capture(handle);
+    // if (err != VmbErrorSuccess)
+    // {
+    //     fprintf(stderr, "Error starting capture: %s\n", allied_strerr(err));
+    //     goto cleanup;
+    // }
+    // sleep(2);
+    // err = allied_stop_capture(handle);
+    // if (err != VmbErrorSuccess)
+    // {
+    //     fprintf(stderr, "Error stopping capture: %s\n", allied_strerr(err));
+    //     goto cleanup;
+    // }
+    // printf("Captured %d frames\n", stat.n);
+    // printf("Average frame time: %lf us (%.5lf FPS)\n", stat.avg * 1e6, 1.0 / stat.avg);
+    // printf("Frame time std: %lf us\n", sqrt(stat.avg2 - stat.avg * stat.avg) * 1e6);
 
 
     err = allied_set_indicator_luma(handle, 10);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error setting indicator luma: %d\n", err);
+        fprintf(stderr, "Error setting indicator luma: %s\n", allied_strerr(err));
     }
 
     err = allied_get_image_format_list(handle, &fmt, &avail, &count);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error getting image format list: %d\n", err);
+        fprintf(stderr, "Error getting image format list: %s\n", allied_strerr(err));
         goto cleanup;
     }
     else
@@ -465,7 +471,7 @@ int main(int argc, char *argv[])
     err = allied_stop_capture(handle);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error stopping capture: %d\n", err);
+        fprintf(stderr, "Error stopping capture: %s\n", allied_strerr(err));
         goto cleanup;
     }
 
@@ -473,7 +479,7 @@ cleanup:
     err = allied_close_camera(&handle);
     if (err != VmbErrorSuccess)
     {
-        fprintf(stderr, "Error closing camera: %d\n", err);
+        fprintf(stderr, "Error closing camera: %s\n", allied_strerr(err));
         return EXIT_FAILURE;
     }
     printf("Closed camera: %p\n", handle);

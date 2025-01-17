@@ -476,6 +476,14 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
         framebuf->frames == NULL ||                  // if we have no frames, first time setup
         framebuf->frames->bufferSize != payloadSize) // if payload size has changed, we need to recreate the frames
     {
+        AlliedCaptureCallback callback = NULL;
+        void *user_data = NULL;
+        // previous frames exist, copy the callback and user data
+        if (framebuf->frames != NULL)
+        {
+            callback = (AlliedCaptureCallback)framebuf->frames->context[CONTEXT_CB_HANDLE];
+            user_data = framebuf->frames->context[CONTEXT_DATA_HANDLE];
+        }
         // payload size has changed, but alignment has not - we need to recreate the frames
         allied_free_framebuf(framebuf, true);
         size_t num_frames = (framebuf->alloc_size / payloadSize) % (ALLIED_MAX_FRAMES + 1);
@@ -496,6 +504,14 @@ VmbError_t allied_realloc_framebuffer(AlliedCameraHandle_t handle)
         framebuf->frames = iframebuf;
         framebuf->num_frames = num_frames;
         framebuf->announced = false;
+        if (callback != NULL)
+        {
+            VmbError_t err = allied_queue_capture(handle, callback, user_data);
+            if (err != VmbErrorSuccess)
+            {
+                return err;
+            }
+        }
     }
     return VmbErrorSuccess;
 }
@@ -524,13 +540,17 @@ VmbError_t allied_queue_capture(AlliedCameraHandle_t handle, AlliedCaptureCallba
     {
         return VmbErrorNotInitialized;
     }
-    eprintlf("Starting capture: %p", handle);
+    eprintlf("Queueing capture: %p", handle);
     VmbError_t err;
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
     AlliedFrameBuffer_t framebuf = ihandle->framebuf;
     if (framebuf == NULL)
     {
         return VmbErrorResources;
+    }
+    if (framebuf->queued) // already queued, so dequeue first
+    {
+        ALLIEDEXIT(allied_dequeue_capture, handle);
     }
     // announce the buffers
     for (VmbUint32_t i = 0; i < framebuf->num_frames; i++)
@@ -785,9 +805,13 @@ VmbError_t allied_set_image_size(AlliedCameraHandle_t handle, VmbUint32_t width,
     {
         return VmbErrorBadParameter;
     }
-    if (ihandle->acquiring || ihandle->streaming)
+    if (ihandle->acquiring)
     {
         return VmbErrorBusy;
+    }
+    if (ihandle->streaming)
+    {
+        ALLIEDEXIT(allied_dequeue_capture, handle);
     }
     ALLIEDEXIT(VmbFeatureIntSet, ihandle->handle, "Width", width);
     ALLIEDEXIT(VmbFeatureIntSet, ihandle->handle, "Height", height);
@@ -856,9 +880,13 @@ VmbError_t allied_set_binning_factor(AlliedCameraHandle_t handle, VmbUint32_t fa
         return VmbErrorNotInitialized;
     }
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
-    if (ihandle->streaming || ihandle->acquiring)
+    if (ihandle->acquiring)
     {
         return VmbErrorBusy;
+    }
+    if (ihandle->streaming)
+    {
+        ALLIEDEXIT(allied_dequeue_capture, handle);
     }
     ALLIEDEXIT(VmbFeatureIntSet, ihandle->handle, "BinningVertical", factor);
     ALLIEDEXIT(VmbFeatureIntSet, ihandle->handle, "BinningHorizontal", factor);
@@ -923,6 +951,10 @@ VmbError_t allied_set_image_format(AlliedCameraHandle_t handle, const char *form
         return VmbErrorNotInitialized;
     }
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
+    if (ihandle->streaming)
+    {
+        ALLIEDEXIT(allied_dequeue_capture, handle);
+    }
     ALLIEDEXIT(VmbFeatureEnumSet, ihandle->handle, "PixelFormat", format);
     return ALLIEDCALL(allied_realloc_framebuffer, handle);
 }
@@ -1542,7 +1574,7 @@ VmbError_t allied_set_sensor_bit_depth(AlliedCameraHandle_t handle, const char *
         return VmbErrorNotInitialized;
     }
     _AlliedCameraHandle_s *ihandle = (_AlliedCameraHandle_s *)handle;
-    if (ihandle->streaming || ihandle->acquiring)
+    if (ihandle->acquiring)
     {
         return VmbErrorBusy;
     }
