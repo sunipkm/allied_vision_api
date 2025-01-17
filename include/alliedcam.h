@@ -19,6 +19,16 @@ extern "C"
 {
 #endif
 
+#ifndef ALLIED_DEBUG
+/**
+ * @brief Debug level for the Allied Vision Camera API.
+ * Set bit 0 to print specific debug messages.
+ * Set bit 1 to print error messages on Vimba API call errors.
+ *
+ */
+#define ALLIED_DEBUG 0
+#endif
+
 #ifndef _Nonnull
 /**
  * @brief Indicates that variable must not be NULL.
